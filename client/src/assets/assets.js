@@ -5,15 +5,17 @@ import appStore from './appStore.svg'
 import screenImage from './screenImage.svg'
 import profile from './profile.png'
 
+// Exporting all static assets as a single object for easy access
 export const assets = {
-    logo,
-    marvelLogo,
-    googlePlay,
-    appStore,
-    screenImage,
-    profile
+    logo,            // Main app logo
+    marvelLogo,      // Marvel studio logo for hero section
+    googlePlay,      // Google Play store badge for footer
+    appStore,        // Apple App Store badge for footer
+    screenImage,     // Cinema screen image for seat layout page
+    profile          // Default profile image for admin sidebar
 };
 
+// Dummy trailer data - YouTube videos displayed in the TrailerSection
 export const dummyTrailers = [
     {
         id: 1,
@@ -35,12 +37,13 @@ export const dummyTrailers = [
     },
     {
         id: 4,
-        title: "What If…? ",
+        title: "What If\u2026? ",
         image: "https://img.youtube.com/vi/umiKiW4En9g/maxresdefault.jpg",
         videoUrl: 'https://www.youtube.com/watch?v=umiKiW4En9g'
     },
 ]
 
+// Dummy cast data - used as placeholder cast members for all movies
 const dummyCastsData = [
     { "name": "Milla Jovovich", "profile_path": "https://image.tmdb.org/t/p/original/usWnHCzbADijULREZYSJ0qfM00y.jpg", },
     { "name": "Dave Bautista", "profile_path": "https://image.tmdb.org/t/p/original/snk6JiXOOoRjPtHU5VMoy6qbd32.jpg", },
@@ -57,10 +60,12 @@ const dummyCastsData = [
     { "name": "Caoilinn Springall", "profile_path": "https://image.tmdb.org/t/p/original/uZNtbPHowlBYo74U1qlTaRlrdiY.jpg", },
     { "name": "Jan Kowalewski", "profile_path": "https://image.tmdb.org/t/p/original/snk6JiXOOoRjPtHU5VMoy6qbd32.jpg", },
     { "name": "Pawel Wysocki", "profile_path": "https://image.tmdb.org/t/p/original/zmznPrQ9GSZwcOIUT0c3GyETwrP.jpg", },
-    { "name": "Simon Lööf", "profile_path": "https://image.tmdb.org/t/p/original/cbZrB8crWlLEDjVUoak8Liak6s.jpg", },
+    { "name": "Simon L\u00f6\u00f6f", "profile_path": "https://image.tmdb.org/t/p/original/cbZrB8crWlLEDjVUoak8Liak6s.jpg", },
     { "name": "Tomasz Cymerman", "profile_path": "https://image.tmdb.org/t/p/original/nTSPtzWu6deZTJtWXHUpACVznY4.jpg", }
 ]
 
+// Dummy movie/show data - contains movie info used across the app (Movies page, Featured section, etc.)
+// Each movie has: id, title, overview, poster/backdrop images, genres, cast, release date, rating, and runtime
 export const dummyShowsData = [
     {
         "_id": "324544",
@@ -166,7 +171,7 @@ export const dummyShowsData = [
         "_id": "575265",
         "id": 575265,
         "title": "Mission: Impossible - The Final Reckoning",
-        "overview": "Ethan Hunt and team continue their search for the terrifying AI known as the Entity — which has infiltrated intelligence networks all over the globe — with the world's governments and a mysterious ghost from Hunt's past on their trail. Joined by new allies and armed with the means to shut the Entity down for good, Hunt is in a race against time to prevent the world as we know it from changing forever.",
+        "overview": "Ethan Hunt and team continue their search for the terrifying AI known as the Entity \u2014 which has infiltrated intelligence networks all over the globe \u2014 with the world's governments and a mysterious ghost from Hunt's past on their trail. Joined by new allies and armed with the means to shut the Entity down for good, Hunt is in a race against time to prevent the world as we know it from changing forever.",
         "poster_path": "https://image.tmdb.org/t/p/original/z53D72EAOxGRqdr7KXXWp9dJiDe.jpg",
         "backdrop_path": "https://image.tmdb.org/t/p/original/1p5aI299YBnqrEEvVGJERk2MXXb.jpg",
         "genres": [
@@ -224,6 +229,8 @@ export const dummyShowsData = [
     }
 ]
 
+// Dummy date/time data - available show dates and time slots for the date picker
+// Each date has an array of time slots with their show IDs
 export const dummyDateTimeData = {
     "2025-07-24": [
         { "time": "2025-07-24T01:00:00.000Z", "showId": "68395b407f6329be2bb45bd1" },
@@ -247,17 +254,18 @@ export const dummyDateTimeData = {
     ]
 }
 
+// Dummy dashboard data - statistics and active shows displayed on the admin dashboard
 export const dummyDashboardData = {
-    "totalBookings": 14,
-    "totalRevenue": 1517,
-    "totalUser": 5,
-    "activeShows": [
+    "totalBookings": 14,       // Total number of bookings made
+    "totalRevenue": 1517,      // Total revenue earned
+    "totalUser": 5,            // Total registered users
+    "activeShows": [           // List of currently active movie shows
         {
             "_id": "68352363e96d99513e4221a4",
-            "movie": dummyShowsData[0],
-            "showDateTime": "2025-06-30T02:30:00.000Z",
-            "showPrice": 59,
-            "occupiedSeats": {
+            "movie": dummyShowsData[0],                        // References "In the Lost Lands"
+            "showDateTime": "2025-06-30T02:30:00.000Z",        // Show date and time
+            "showPrice": 59,                                    // Ticket price
+            "occupiedSeats": {                                  // Seats already booked (seat ID -> user ID)
                 "A1": "user_2xO4XPCgWWwWq9EHuQxc5UWqIok",
                 "B1": "user_2xO4XPCgWWwWq9EHuQxc5UWqIok",
                 "C1": "user_2xO4XPCgWWwWq9EHuQxc5UWqIok"
@@ -265,21 +273,21 @@ export const dummyDashboardData = {
         },
         {
             "_id": "6835238fe96d99513e4221a8",
-            "movie": dummyShowsData[1],
+            "movie": dummyShowsData[1],                        // References "Until Dawn"
             "showDateTime": "2025-06-30T15:30:00.000Z",
             "showPrice": 81,
-            "occupiedSeats": {},
+            "occupiedSeats": {},                                // No seats booked yet
         },
         {
             "_id": "6835238fe96d99513e4221a9",
-            "movie": dummyShowsData[2],
+            "movie": dummyShowsData[2],                        // References "Lilo & Stitch"
             "showDateTime": "2025-06-30T03:30:00.000Z",
             "showPrice": 81,
             "occupiedSeats": {},
         },
         {
             "_id": "6835238fe96d99513e4221aa",
-            "movie": dummyShowsData[3],
+            "movie": dummyShowsData[3],                        // References "Havoc"
             "showDateTime": "2025-07-15T16:30:00.000Z",
             "showPrice": 81,
             "occupiedSeats": {
@@ -291,7 +299,7 @@ export const dummyDashboardData = {
         },
         {
             "_id": "683682072b5989c29fc6dc0d",
-            "movie": dummyShowsData[4],
+            "movie": dummyShowsData[4],                        // References "A Minecraft Movie"
             "showDateTime": "2025-06-05T15:30:00.000Z",
             "showPrice": 49,
             "occupiedSeats": {
@@ -306,7 +314,7 @@ export const dummyDashboardData = {
         },
         {
             "_id": "68380044686d454f2116b39a",
-            "movie": dummyShowsData[5],
+            "movie": dummyShowsData[5],                        // References "Mission: Impossible"
             "showDateTime": "2025-06-20T16:00:00.000Z",
             "showPrice": 79,
             "occupiedSeats": {
@@ -318,6 +326,8 @@ export const dummyDashboardData = {
 }
 
 
+// Dummy booking data - sample bookings displayed on the "My Bookings" page
+// Each booking has: user info, show details, total amount, booked seats, and payment status
 export const dummyBookingData = [
     {
         "_id": "68396334fb83252d82e17295",
@@ -328,9 +338,9 @@ export const dummyBookingData = [
             showDateTime: "2025-06-30T02:30:00.000Z",
             showPrice: 59,
         },
-        "amount": 98,
-        "bookedSeats": ["D1", "D2"],
-        "isPaid": false,
+        "amount": 98,                  // Total booking amount
+        "bookedSeats": ["D1", "D2"],   // Seats booked
+        "isPaid": false,               // Payment not completed
     },
     {
         "_id": "68396334fb83252d82e17295",
@@ -343,7 +353,7 @@ export const dummyBookingData = [
         },
         "amount": 49,
         "bookedSeats": ["A1"],
-        "isPaid": true,
+        "isPaid": true,                // Payment completed
     },
     {
         "_id": "68396334fb83252d82e17295",
