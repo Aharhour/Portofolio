@@ -2,62 +2,99 @@ import React, { useEffect, useState } from 'react'
 import { dummyShowsData } from '../../assets/assets';
 import Title from '../../components/admin/Title';
 import Loading from '../../components/Loading';
-import { StarIcon } from 'lucide-react'
+import { CheckIcon, StarIcon } from 'lucide-react'
+import { kConverter } from '../../library/kConverter';
 
-// AddShows - Admin page for adding new movie shows
 const AddShows = () => {
-    // Get the currency symbol from environment variables
     const currency = import.meta.env.VITE_CURRENCY
-    // State to store the list of currently playing movies
     const [nowPlayingMovies, setNowPlayingMovies] = useState([]);
-    // State to track which movie the admin has selected
     const [selectedMovie, setSelectedMovie] = useState(null);
-    // State to store selected date/time slots for the new show
     const [dateTimeSelection, setDateTimeSelection] = useState({});
-    // State for the date/time input field value
     const [dateTimeInput, setDateTimeInput] = useState("");
-    // State for the ticket price input field value
     const [showPrice, setShowPrice] = useState("");
 
-    // Fetch all currently playing movies (using dummy data for now)
     const fetchNowPlayingMovies = async () => {
       setNowPlayingMovies(dummyShowsData)
     };
 
-    // Fetch movies when the component mounts
+    const handleDateTimeAdd = () => {
+      if (!dateTimeInput) return;
+      const [date, time] = dateTimeInput.split("T");
+      if (!date || !time) return;
+
+      setDateTimeSelection((prev) => {
+        const times = prev[date] || [];
+        if (!times.includes(time)) {
+          return { ...prev, [date]: [...times, time] };
+        }
+        return prev;
+      });
+    };
+
+    const handleRemoveTime = (date, time) => {
+      setDateTimeSelection((prev) => {
+        const filteredTimes = prev[date].filter((t) => t !== time);
+        if (filteredTimes.length === 0) {
+          const { [date]: _, ...rest } = prev;
+          return rest;
+        }
+        return {
+          ...prev,
+          [date]: filteredTimes,
+        };
+      });
+    };
+
     useEffect(() => {
       fetchNowPlayingMovies();
     }, []);
 
-  // Show movie grid if movies are loaded, otherwise show loading spinner
   return nowPlayingMovies.length > 0 ? (
     <>
-      {/* Page title */}
       <Title text1="Add" text2="Shows" />
       <p className="mt-10 text-lg font-medium">Now Playing Movies</p>
-      {/* Scrollable container for movie posters */}
       <div className="overflow-x-auto pb-4">
-        {/* Movie grid - non-hovered movies become transparent on group hover */}
+        {/* Non-hovered movies become transparent via group hover */}
         <div className="group flex flex-wrap gap-4 mt-4 w-max">
-          {/* Loop through each movie and display as a selectable card */}
           {nowPlayingMovies.map((movie) =>(
-            <div key={movie.id} className={`relative max-w-40 cursor-pointer group-hover:not-hover:opacity-40 hover:-translate-y-1 transition duration-300`}>
+            <div key={movie.id} className={`relative max-w-40 cursor-pointer group-hover:not-hover:opacity-40 hover:-translate-y-1 transition duration-300`} onClick={()=> setSelectedMovie(movie.id)}>
               <div className="relative rounded-lg overflow-hidden">
-                {/* Movie poster image */}
                 <img src={movie.poster_path} alt="" className="w-full object-cover brightness-90"/>
-                {/* Overlay at the bottom showing rating and vote count */}
                 <div className="text-sm flex items-center justify-between p-2 bg-black/70 w-full absolute bottom-0 left-0">
-                  {/* Star rating */}
                   <p className="flex items-center gap-1 text-gray-400">
                     <StarIcon className="w-4 h-4 text-primary fill-primary"/>
                     {movie.vote_average.toFixed(1)}
                   </p>
-                  {/* Total vote count */}
-                  <p className="text-gray-300">{movie.vote_count} Votes</p>
+                  <p className="text-gray-300">{kConverter(movie.vote_count)} Votes</p>
                 </div>
               </div>
+              {selectedMovie === movie.id && (
+                <div className="absolute top-2 right-2 flex items-center justify-center bg-primary h-6 w-6 rounded">
+                  <CheckIcon className="w-4 h-4 text-white" strokeWidth={2.5} />
+                </div>
+              )}
+              <p className="font-medium truncate">{movie.title}</p>
+              <p className="text-gray-400 text-sm">{movie.release_date}</p>
             </div>
           ))}
+        </div>
+
+        {/* Show Price Input */}
+        <div className="mt-8">
+          <label className="block text-sm font-medium mb-2">Show Price</label>
+          <div className="inline-flex items-center gap-2 border border-gray-600">
+            <p className="text-gray-400 text-sm">{currency}</p>
+            <input min={0} type="number" value={showPrice} onChange={(e) => setShowPrice(e.target.value)} placeholder="Enter show price" className="outline-none"/>
+          </div>
+        </div>
+
+        {/* Date & Time Selection */}
+        <div className="mt-6">
+          <label className="block text-sm font-medium mb-2">Select Date and Time</label>
+          <div className="inline-flex gap-5 border border-gray-600 p-1 pl-3 rounded-lg">
+            <input type="datetime-local" value={dateTimeInput} onChange={(e) => setDateTimeInput(e.target.value)} className="outline-none rounded-md" />
+            <button onClick={handleDateTimeAdd} className="bg-primary/80 text-white px-3 py-2 text-sm rounded-lg hover:bg-primary cursor-pointer">Add Time</button>
+          </div>
         </div>
       </div>
     </>

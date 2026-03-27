@@ -1,7 +1,6 @@
 import React from 'react'
 
-// Title - A reusable title component for admin pages
-// text1 is displayed in normal style, text2 is displayed with underline and primary color
+// text1 = normal style, text2 = underline + primary color
 const Title = ({ text1, text2 }) => {
   return (
     <h1 className='font-medium text-2xl'>

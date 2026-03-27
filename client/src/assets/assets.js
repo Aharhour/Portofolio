@@ -5,17 +5,15 @@ import appStore from './appStore.svg'
 import screenImage from './screenImage.svg'
 import profile from './profile.png'
 
-// Exporting all static assets as a single object for easy access
 export const assets = {
-    logo,            // Main app logo
-    marvelLogo,      // Marvel studio logo for hero section
-    googlePlay,      // Google Play store badge for footer
-    appStore,        // Apple App Store badge for footer
-    screenImage,     // Cinema screen image for seat layout page
-    profile          // Default profile image for admin sidebar
+    logo,
+    marvelLogo,
+    googlePlay,
+    appStore,
+    screenImage,
+    profile
 };
 
-// Dummy trailer data - YouTube videos displayed in the TrailerSection
 export const dummyTrailers = [
     {
         id: 1,
@@ -43,7 +41,6 @@ export const dummyTrailers = [
     },
 ]
 
-// Dummy cast data - used as placeholder cast members for all movies
 const dummyCastsData = [
     { "name": "Milla Jovovich", "profile_path": "https://image.tmdb.org/t/p/original/usWnHCzbADijULREZYSJ0qfM00y.jpg", },
     { "name": "Dave Bautista", "profile_path": "https://image.tmdb.org/t/p/original/snk6JiXOOoRjPtHU5VMoy6qbd32.jpg", },
@@ -64,8 +61,6 @@ const dummyCastsData = [
     { "name": "Tomasz Cymerman", "profile_path": "https://image.tmdb.org/t/p/original/nTSPtzWu6deZTJtWXHUpACVznY4.jpg", }
 ]
 
-// Dummy movie/show data - contains movie info used across the app (Movies page, Featured section, etc.)
-// Each movie has: id, title, overview, poster/backdrop images, genres, cast, release date, rating, and runtime
 export const dummyShowsData = [
     {
         "_id": "324544",
@@ -229,8 +224,6 @@ export const dummyShowsData = [
     }
 ]
 
-// Dummy date/time data - available show dates and time slots for the date picker
-// Each date has an array of time slots with their show IDs
 export const dummyDateTimeData = {
     "2025-07-24": [
         { "time": "2025-07-24T01:00:00.000Z", "showId": "68395b407f6329be2bb45bd1" },
@@ -254,18 +247,17 @@ export const dummyDateTimeData = {
     ]
 }
 
-// Dummy dashboard data - statistics and active shows displayed on the admin dashboard
 export const dummyDashboardData = {
-    "totalBookings": 14,       // Total number of bookings made
-    "totalRevenue": 1517,      // Total revenue earned
-    "totalUser": 5,            // Total registered users
-    "activeShows": [           // List of currently active movie shows
+    "totalBookings": 14,
+    "totalRevenue": 1517,
+    "totalUser": 5,
+    "activeShows": [
         {
             "_id": "68352363e96d99513e4221a4",
-            "movie": dummyShowsData[0],                        // References "In the Lost Lands"
-            "showDateTime": "2025-06-30T02:30:00.000Z",        // Show date and time
-            "showPrice": 59,                                    // Ticket price
-            "occupiedSeats": {                                  // Seats already booked (seat ID -> user ID)
+            "movie": dummyShowsData[0],
+            "showDateTime": "2025-06-30T02:30:00.000Z",
+            "showPrice": 59,
+            "occupiedSeats": {
                 "A1": "user_2xO4XPCgWWwWq9EHuQxc5UWqIok",
                 "B1": "user_2xO4XPCgWWwWq9EHuQxc5UWqIok",
                 "C1": "user_2xO4XPCgWWwWq9EHuQxc5UWqIok"
@@ -273,21 +265,21 @@ export const dummyDashboardData = {
         },
         {
             "_id": "6835238fe96d99513e4221a8",
-            "movie": dummyShowsData[1],                        // References "Until Dawn"
+            "movie": dummyShowsData[1],
             "showDateTime": "2025-06-30T15:30:00.000Z",
             "showPrice": 81,
-            "occupiedSeats": {},                                // No seats booked yet
+            "occupiedSeats": {},
         },
         {
             "_id": "6835238fe96d99513e4221a9",
-            "movie": dummyShowsData[2],                        // References "Lilo & Stitch"
+            "movie": dummyShowsData[2],
             "showDateTime": "2025-06-30T03:30:00.000Z",
             "showPrice": 81,
             "occupiedSeats": {},
         },
         {
             "_id": "6835238fe96d99513e4221aa",
-            "movie": dummyShowsData[3],                        // References "Havoc"
+            "movie": dummyShowsData[3],
             "showDateTime": "2025-07-15T16:30:00.000Z",
             "showPrice": 81,
             "occupiedSeats": {
@@ -299,7 +291,7 @@ export const dummyDashboardData = {
         },
         {
             "_id": "683682072b5989c29fc6dc0d",
-            "movie": dummyShowsData[4],                        // References "A Minecraft Movie"
+            "movie": dummyShowsData[4],
             "showDateTime": "2025-06-05T15:30:00.000Z",
             "showPrice": 49,
             "occupiedSeats": {
@@ -314,7 +306,7 @@ export const dummyDashboardData = {
         },
         {
             "_id": "68380044686d454f2116b39a",
-            "movie": dummyShowsData[5],                        // References "Mission: Impossible"
+            "movie": dummyShowsData[5],
             "showDateTime": "2025-06-20T16:00:00.000Z",
             "showPrice": 79,
             "occupiedSeats": {
@@ -326,8 +318,6 @@ export const dummyDashboardData = {
 }
 
 
-// Dummy booking data - sample bookings displayed on the "My Bookings" page
-// Each booking has: user info, show details, total amount, booked seats, and payment status
 export const dummyBookingData = [
     {
         "_id": "68396334fb83252d82e17295",
@@ -338,9 +328,9 @@ export const dummyBookingData = [
             showDateTime: "2025-06-30T02:30:00.000Z",
             showPrice: 59,
         },
-        "amount": 98,                  // Total booking amount
-        "bookedSeats": ["D1", "D2"],   // Seats booked
-        "isPaid": false,               // Payment not completed
+        "amount": 98,
+        "bookedSeats": ["D1", "D2"],
+        "isPaid": false,
     },
     {
         "_id": "68396334fb83252d82e17295",
@@ -353,7 +343,7 @@ export const dummyBookingData = [
         },
         "amount": 49,
         "bookedSeats": ["A1"],
-        "isPaid": true,                // Payment completed
+        "isPaid": true,
     },
     {
         "_id": "68396334fb83252d82e17295",
