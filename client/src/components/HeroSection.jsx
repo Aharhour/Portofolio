@@ -8,7 +8,7 @@ const HeroSection = () => {
     const navigate = useNavigate()
 
   return (
-    <div className='flex flex-col items-start justify-center gap-4 px-6 md:px-16 lg:px-36 
+    <div className='flex flex-col items-start justify-center gap-4 px-6 md:px-16 lg:px-36
     bg-[url("/background.png")] bg-cover bg-center h-screen'>
 
         <img src={assets.marvelLogo} alt="" className="max-h-11 lg:h-11 mt-20"/>
@@ -28,8 +28,8 @@ const HeroSection = () => {
         </div>
 
         <p className='max-w-md text-gray-300'>
-            After the devastating events of Avengers: Infinity War (2018), 
-            the universe is in ruins. With the help of remaining allies, 
+            After the devastating events of Avengers: Infinity War (2018),
+            the universe is in ruins. With the help of remaining allies,
             the Avengers assemble once more in order to reverse Thanos' actions and restore balance to the universe.
         </p>
 

@@ -9,7 +9,7 @@ const Movies = () => {
 
       <BlurCircle top="150px" left="0px"/>
       <BlurCircle bottom="50px" right="50px"/>
-      
+
       <h1 className='text-lg font-medium my-4'>Now Showing</h1>
       <div className='flex flex-wrap max-sm:justify-center gap-8'>
         {dummyShowsData.map((movie)=> (
@@ -19,7 +19,7 @@ const Movies = () => {
     </div>
   ) : (
     <div className='flex flex-col items-center justify-center h-screen'>
-      <h1 className='test-3xl font-bold text-center'>No movies available</h1>
+      <h1 className='text-3xl font-bold text-center'>No movies available</h1>
     </div>
   )
 }

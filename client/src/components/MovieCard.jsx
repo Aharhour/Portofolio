@@ -5,7 +5,7 @@ import timeFormat from '../library/timeFormat'
 
 const MovieCard = ({ movie }) => {
 
-  const navigate = useNavigate() 
+  const navigate = useNavigate()
 
   return (
     <div className='flex flex-col justify-between p-3 bg-gray-800
@@ -24,8 +24,8 @@ const MovieCard = ({ movie }) => {
       <p className='font-semibold mt-2 truncate'>{movie.title}</p>
 
       <p className='text-sm text-gray-400 mt-2'>
-        {new Date(movie.release_date).getFullYear()} • 
-        {movie.genres.slice(0, 2).map(g => g.name).join(" | ")} • 
+        {new Date(movie.release_date).getFullYear()} •
+        {movie.genres.slice(0, 2).map(g => g.name).join(" | ")} •
         {timeFormat(movie.runtime)}
       </p>
 

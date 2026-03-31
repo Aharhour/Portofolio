@@ -13,6 +13,7 @@ const MovieDetails = () => {
   const { id } = useParams()
   const [show, setShow] = useState(null)
 
+  // Find the movie matching the URL id and pair it with available date/time slots
   const getShow = () => {
     const foundShow = dummyShowsData.find((item) => item._id === id)
 

@@ -7,7 +7,6 @@ import { useNavigate } from 'react-router-dom'
 const DateSelect = ({dateTime, id}) => {
 
     const navigate = useNavigate();
-
     const[selected, setSelected] = useState(null)
 
     const onBookHndler = ()=> {
