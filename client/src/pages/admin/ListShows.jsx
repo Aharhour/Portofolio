@@ -3,8 +3,11 @@ import { dummyShowsData } from '../../assets/assets';
 import Loading from '../../components/Loading';
 import Title from '../../components/admin/Title';
 import { dateFormat } from '../../library/dateFormat';
+import { useAppContext } from '../../context/AppContext';
 
 const ListShows = () => {
+
+  const {axios, getToken, user} = useAppContext()
 
   const currency = import.meta.env.VITE_CURRENCY
 
@@ -13,16 +16,8 @@ const ListShows = () => {
 
   const getAllShows = async () =>{
     try {
-      setShows([{
-        movie:dummyShowsData[0],
-        showDateTime: "2026-03-27T02:30:00.000Z",
-        showPrice: 59,
-        occupiedSeats: {
-          A1: "user_1",
-          A2: "user_2",
-          A3: "user_3"
-        }
-      }]);
+      const {data} = await axios.get('/api/admin/all-shows', {headers: { Authorization: `Bearer ${await getToken()}` }});
+      setShows(data.shows)
       setLoading(false);
     } catch (error) {
       console.log(error);
@@ -30,8 +25,10 @@ const ListShows = () => {
   }
 
   useEffect(() => {
-    getAllShows();
-  }, []);
+    if(user){
+      getAllShows()
+    }
+  }, [user]);
 
   return !loading ? (
     <>
@@ -49,7 +46,7 @@ const ListShows = () => {
           <tbody className="text-sm font-light">
             {shows.map((show, index) => (
               <tr key={index} className="border-b border-primary/10 bg-primary/5 even:bg-primary/10">
-              <td className="p-2 font-medium pl-5">{show.movie.title}</td>
+              <td className="p-2 font-medium pl-5">{show.movie_id.title}</td>
               <td className="p-2">{dateFormat(show.showDateTime)}</td>
               <td className="p-2">{Object.keys(show.occupiedSeats).length}</td>
               {/* Earnings = occupied seats * ticket price */}
