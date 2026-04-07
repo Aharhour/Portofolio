@@ -1,5 +1,6 @@
 import nodemailer from 'nodemailer';
 
+// Brevo SMTP transporter for sending transactional emails
 const transporter = nodemailer.createTransport({
     host: "smtp-relay.brevo.com",
     port: 587,
@@ -9,7 +10,7 @@ const transporter = nodemailer.createTransport({
     },
 });
 
-const sendEmail = async ({to, subject, body})=>{
+const sendEmail = async ({ to, subject, body }) => {
     const response = await transporter.sendMail({
         from: process.env.SENDER_EMAIL,
         to,

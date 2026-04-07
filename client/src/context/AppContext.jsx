@@ -9,35 +9,35 @@ axios.defaults.baseURL = import.meta.env.VITE_BASE_URL
 export const AppContext = createContext()
 
 export const AppProvider = ({ children }) => {
-
     const [isAdmin, setIsAdmin] = useState(false)
     const [shows, setShows] = useState([])
     const [favoriteMovies, setFavoriteMovies] = useState([])
 
     const image_base_url = import.meta.env.VITE_TMDB_IMAGE_BASE_URL;
 
-    const {user} = useUser()
-    const {getToken, isLoaded} = useAuth()
+    const { user } = useUser()
+    const { getToken, isLoaded } = useAuth()
     const location = useLocation()
     const navigate = useNavigate()
 
+    // Check if the current user has admin privileges via the backend
     const fetchIsAdmin = async () => {
         try {
             const token = await getToken()
-            if(!token) {
-                console.log("No token available yet, skipping admin check")
-                return
-            }
-            const {data} = await axios.get('/api/admin/is-admin', {headers: {Authorization: `Bearer ${token}`}})
+            if (!token) return
+
+            const { data } = await axios.get('/api/admin/is-admin', {
+                headers: { Authorization: `Bearer ${token}` }
+            })
             setIsAdmin(data.isAdmin)
 
-            if(!data.isAdmin && location.pathname.startsWith('/admin')) {
+            if (!data.isAdmin && location.pathname.startsWith('/admin')) {
                 navigate('/')
                 toast.error('You are not authorized to access admin dashboard')
             }
         } catch (error) {
             setIsAdmin(false)
-            if(location.pathname.startsWith('/admin')) {
+            if (location.pathname.startsWith('/admin')) {
                 navigate('/')
                 toast.error(error.response?.data?.message || 'You are not authorized to access admin dashboard')
             }
@@ -45,10 +45,11 @@ export const AppProvider = ({ children }) => {
         }
     }
 
+    // Fetch all available shows (unique movies) from the backend
     const fetchShows = async () => {
         try {
             const { data } = await axios.get('/api/show/all')
-            if(data.success) {
+            if (data.success) {
                 setShows(data.shows)
             } else {
                 toast.error(data.message)
@@ -58,11 +59,14 @@ export const AppProvider = ({ children }) => {
         }
     }
 
+    // Fetch the logged-in user's favorite movies from Clerk metadata
     const fetchFavoriteMovies = async () => {
         try {
-            const { data } = await axios.get('/api/user/favorites', {headers: {Authorization: `Bearer ${await getToken()}`}})
+            const { data } = await axios.get('/api/user/favorites', {
+                headers: { Authorization: `Bearer ${await getToken()}` }
+            })
 
-            if(data.success) {
+            if (data.success) {
                 setFavoriteMovies(data.movies)
             } else {
                 toast.error(data.message)
@@ -72,27 +76,28 @@ export const AppProvider = ({ children }) => {
         }
     }
 
+    // Load shows on initial mount
     useEffect(() => {
         fetchShows()
-    },[])
+    }, [])
 
+    // When user logs in, check admin status and load favorites
     useEffect(() => {
-        if(user && isLoaded) {
+        if (user && isLoaded) {
             fetchIsAdmin()
             fetchFavoriteMovies()
         }
     }, [user, isLoaded, location.pathname])
 
     const value = {
-        axios,
-        fetchIsAdmin,
+        axios, fetchIsAdmin,
         user, getToken, navigate, isAdmin, shows,
         favoriteMovies, fetchFavoriteMovies, image_base_url
     }
 
     return (
         <AppContext.Provider value={value}>
-            { children }
+            {children}
         </AppContext.Provider>
     )
 }

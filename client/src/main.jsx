@@ -1,4 +1,3 @@
-import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.jsx'
@@ -12,12 +11,13 @@ if (!PUBLISHABLE_KEY) {
   throw new Error('Missing Publishable Key')
 }
 
+// Mount the app with Clerk auth, React Router, and global state providers
 createRoot(document.getElementById("root")).render(
-    <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
-      <BrowserRouter>
-        <AppProvider>
-          <App />
-        </AppProvider>
-      </BrowserRouter>
-    </ClerkProvider>,
+  <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
+    <BrowserRouter>
+      <AppProvider>
+        <App />
+      </AppProvider>
+    </BrowserRouter>
+  </ClerkProvider>,
 )
