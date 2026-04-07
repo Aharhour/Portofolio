@@ -52,7 +52,7 @@ const checkSeatAvailability = async (showId, selectedSeats) => {
         await showData.save();
 
         // Stripe Gateway Initialize
-         const stripeInstance = new stripe(process.env.STRIPE_SECTRET_KEY);
+         const stripeInstance = new stripe(process.env.STRIPE_SECRET_KEY);
 
          // Create line items to for Stripe
          const line_items = [{
@@ -78,7 +78,16 @@ const checkSeatAvailability = async (showId, selectedSeats) => {
          })
 
          booking.paymentLink = session.url
+         booking.stripeSessionId = session.id
          await booking.save()
+
+         // Run Inngest Shedular Function to check payment status after 10 minutes
+         await inngest.send({
+            name: "app/checkpayment",
+            data: {
+                bookingId: booking._id.toString()
+            }
+         })
 
         res.json({success: true, url: session.url })
 
