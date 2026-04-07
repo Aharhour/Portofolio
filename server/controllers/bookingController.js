@@ -1,6 +1,7 @@
 import Show from "../models/Show.js";
 import Booking from "../models/Booking.js";
 import stripe from "stripe";
+import { inngest } from "../inngest/index.js";
 
 // Function to check availability of selected seats for a movie 
 const checkSeatAvailability = async (showId, selectedSeats) => { 
