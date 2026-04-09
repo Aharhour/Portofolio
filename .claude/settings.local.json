@@ -7,7 +7,14 @@
       "Bash(where pandoc:*)",
       "Bash(where npm:*)",
       "Bash(npm install:*)",
-      "Bash(node convert-to-docx.js)"
+      "Bash(node convert-to-docx.js)",
+      "Bash(node convert-to-docx.js verbeter)",
+      "Bash(node convert-to-docx.js scenarios)",
+      "Bash(node convert-to-docx.js rapport)",
+      "Bash(npm list:*)",
+      "Bash(ls -la \"C:\\\\\\\\bit-academy\\\\\\\\Jaar 3\\\\\\\\End-project\\\\\\\\Portofolio\\\\\\\\server\\\\\\\\routes\\\\\\\\\")",
+      "Bash(ls -la \"C:\\\\\\\\bit-academy\\\\\\\\Jaar 3\\\\\\\\End-project\\\\\\\\Portofolio\\\\\\\\server\\\\\\\\models\\\\\\\\\")",
+      "Bash(ls -la \"C:\\\\\\\\bit-academy\\\\\\\\Jaar 3\\\\\\\\End-project\\\\\\\\Portofolio\\\\\\\\server\\\\\\\\inngest\\\\\\\\\")"
     ]
   }
 }

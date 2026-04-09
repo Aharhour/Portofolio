@@ -10,21 +10,24 @@ export const isAdmin = async (req, res) => {
 // Aggregate dashboard KPIs: bookings, revenue, active shows, total users
 export const getDashboardData = async (req, res) => {
     try {
-        const bookings = await Booking.find({ isPaid: true });
-        const activeShows = await Show.find({ showDateTime: { $gt: new Date() } }).populate('movie_id');
-        const totalUser = await User.countDocuments();
+        const [bookings, activeShows, totalUser] = await Promise.allSettled([
+            Booking.find({ isPaid: true }),
+            Show.find({ showDateTime: { $gt: new Date() } }).populate('movie_id'),
+            User.countDocuments()
+        ]);
+
+        const paidBookings = bookings.status === 'fulfilled' ? bookings.value : [];
 
         const dashboardData = {
-            totalBookings: bookings.length,
-            totalRevenue: bookings.reduce((acc, booking) => acc + booking.amount, 0),
-            activeShows,
-            totalUser
+            totalBookings: paidBookings.length,
+            totalRevenue: paidBookings.reduce((acc, booking) => acc + booking.amount, 0),
+            activeShows: activeShows.status === 'fulfilled' ? activeShows.value : [],
+            totalUser: totalUser.status === 'fulfilled' ? totalUser.value : 0
         }
 
         res.json({ success: true, data: dashboardData })
     } catch (error) {
-        console.error(error);
-        res.json({ success: false, message: error.message })
+        res.status(500).json({ success: false, message: "Failed to load dashboard data." })
     }
 }
 
@@ -36,8 +39,7 @@ export const getAllShows = async (req, res) => {
             .sort({ showDateTime: 1 });
         res.json({ success: true, shows })
     } catch (error) {
-        console.error(error);
-        res.json({ success: false, message: error.message })
+        res.status(500).json({ success: false, message: "Failed to load shows." })
     }
 }
 
@@ -50,7 +52,6 @@ export const getAllBookings = async (req, res) => {
             .sort({ createdAt: -1 })
         res.json({ success: true, bookings })
     } catch (error) {
-        console.error(error);
-        res.json({ success: false, message: error.message })
+        res.status(500).json({ success: false, message: "Failed to load bookings." })
     }
 }

@@ -12,8 +12,7 @@ export const getNowPlayingMovies = async (req, res) => {
 
         res.json({ success: true, movies: data.results })
     } catch (error) {
-        console.error(error);
-        res.json({ success: false, message: error.message })
+        res.status(502).json({ success: false, message: "Failed to fetch movies from TMDB." })
     }
 }
 
@@ -21,6 +20,18 @@ export const getNowPlayingMovies = async (req, res) => {
 export const addShow = async (req, res) => {
     try {
         const { movieId, showsInput, showPrice } = req.body
+
+        if (!movieId || !showsInput || !showPrice) {
+            return res.status(400).json({ success: false, message: "Movie ID, show times, and price are required." });
+        }
+
+        if (!Array.isArray(showsInput) || showsInput.length === 0) {
+            return res.status(400).json({ success: false, message: "At least one show time is required." });
+        }
+
+        if (typeof showPrice !== 'number' || showPrice <= 0) {
+            return res.status(400).json({ success: false, message: "Price must be a positive number." });
+        }
 
         let movie = await Movie.findById(movieId)
 
@@ -37,6 +48,10 @@ export const addShow = async (req, res) => {
 
             const movieApiData = movieDetailsResponse.data;
             const movieCreditsData = movieCreditsResponse.data;
+
+            if (!movieApiData || !movieApiData.title) {
+                return res.status(404).json({ success: false, message: "Movie not found on TMDB." });
+            }
 
             const movieDetails = {
                 _id: movieId,
@@ -83,8 +98,7 @@ export const addShow = async (req, res) => {
 
         res.json({ success: true, message: 'Shows added successfully.' })
     } catch (error) {
-        console.error(error);
-        res.json({ success: false, message: error.message })
+        res.status(500).json({ success: false, message: "Failed to add shows." })
     }
 }
 
@@ -105,8 +119,7 @@ export const getShows = async (req, res) => {
 
         res.json({ success: true, shows: uniqueMovies })
     } catch (error) {
-        console.error(error);
-        res.json({ success: false, message: error.message })
+        res.status(500).json({ success: false, message: "Failed to load shows." })
     }
 }
 
@@ -122,6 +135,10 @@ export const getShow = async (req, res) => {
 
         const movie = await Movie.findById(movieId);
 
+        if (!movie) {
+            return res.status(404).json({ success: false, message: "Movie not found." });
+        }
+
         // Group showtimes by date
         const dateTime = {};
         shows.forEach((show) => {
@@ -134,7 +151,6 @@ export const getShow = async (req, res) => {
 
         res.json({ success: true, movie, dateTime })
     } catch (error) {
-        console.error(error);
-        res.json({ success: false, message: error.message });
+        res.status(500).json({ success: false, message: "Failed to load movie details." });
     }
 }

@@ -41,7 +41,7 @@ export const AppProvider = ({ children }) => {
                 navigate('/')
                 toast.error(error.response?.data?.message || 'You are not authorized to access admin dashboard')
             }
-            console.error("Admin check error:", error.response?.status, error.response?.data)
+            // Admin check failed
         }
     }
 
@@ -55,7 +55,7 @@ export const AppProvider = ({ children }) => {
                 toast.error(data.message)
             }
         } catch (error) {
-            console.error(error)
+            // Fetch failed
         }
     }
 
@@ -72,7 +72,7 @@ export const AppProvider = ({ children }) => {
                 toast.error(data.message)
             }
         } catch (error) {
-            console.error(error)
+            // Fetch failed
         }
     }
 

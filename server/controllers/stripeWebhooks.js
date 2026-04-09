@@ -12,7 +12,7 @@ export const stripeWebhooks = async (request, response) => {
     try {
         event = stripeInstance.webhooks.constructEvent(request.body, sig, process.env.STRIPE_WEBHOOK_SECRET);
     } catch (error) {
-        return response.status(400).send(`Webhook Error: ${error.message}`);
+        return response.status(400).send('Webhook signature verification failed.');
     }
 
     try {
@@ -25,6 +25,8 @@ export const stripeWebhooks = async (request, response) => {
                 })
 
                 const session = sessionList.data[0];
+                if (!session?.metadata?.bookingId) break;
+
                 const { bookingId } = session.metadata;
 
                 // Mark booking as paid
@@ -43,11 +45,10 @@ export const stripeWebhooks = async (request, response) => {
             }
 
             default:
-                console.log('Unhandled event type:', event.type)
+                break;
         }
         response.json({ received: true })
     } catch (err) {
-        console.error("Webhook handler error:", err);
         response.status(500).send("Internal Server Error");
     }
 }

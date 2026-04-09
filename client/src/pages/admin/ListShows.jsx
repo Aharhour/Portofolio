@@ -19,7 +19,7 @@ const ListShows = () => {
             setShows(data.shows)
             setLoading(false);
         } catch (error) {
-            console.error(error);
+            // Fetch failed
         }
     }
 

@@ -28,7 +28,7 @@ const SeatLayout = () => {
                 setShow(data)
             }
         } catch (error) {
-            console.error(error)
+            // Fetch failed
         }
     }
 
@@ -80,7 +80,7 @@ const SeatLayout = () => {
                 toast.error(data.message)
             }
         } catch (error) {
-            console.error(error)
+            // Fetch failed
         }
     }
 

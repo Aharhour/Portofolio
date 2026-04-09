@@ -23,7 +23,7 @@ export const getUserBookings = async (req, res) => {
                         booking.paymentLink = "";
                         await booking.save();
                     }
-                } catch (err) {
+                } catch {
                     // Session may have expired - skip silently
                 }
             }
@@ -31,8 +31,7 @@ export const getUserBookings = async (req, res) => {
 
         res.json({ success: true, bookings })
     } catch (error) {
-        console.error(error.message);
-        res.json({ success: false, message: error.message });
+        res.status(500).json({ success: false, message: "Failed to retrieve bookings." });
     }
 }
 
@@ -41,6 +40,10 @@ export const updateFavorite = async (req, res) => {
     try {
         const { movieId } = req.body;
         const userId = req.auth().userId;
+
+        if (!movieId) {
+            return res.status(400).json({ success: false, message: "Movie ID is required." });
+        }
 
         const user = await clerkClient.users.getUser(userId);
 
@@ -61,8 +64,7 @@ export const updateFavorite = async (req, res) => {
 
         res.json({ success: true, message: "Favorites updated successfully" });
     } catch (error) {
-        console.error(error.message);
-        res.json({ success: false, message: error.message });
+        res.status(500).json({ success: false, message: "Failed to update favorites." });
     }
 }
 
@@ -76,7 +78,6 @@ export const getFavorites = async (req, res) => {
 
         res.json({ success: true, movies });
     } catch (error) {
-        console.error(error.message);
-        res.json({ success: false, message: error.message });
+        res.status(500).json({ success: false, message: "Failed to retrieve favorites." });
     }
 }

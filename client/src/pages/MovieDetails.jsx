@@ -24,7 +24,7 @@ const MovieDetails = () => {
                 setShow(data)
             }
         } catch (error) {
-            console.error(error)
+            // Fetch failed
         }
     }
 
@@ -42,7 +42,7 @@ const MovieDetails = () => {
                 toast.success(data.message)
             }
         } catch (error) {
-            console.error(error)
+            // Fetch failed
         }
     }
 

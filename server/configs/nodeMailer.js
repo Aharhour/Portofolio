@@ -11,13 +11,17 @@ const transporter = nodemailer.createTransport({
 });
 
 const sendEmail = async ({ to, subject, body }) => {
+    if (!to || !subject || !body) {
+        throw new Error('Email requires to, subject, and body fields.');
+    }
+
     const response = await transporter.sendMail({
         from: process.env.SENDER_EMAIL,
         to,
         subject,
         html: body,
     })
-    return response
+    return response;
 }
 
 export default sendEmail;

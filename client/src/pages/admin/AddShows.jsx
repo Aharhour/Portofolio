@@ -27,7 +27,7 @@ const AddShows = () => {
                 setNowPlayingMovies(data.movies);
             }
         } catch (error) {
-            console.error('Error fetching movies:', error);
+            // Fetch failed
         }
     };
 
@@ -83,7 +83,6 @@ const AddShows = () => {
                 setShowPrice("")
             }
         } catch (error) {
-            console.error("Submission error", error);
             toast.error('An error occurred. Please try again.')
         }
         setAddingShow(false)

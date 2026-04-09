@@ -13,11 +13,14 @@ const syncUserCreation = inngest.createFunction(
     { id: 'sync-user-from-clerk', triggers: [{ event: 'clerk/user.created' }] },
     async ({ event }) => {
         const { id, first_name, last_name, email_addresses, image_url } = event.data
+        const email = email_addresses?.[0]?.email_address;
+        if (!id || !email) return;
+
         await User.create({
             _id: id,
-            email: email_addresses[0].email_address,
-            name: first_name + ' ' + last_name,
-            image: image_url
+            email,
+            name: `${first_name || ''} ${last_name || ''}`.trim(),
+            image: image_url || ''
         })
     }
 )
@@ -35,10 +38,13 @@ const syncUserUpdation = inngest.createFunction(
     { id: 'update-user-from-clerk', triggers: [{ event: 'clerk/user.updated' }] },
     async ({ event }) => {
         const { id, first_name, last_name, email_addresses, image_url } = event.data
+        const email = email_addresses?.[0]?.email_address;
+        if (!id) return;
+
         await User.findByIdAndUpdate(id, {
-            email: email_addresses[0].email_address,
-            name: first_name + ' ' + last_name,
-            image: image_url
+            ...(email && { email }),
+            name: `${first_name || ''} ${last_name || ''}`.trim(),
+            image: image_url || ''
         })
     }
 )
@@ -82,6 +88,8 @@ const sendBookingConfirmationEmail = inngest.createFunction(
             path: 'show',
             populate: { path: "movie_id" }
         }).populate('user');
+
+        if (!booking?.user?.email || !booking?.show?.movie_id) return;
 
         const showDate = new Date(booking.show.showDateTime).toLocaleDateString('nl-NL', {
             timeZone: 'Europe/Amsterdam', weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
@@ -238,10 +246,11 @@ const sendNewShowNotifications = inngest.createFunction(
     { id: "send-new-show-notifications", triggers: [{ event: "app/show.added" }] },
     async ({ event }) => {
         const { movieTitle } = event.data;
-        const users = await User.find({})
+        if (!movieTitle) return;
 
-        for (const user of users) {
-            await sendEmail({
+        const users = await User.find({}).select('name email');
+
+        await Promise.allSettled(users.map(user => sendEmail({
                 to: user.email,
                 subject: `New Show Added: ${movieTitle}`,
                 body: `<div style="font-family: Arial, sans-serif; padding: 20px;">
@@ -252,8 +261,7 @@ const sendNewShowNotifications = inngest.createFunction(
                             <br/>
                             <p>Thanks,<br/>BetaTicket Team</p>
                         </div>`
-            })
-        }
+            })));
 
         return { message: "Notifications sent." }
     }

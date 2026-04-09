@@ -1,13 +1,15 @@
 import { useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 
+const ALLOWED_REDIRECTS = ['my-bookings', 'movies', 'favorite', 'admin'];
+
 const Loading = () => {
     const { nextUrl } = useParams()
     const navigate = useNavigate()
 
     // If a redirect URL is provided, navigate there after a delay (e.g. post-payment)
     useEffect(() => {
-        if (nextUrl) {
+        if (nextUrl && ALLOWED_REDIRECTS.includes(nextUrl)) {
             const timer = setTimeout(() => {
                 navigate(`/${nextUrl}`)
             }, 8000)
