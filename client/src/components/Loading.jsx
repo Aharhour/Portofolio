@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 
-const ALLOWED_REDIRECTS = ['my-bookings', 'movies', 'favorite', 'admin'];
+const ALLOWED_REDIRECTS = ['my-bookings', 'movies', 'favorite', 'admin', 'releases', 'theaters'];
 
 const Loading = () => {
     const { nextUrl } = useParams()

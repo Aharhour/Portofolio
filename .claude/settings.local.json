@@ -14,7 +14,8 @@
       "Bash(npm list:*)",
       "Bash(ls -la \"C:\\\\\\\\bit-academy\\\\\\\\Jaar 3\\\\\\\\End-project\\\\\\\\Portofolio\\\\\\\\server\\\\\\\\routes\\\\\\\\\")",
       "Bash(ls -la \"C:\\\\\\\\bit-academy\\\\\\\\Jaar 3\\\\\\\\End-project\\\\\\\\Portofolio\\\\\\\\server\\\\\\\\models\\\\\\\\\")",
-      "Bash(ls -la \"C:\\\\\\\\bit-academy\\\\\\\\Jaar 3\\\\\\\\End-project\\\\\\\\Portofolio\\\\\\\\server\\\\\\\\inngest\\\\\\\\\")"
+      "Bash(ls -la \"C:\\\\\\\\bit-academy\\\\\\\\Jaar 3\\\\\\\\End-project\\\\\\\\Portofolio\\\\\\\\server\\\\\\\\inngest\\\\\\\\\")",
+      "Bash(npx vite:*)"
     ]
   }
 }

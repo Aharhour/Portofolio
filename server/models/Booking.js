@@ -5,6 +5,7 @@ const bookingSchema = new mongoose.Schema({
     show: { type: String, required: true, ref: 'Show' },
     amount: { type: Number, required: true, min: 0 },
     bookSeats: [{ type: String, required: true }],
+    theater: { type: String, enum: ["zaal-1", "zaal-2", "zaal-3"], default: "zaal-1" },
     isPaid: { type: Boolean, default: false },
     paymentLink: { type: String },
     stripeSessionId: { type: String },

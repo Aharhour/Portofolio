@@ -7,8 +7,6 @@ const userSchema = new mongoose.Schema({
     image: { type: String, required: true }
 })
 
-userSchema.index({ email: 1 });
-
 const User = mongoose.model('User', userSchema)
 
 export default User;

@@ -2,6 +2,7 @@ import Show from "../models/Show.js";
 import Booking from "../models/Booking.js";
 import stripe from "stripe";
 import { inngest } from "../inngest/index.js";
+import theaters from "../configs/theaters.js";
 
 const allowedOrigins = process.env.ALLOWED_ORIGINS
     ? process.env.ALLOWED_ORIGINS.split(',')
@@ -20,24 +21,18 @@ const checkSeatAvailability = async (showId, selectedSeats) => {
 export const createBooking = async (req, res) => {
     try {
         const { userId } = req.auth();
-        const { showId, selectedSeats } = req.body;
+        const { showId, selectedSeats, theater: theaterId } = req.body;
 
         if (!showId || !Array.isArray(selectedSeats) || selectedSeats.length === 0) {
             return res.status(400).json({ success: false, message: "Show ID and at least one seat are required." });
         }
 
+        if (!theaterId || !theaters[theaterId]) {
+            return res.status(400).json({ success: false, message: "Please select a valid zaal." });
+        }
+
         if (selectedSeats.length > 5) {
             return res.status(400).json({ success: false, message: "You can select a maximum of 5 seats." });
-        }
-
-        const seatPattern = /^[A-J][1-9]$/;
-        if (!selectedSeats.every(seat => typeof seat === 'string' && seatPattern.test(seat))) {
-            return res.status(400).json({ success: false, message: "Invalid seat format." });
-        }
-
-        const isAvailable = await checkSeatAvailability(showId, selectedSeats);
-        if (!isAvailable) {
-            return res.status(409).json({ success: false, message: "Selected seats are already occupied. Please choose different seats." });
         }
 
         const showData = await Show.findById(showId).populate('movie_id');
@@ -45,12 +40,37 @@ export const createBooking = async (req, res) => {
             return res.status(404).json({ success: false, message: "Show not found." });
         }
 
+        // Validate seats against the chosen theater's layout
+        const theater = theaters[theaterId];
+        const validRows = theater.rows;
+        const maxSeat = theater.seatsPerRow;
+
+        if (!selectedSeats.every(seat => {
+            if (typeof seat !== 'string') return false;
+            const row = seat[0];
+            const num = parseInt(seat.slice(1));
+            if (isNaN(num)) return false;
+            return validRows.includes(row) && num >= 1 && num <= maxSeat;
+        })) {
+            return res.status(400).json({ success: false, message: "Invalid seat for this zaal." });
+        }
+
+        const isAvailable = await checkSeatAvailability(showId, selectedSeats);
+        if (!isAvailable) {
+            return res.status(409).json({ success: false, message: "Selected seats are already occupied. Please choose different seats." });
+        }
+
+        // Calculate total: base price + theater upcharge per seat
+        const pricePerSeat = showData.showPrice + theater.upcharge;
+        const totalAmount = pricePerSeat * selectedSeats.length;
+
         // Create booking record
         const booking = await Booking.create({
             user: userId,
             show: showId,
-            amount: showData.showPrice * selectedSeats.length,
-            bookSeats: selectedSeats
+            amount: totalAmount,
+            bookSeats: selectedSeats,
+            theater: theaterId
         })
 
         // Mark seats as occupied
@@ -70,8 +90,8 @@ export const createBooking = async (req, res) => {
         const line_items = [{
             price_data: {
                 currency: 'eur',
-                product_data: { name: showData.movie_id.title },
-                unit_amount: Math.floor(booking.amount * 100)
+                product_data: { name: `${showData.movie_id.title} — ${theater.name}` },
+                unit_amount: Math.round(totalAmount * 100)
             },
             quantity: 1
         }]

@@ -1,5 +1,6 @@
 import HeroSection from '../components/HeroSection'
 import FeaturedSection from '../components/FeaturedSection'
+import UpcomingSection from '../components/UpcomingSection'
 import TrailerSection from '../components/TrailerSection'
 
 const Home = () => {
@@ -7,6 +8,7 @@ const Home = () => {
     <>
       <HeroSection />
       <FeaturedSection />
+      <UpcomingSection />
       <TrailerSection />
     </>
   )
