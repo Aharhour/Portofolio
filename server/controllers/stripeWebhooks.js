@@ -2,6 +2,21 @@ import stripe from "stripe";
 import Booking from '../models/Booking.js';
 import { inngest } from '../inngest/index.js';
 
+// Mark a booking as paid and trigger confirmation email
+const markBookingPaid = async (bookingId) => {
+    const booking = await Booking.findById(bookingId);
+    if (!booking || booking.isPaid) return;
+
+    booking.isPaid = true;
+    booking.paymentLink = "";
+    await booking.save();
+
+    await inngest.send({
+        name: "app/show.booked",
+        data: { bookingId }
+    });
+}
+
 // Handle Stripe webhook events (called with raw body)
 export const stripeWebhooks = async (request, response) => {
     const stripeInstance = new stripe(process.env.STRIPE_SECRET_KEY);
@@ -17,30 +32,24 @@ export const stripeWebhooks = async (request, response) => {
 
     try {
         switch (event.type) {
+            case "checkout.session.completed": {
+                const session = event.data.object;
+                if (session.payment_status === 'paid' && session.metadata?.bookingId) {
+                    await markBookingPaid(session.metadata.bookingId);
+                }
+                break;
+            }
+
             case "payment_intent.succeeded": {
-                // Look up the checkout session to get booking metadata
                 const paymentIntent = event.data.object;
                 const sessionList = await stripeInstance.checkout.sessions.list({
                     payment_intent: paymentIntent.id
-                })
+                });
 
                 const session = sessionList.data[0];
-                if (!session?.metadata?.bookingId) break;
-
-                const { bookingId } = session.metadata;
-
-                // Mark booking as paid
-                await Booking.findByIdAndUpdate(bookingId, {
-                    isPaid: true,
-                    paymentLink: ""
-                })
-
-                // Trigger confirmation email via Inngest
-                await inngest.send({
-                    name: "app/show.booked",
-                    data: { bookingId }
-                })
-
+                if (session?.metadata?.bookingId) {
+                    await markBookingPaid(session.metadata.bookingId);
+                }
                 break;
             }
 

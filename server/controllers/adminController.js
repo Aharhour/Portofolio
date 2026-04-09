@@ -10,17 +10,19 @@ export const isAdmin = async (req, res) => {
 // Aggregate dashboard KPIs: bookings, revenue, active shows, total users
 export const getDashboardData = async (req, res) => {
     try {
-        const [bookings, activeShows, totalUser] = await Promise.allSettled([
-            Booking.find({ isPaid: true }),
+        const [allBookings, activeShows, totalUser] = await Promise.allSettled([
+            Booking.find({}),
             Show.find({ showDateTime: { $gt: new Date() } }).populate('movie_id'),
             User.countDocuments()
         ]);
 
-        const paidBookings = bookings.status === 'fulfilled' ? bookings.value : [];
+        const bookings = allBookings.status === 'fulfilled' ? allBookings.value : [];
+        const paidBookings = bookings.filter(b => b.isPaid === true);
 
         const dashboardData = {
-            totalBookings: paidBookings.length,
-            totalRevenue: paidBookings.reduce((acc, booking) => acc + booking.amount, 0),
+            totalBookings: bookings.length,
+            paidBookings: paidBookings.length,
+            totalRevenue: paidBookings.reduce((acc, booking) => acc + (booking.amount || 0), 0),
             activeShows: activeShows.status === 'fulfilled' ? activeShows.value : [],
             totalUser: totalUser.status === 'fulfilled' ? totalUser.value : 0
         }

@@ -52,7 +52,7 @@ const ListBookings = () => {
                                 <td className="p-2">{item.show.movie_id.title}</td>
                                 <td className="p-2">{dateFormat(item.show.showDateTime)}</td>
                                 <td className="p-2">{item.bookSeats.join(", ")}</td>
-                                <td className="p-2">{currency} {item.amount}</td>
+                                <td className="p-2">{currency} {item.amount.toFixed(2)}</td>
                             </tr>
                         ))}
                     </tbody>
