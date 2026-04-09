@@ -3,7 +3,11 @@
     "allow": [
       "Bash(node -e ':*)",
       "Bash(timeout 8 node server.js)",
-      "Bash(curl -s http://localhost:3000/api/inngest)"
+      "Bash(curl -s http://localhost:3000/api/inngest)",
+      "Bash(where pandoc:*)",
+      "Bash(where npm:*)",
+      "Bash(npm install:*)",
+      "Bash(node convert-to-docx.js)"
     ]
   }
 }

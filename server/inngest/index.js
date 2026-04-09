@@ -83,26 +83,78 @@ const sendBookingConfirmationEmail = inngest.createFunction(
             populate: { path: "movie_id" }
         }).populate('user');
 
-        const showDate = new Date(booking.show.showDateTime).toLocaleDateString('en-US', {
-            timeZone: 'Europe/Amsterdam', weekday: 'short', month: 'long', day: 'numeric'
+        const showDate = new Date(booking.show.showDateTime).toLocaleDateString('nl-NL', {
+            timeZone: 'Europe/Amsterdam', weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
         })
-        const showTime = new Date(booking.show.showDateTime).toLocaleTimeString('en-US', {
+        const showTime = new Date(booking.show.showDateTime).toLocaleTimeString('nl-NL', {
             timeZone: 'Europe/Amsterdam', hour: '2-digit', minute: '2-digit'
         })
 
+        const seatList = booking.bookSeats.join(', ');
+        const seatCount = booking.bookSeats.length;
+        const totalAmount = booking.amount.toFixed(2);
+
         await sendEmail({
             to: booking.user.email,
-            subject: `Payment Confirmation: "${booking.show.movie_id.title}" booked!`,
-            body: `<div style="font-family: Arial, sans-serif; line-height: 1.5;">
-                        <h2>Hi ${booking.user.name},</h2>
-                        <p>Your booking for <strong style="color: #F84565;">"${booking.show.movie_id.title}"</strong> is confirmed.</p>
-                        <p>
-                            <strong>Date:</strong> ${showDate}<br/>
-                            <strong>Time:</strong> ${showTime}
+            subject: `Bevestiging: Je tickets voor "${booking.show.movie_id.title}"`,
+            body: `
+            <div style="margin:0;padding:0;background-color:#f4f4f5;font-family:'Helvetica Neue',Arial,sans-serif;">
+                <div style="max-width:600px;margin:0 auto;padding:32px 16px;">
+
+                    <!-- Header -->
+                    <div style="background:linear-gradient(135deg,#1a1a2e 0%,#16213e 100%);border-radius:16px 16px 0 0;padding:32px;text-align:center;">
+                        <h1 style="color:#F84565;margin:0;font-size:28px;letter-spacing:1px;">BetaTicket</h1>
+                        <p style="color:#a0a0b0;margin:8px 0 0;font-size:14px;">Jouw ticket is bevestigd!</p>
+                    </div>
+
+                    <!-- Body -->
+                    <div style="background:#ffffff;padding:32px;border-radius:0 0 16px 16px;box-shadow:0 4px 24px rgba(0,0,0,0.08);">
+                        <p style="font-size:16px;color:#333;">Hoi <strong>${booking.user.name}</strong>,</p>
+                        <p style="font-size:15px;color:#555;line-height:1.6;">
+                            Bedankt voor je aankoop! Je boeking voor
+                            <strong style="color:#F84565;">${booking.show.movie_id.title}</strong>
+                            is succesvol bevestigd.
                         </p>
-                        <p>Enjoy the show!</p>
-                        <p>Thanks for booking with us!<br/>- BetaTicket Team</p>
-                    </div>`
+
+                        <!-- Ticket Card -->
+                        <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:12px;padding:24px;margin:24px 0;">
+                            <table style="width:100%;border-collapse:collapse;">
+                                <tr>
+                                    <td style="padding:8px 0;color:#888;font-size:13px;text-transform:uppercase;letter-spacing:0.5px;">Film</td>
+                                    <td style="padding:8px 0;color:#1a1a2e;font-size:15px;font-weight:600;text-align:right;">${booking.show.movie_id.title}</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:8px 0;border-top:1px dashed #e5e7eb;color:#888;font-size:13px;text-transform:uppercase;letter-spacing:0.5px;">Datum</td>
+                                    <td style="padding:8px 0;border-top:1px dashed #e5e7eb;color:#1a1a2e;font-size:15px;font-weight:600;text-align:right;">${showDate}</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:8px 0;border-top:1px dashed #e5e7eb;color:#888;font-size:13px;text-transform:uppercase;letter-spacing:0.5px;">Tijd</td>
+                                    <td style="padding:8px 0;border-top:1px dashed #e5e7eb;color:#1a1a2e;font-size:15px;font-weight:600;text-align:right;">${showTime}</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:8px 0;border-top:1px dashed #e5e7eb;color:#888;font-size:13px;text-transform:uppercase;letter-spacing:0.5px;">Stoelen (${seatCount}x)</td>
+                                    <td style="padding:8px 0;border-top:1px dashed #e5e7eb;color:#1a1a2e;font-size:15px;font-weight:600;text-align:right;">${seatList}</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:12px 0;border-top:2px solid #e5e7eb;color:#888;font-size:13px;text-transform:uppercase;letter-spacing:0.5px;">Totaal betaald</td>
+                                    <td style="padding:12px 0;border-top:2px solid #e5e7eb;color:#F84565;font-size:20px;font-weight:700;text-align:right;">&euro;${totalAmount}</td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <p style="font-size:14px;color:#888;line-height:1.6;text-align:center;">
+                            Bewaar deze e-mail als bewijs van je aankoop.<br/>
+                            Veel plezier met de film!
+                        </p>
+                    </div>
+
+                    <!-- Footer -->
+                    <div style="text-align:center;padding:24px 0 0;">
+                        <p style="color:#aaa;font-size:12px;margin:0;">&copy; ${new Date().getFullYear()} BetaTicket. Alle rechten voorbehouden.</p>
+                    </div>
+
+                </div>
+            </div>`
         })
     }
 )

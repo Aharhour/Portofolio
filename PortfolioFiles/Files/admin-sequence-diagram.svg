@@ -1,0 +1,463 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 2800" font-family="Arial, sans-serif" font-size="13">
+  <defs>
+    <style>
+      .title { font-size: 22px; font-weight: bold; fill: #1a1a2e; }
+      .subtitle { font-size: 14px; fill: #555; }
+      .actor-box { fill: #1a1a2e; stroke: #1a1a2e; stroke-width: 2; rx: 6; }
+      .actor-text { fill: white; font-size: 13px; font-weight: bold; text-anchor: middle; }
+      .lifeline { stroke: #999; stroke-width: 1.5; stroke-dasharray: 6,4; }
+      .msg-line { stroke: #333; stroke-width: 1.5; }
+      .msg-line-dash { stroke: #e74c3c; stroke-width: 1.5; stroke-dasharray: 6,4; }
+      .msg-text { font-size: 12px; fill: #222; }
+      .note { fill: #fff3cd; stroke: #ffc107; stroke-width: 1.5; rx: 4; }
+      .note-text { font-size: 11px; fill: #856404; }
+      .group-box { fill: none; stroke: #3498db; stroke-width: 2; rx: 6; }
+      .group-label { fill: #3498db; rx: 3; }
+      .group-label-text { fill: white; font-size: 11px; font-weight: bold; }
+      .group-title { font-size: 12px; fill: #2c3e50; font-weight: bold; }
+      .alt-box { fill: none; stroke: #27ae60; stroke-width: 2; rx: 6; stroke-dasharray: 8,4; }
+      .alt-label { fill: #27ae60; rx: 3; }
+      .alt-label-text { fill: white; font-size: 11px; font-weight: bold; }
+      .section-divider { stroke: #ddd; stroke-width: 1; }
+      .section-text { font-size: 16px; font-weight: bold; fill: #2c3e50; }
+      .activation { fill: #e8f4fd; stroke: #3498db; stroke-width: 1.5; rx: 3; }
+      .arrow { fill: #333; }
+      .arrow-red { fill: #e74c3c; }
+      .self-msg { stroke: #333; stroke-width: 1.5; fill: none; }
+    </style>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1400" height="2800" fill="#fafbfc"/>
+
+  <!-- Title -->
+  <text x="700" y="40" class="title" text-anchor="middle">UML Sequence Diagram — Admin Side</text>
+  <text x="700" y="62" class="subtitle" text-anchor="middle">Movie Ticket Booking System — Admin Workflows</text>
+
+  <!-- ========== ACTORS ========== -->
+  <!-- Admin Browser -->
+  <rect x="50" y="85" width="120" height="40" class="actor-box"/>
+  <text x="110" y="110" class="actor-text">Admin</text>
+  <line x1="110" y1="125" x2="110" y2="2720" class="lifeline"/>
+
+  <!-- React Frontend -->
+  <rect x="260" y="85" width="120" height="40" class="actor-box"/>
+  <text x="320" y="110" class="actor-text">React App</text>
+  <line x1="320" y1="125" x2="320" y2="2720" class="lifeline"/>
+
+  <!-- Clerk Auth -->
+  <rect x="470" y="85" width="120" height="40" class="actor-box"/>
+  <text x="530" y="110" class="actor-text">Clerk Auth</text>
+  <line x1="530" y1="125" x2="530" y2="2720" class="lifeline"/>
+
+  <!-- Express Backend -->
+  <rect x="680" y="85" width="140" height="40" class="actor-box"/>
+  <text x="750" y="110" class="actor-text">Express API</text>
+  <line x1="750" y1="125" x2="750" y2="2720" class="lifeline"/>
+
+  <!-- MongoDB -->
+  <rect x="890" y="85" width="120" height="40" class="actor-box"/>
+  <text x="950" y="110" class="actor-text">MongoDB</text>
+  <line x1="950" y1="125" x2="950" y2="2720" class="lifeline"/>
+
+  <!-- TMDB API -->
+  <rect x="1080" y="85" width="120" height="40" class="actor-box"/>
+  <text x="1140" y="110" class="actor-text">TMDB API</text>
+  <line x1="1140" y1="125" x2="1140" y2="2720" class="lifeline"/>
+
+  <!-- Inngest -->
+  <rect x="1260" y="85" width="100" height="40" class="actor-box"/>
+  <text x="1310" y="110" class="actor-text">Inngest</text>
+  <line x1="1310" y1="125" x2="1310" y2="2720" class="lifeline"/>
+
+  <!-- ============================================================ -->
+  <!-- SECTION 1: ADMIN AUTHENTICATION -->
+  <!-- ============================================================ -->
+  <line x1="30" y1="155" x2="1380" y2="155" class="section-divider"/>
+  <text x="40" y="178" class="section-text">1. Admin Authentication</text>
+
+  <!-- Group box -->
+  <rect x="40" y="190" width="960" height="250" class="group-box"/>
+  <rect x="40" y="190" width="50" height="22" class="group-label"/>
+  <text x="65" y="205" class="group-label-text">seq</text>
+  <text x="100" y="205" class="group-title">Admin Login Flow</text>
+
+  <!-- Step 1: Admin navigates -->
+  <line x1="110" y1="230" x2="315" y2="230" class="msg-line" marker-end="url(#arrowhead)"/>
+  <text x="215" y="225" class="msg-text" text-anchor="middle">Navigate to /admin</text>
+
+  <!-- Step 2: Clerk auth check -->
+  <rect x="310" y="245" width="20" height="60" class="activation"/>
+  <line x1="320" y1="260" x2="525" y2="260" class="msg-line" marker-end="url(#arrowhead)"/>
+  <text x="425" y="255" class="msg-text" text-anchor="middle">Verify JWT token</text>
+
+  <!-- Step 3: Clerk response -->
+  <line x1="530" y1="285" x2="325" y2="285" class="msg-line-dash" marker-end="url(#arrowhead-red)"/>
+  <text x="425" y="280" class="msg-text" text-anchor="middle">Token valid + userId</text>
+
+  <!-- Step 4: Check admin role -->
+  <line x1="320" y1="315" x2="745" y2="315" class="msg-line" marker-end="url(#arrowhead)"/>
+  <text x="535" y="310" class="msg-text" text-anchor="middle">GET /api/admin/is-admin</text>
+
+  <!-- Step 5: Backend checks Clerk metadata -->
+  <rect x="740" y="325" width="20" height="50" class="activation"/>
+  <line x1="750" y1="340" x2="525" y2="340" class="msg-line" marker-end="url(#arrowhead)"/>
+  <text x="640" y="335" class="msg-text" text-anchor="middle">getUser(userId) — check role</text>
+
+  <!-- Step 6: Clerk returns metadata -->
+  <line x1="530" y1="360" x2="745" y2="360" class="msg-line-dash" marker-end="url(#arrowhead-red)"/>
+  <text x="640" y="355" class="msg-text" text-anchor="middle">publicMetadata.role = "admin"</text>
+
+  <!-- Alt box for role check -->
+  <rect x="60" y="385" width="920" height="45" class="alt-box"/>
+  <rect x="60" y="385" width="35" height="20" class="alt-label"/>
+  <text x="78" y="399" class="alt-label-text">alt</text>
+  <text x="105" y="399" class="group-title">[role === "admin"]</text>
+
+  <!-- Step 7: Return admin confirmed -->
+  <line x1="750" y1="415" x2="325" y2="415" class="msg-line-dash" marker-end="url(#arrowhead-red)"/>
+  <text x="535" y="410" class="msg-text" text-anchor="middle">200 OK — { isAdmin: true }</text>
+
+  <!-- Note -->
+  <rect x="70" y="442" width="280" height="35" class="note"/>
+  <text x="80" y="460" class="note-text">protectAdmin middleware checks publicMetadata</text>
+  <text x="80" y="472" class="note-text">and privateMetadata for role: "admin"</text>
+
+  <!-- ============================================================ -->
+  <!-- SECTION 2: VIEW DASHBOARD -->
+  <!-- ============================================================ -->
+  <line x1="30" y1="500" x2="1380" y2="500" class="section-divider"/>
+  <text x="40" y="523" class="section-text">2. View Dashboard (GET /api/admin/dashboard)</text>
+
+  <rect x="40" y="535" width="960" height="270" class="group-box"/>
+  <rect x="40" y="535" width="50" height="22" class="group-label"/>
+  <text x="65" y="550" class="group-label-text">seq</text>
+  <text x="100" y="550" class="group-title">Dashboard Data Retrieval</text>
+
+  <!-- Admin clicks dashboard -->
+  <line x1="110" y1="575" x2="315" y2="575" class="msg-line" marker-end="url(#arrowhead)"/>
+  <text x="215" y="570" class="msg-text" text-anchor="middle">Click Dashboard menu</text>
+
+  <!-- React calls API -->
+  <line x1="320" y1="600" x2="745" y2="600" class="msg-line" marker-end="url(#arrowhead)"/>
+  <text x="535" y="595" class="msg-text" text-anchor="middle">GET /api/admin/dashboard (+ JWT)</text>
+
+  <!-- Backend queries -->
+  <rect x="740" y="615" width="20" height="120" class="activation"/>
+
+  <line x1="750" y1="630" x2="945" y2="630" class="msg-line" marker-end="url(#arrowhead)"/>
+  <text x="850" y="625" class="msg-text" text-anchor="middle">Booking.find({ isPaid: true })</text>
+
+  <line x1="950" y1="650" x2="755" y2="650" class="msg-line-dash" marker-end="url(#arrowhead-red)"/>
+  <text x="850" y="645" class="msg-text" text-anchor="middle">All paid bookings</text>
+
+  <line x1="750" y1="675" x2="945" y2="675" class="msg-line" marker-end="url(#arrowhead)"/>
+  <text x="850" y="670" class="msg-text" text-anchor="middle">Show.find({ date > now })</text>
+
+  <line x1="950" y1="695" x2="755" y2="695" class="msg-line-dash" marker-end="url(#arrowhead-red)"/>
+  <text x="850" y="690" class="msg-text" text-anchor="middle">Active shows</text>
+
+  <line x1="750" y1="720" x2="945" y2="720" class="msg-line" marker-end="url(#arrowhead)"/>
+  <text x="850" y="715" class="msg-text" text-anchor="middle">User.countDocuments()</text>
+
+  <!-- Return aggregated data -->
+  <line x1="750" y1="760" x2="325" y2="760" class="msg-line-dash" marker-end="url(#arrowhead-red)"/>
+  <text x="535" y="755" class="msg-text" text-anchor="middle">{ totalBookings, totalRevenue, activeShows, totalUsers }</text>
+
+  <!-- React renders -->
+  <line x1="320" y1="785" x2="115" y2="785" class="msg-line-dash" marker-end="url(#arrowhead-red)"/>
+  <text x="215" y="780" class="msg-text" text-anchor="middle">Render KPI cards + show grid</text>
+
+  <!-- ============================================================ -->
+  <!-- SECTION 3: ADD SHOWS -->
+  <!-- ============================================================ -->
+  <line x1="30" y1="830" x2="1380" y2="830" class="section-divider"/>
+  <text x="40" y="853" class="section-text">3. Add Shows (POST /api/show/add)</text>
+
+  <rect x="40" y="865" width="1330" height="530" class="group-box"/>
+  <rect x="40" y="865" width="50" height="22" class="group-label"/>
+  <text x="65" y="880" class="group-label-text">seq</text>
+  <text x="100" y="880" class="group-title">Add Movie Shows Flow</text>
+
+  <!-- Admin navigates to add shows -->
+  <line x1="110" y1="905" x2="315" y2="905" class="msg-line" marker-end="url(#arrowhead)"/>
+  <text x="215" y="900" class="msg-text" text-anchor="middle">Navigate to /admin/add-shows</text>
+
+  <!-- Fetch now playing -->
+  <line x1="320" y1="930" x2="745" y2="930" class="msg-line" marker-end="url(#arrowhead)"/>
+  <text x="535" y="925" class="msg-text" text-anchor="middle">GET /api/show/now-playing</text>
+
+  <!-- Backend calls TMDB -->
+  <rect x="740" y="940" width="20" height="50" class="activation"/>
+  <line x1="750" y1="955" x2="1135" y2="955" class="msg-line" marker-end="url(#arrowhead)"/>
+  <text x="945" y="950" class="msg-text" text-anchor="middle">GET /movie/now_playing</text>
+
+  <line x1="1140" y1="975" x2="755" y2="975" class="msg-line-dash" marker-end="url(#arrowhead-red)"/>
+  <text x="945" y="970" class="msg-text" text-anchor="middle">Now playing movie list</text>
+
+  <!-- Return to frontend -->
+  <line x1="750" y1="1005" x2="325" y2="1005" class="msg-line-dash" marker-end="url(#arrowhead-red)"/>
+  <text x="535" y="1000" class="msg-text" text-anchor="middle">Movie carousel data</text>
+
+  <line x1="320" y1="1025" x2="115" y2="1025" class="msg-line-dash" marker-end="url(#arrowhead-red)"/>
+  <text x="215" y="1020" class="msg-text" text-anchor="middle">Render movie carousel</text>
+
+  <!-- Admin selects movie and configures -->
+  <rect x="70" y="1045" width="270" height="35" class="note"/>
+  <text x="80" y="1063" class="note-text">Admin selects movie, picks dates/times,</text>
+  <text x="80" y="1075" class="note-text">and sets ticket price</text>
+
+  <!-- Submit show -->
+  <line x1="110" y1="1100" x2="315" y2="1100" class="msg-line" marker-end="url(#arrowhead)"/>
+  <text x="215" y="1095" class="msg-text" text-anchor="middle">Submit show form</text>
+
+  <line x1="320" y1="1125" x2="745" y2="1125" class="msg-line" marker-end="url(#arrowhead)"/>
+  <text x="535" y="1120" class="msg-text" text-anchor="middle">POST /api/show/add { movieId, dates, times, price }</text>
+
+  <rect x="740" y="1135" width="20" height="140" class="activation"/>
+
+  <!-- Check if movie exists -->
+  <line x1="750" y1="1155" x2="945" y2="1155" class="msg-line" marker-end="url(#arrowhead)"/>
+  <text x="850" y="1150" class="msg-text" text-anchor="middle">Movie.findById(movieId)</text>
+
+  <!-- Alt: movie not in DB -->
+  <rect x="720" y="1170" width="460" height="55" class="alt-box"/>
+  <rect x="720" y="1170" width="35" height="20" class="alt-label"/>
+  <text x="738" y="1184" class="alt-label-text">alt</text>
+  <text x="765" y="1184" class="group-title">[movie not in DB]</text>
+
+  <line x1="750" y1="1200" x2="1135" y2="1200" class="msg-line" marker-end="url(#arrowhead)"/>
+  <text x="945" y="1195" class="msg-text" text-anchor="middle">GET /movie/{id} (fetch details + cast)</text>
+
+  <line x1="1140" y1="1215" x2="755" y2="1215" class="msg-line-dash" marker-end="url(#arrowhead-red)"/>
+
+  <!-- Create shows -->
+  <line x1="750" y1="1245" x2="945" y2="1245" class="msg-line" marker-end="url(#arrowhead)"/>
+  <text x="850" y="1240" class="msg-text" text-anchor="middle">Show.insertMany(showDocs)</text>
+
+  <line x1="950" y1="1260" x2="755" y2="1260" class="msg-line-dash" marker-end="url(#arrowhead-red)"/>
+  <text x="850" y="1257" class="msg-text" text-anchor="middle">Shows created</text>
+
+  <!-- Trigger Inngest -->
+  <line x1="750" y1="1290" x2="1305" y2="1290" class="msg-line" marker-end="url(#arrowhead)"/>
+  <text x="1030" y="1285" class="msg-text" text-anchor="middle">inngest.send("app/show.added")</text>
+
+  <!-- Inngest note -->
+  <rect x="1220" y="1305" width="140" height="35" class="note"/>
+  <text x="1230" y="1323" class="note-text">Sends email notification</text>
+  <text x="1230" y="1335" class="note-text">to all registered users</text>
+
+  <!-- Return success -->
+  <line x1="750" y1="1355" x2="325" y2="1355" class="msg-line-dash" marker-end="url(#arrowhead-red)"/>
+  <text x="535" y="1350" class="msg-text" text-anchor="middle">200 OK — Shows created successfully</text>
+
+  <line x1="320" y1="1375" x2="115" y2="1375" class="msg-line-dash" marker-end="url(#arrowhead-red)"/>
+  <text x="215" y="1370" class="msg-text" text-anchor="middle">Show success toast</text>
+
+  <!-- ============================================================ -->
+  <!-- SECTION 4: LIST SHOWS -->
+  <!-- ============================================================ -->
+  <line x1="30" y1="1420" x2="1380" y2="1420" class="section-divider"/>
+  <text x="40" y="1443" class="section-text">4. List Shows (GET /api/admin/all-shows)</text>
+
+  <rect x="40" y="1455" width="960" height="230" class="group-box"/>
+  <rect x="40" y="1455" width="50" height="22" class="group-label"/>
+  <text x="65" y="1470" class="group-label-text">seq</text>
+  <text x="100" y="1470" class="group-title">List All Shows with Earnings</text>
+
+  <line x1="110" y1="1495" x2="315" y2="1495" class="msg-line" marker-end="url(#arrowhead)"/>
+  <text x="215" y="1490" class="msg-text" text-anchor="middle">Navigate to /admin/list-shows</text>
+
+  <line x1="320" y1="1520" x2="745" y2="1520" class="msg-line" marker-end="url(#arrowhead)"/>
+  <text x="535" y="1515" class="msg-text" text-anchor="middle">GET /api/admin/all-shows (+ JWT)</text>
+
+  <rect x="740" y="1530" width="20" height="70" class="activation"/>
+
+  <line x1="750" y1="1545" x2="945" y2="1545" class="msg-line" marker-end="url(#arrowhead)"/>
+  <text x="850" y="1540" class="msg-text" text-anchor="middle">Show.find().populate("movie_id")</text>
+
+  <line x1="950" y1="1570" x2="755" y2="1570" class="msg-line-dash" marker-end="url(#arrowhead-red)"/>
+  <text x="850" y="1565" class="msg-text" text-anchor="middle">Shows with movie details</text>
+
+  <!-- Note about earnings calc -->
+  <rect x="770" y="1605" width="290" height="25" class="note"/>
+  <text x="780" y="1622" class="note-text">Earnings = occupiedSeats.length × showPrice</text>
+
+  <!-- Return -->
+  <line x1="750" y1="1645" x2="325" y2="1645" class="msg-line-dash" marker-end="url(#arrowhead-red)"/>
+  <text x="535" y="1640" class="msg-text" text-anchor="middle">Shows array with earnings data</text>
+
+  <line x1="320" y1="1665" x2="115" y2="1665" class="msg-line-dash" marker-end="url(#arrowhead-red)"/>
+  <text x="215" y="1660" class="msg-text" text-anchor="middle">Render shows table</text>
+
+  <!-- ============================================================ -->
+  <!-- SECTION 5: LIST BOOKINGS -->
+  <!-- ============================================================ -->
+  <line x1="30" y1="1710" x2="1380" y2="1710" class="section-divider"/>
+  <text x="40" y="1733" class="section-text">5. List Bookings (GET /api/admin/all-bookings)</text>
+
+  <rect x="40" y="1745" width="960" height="260" class="group-box"/>
+  <rect x="40" y="1745" width="50" height="22" class="group-label"/>
+  <text x="65" y="1760" class="group-label-text">seq</text>
+  <text x="100" y="1760" class="group-title">List All Bookings</text>
+
+  <line x1="110" y1="1785" x2="315" y2="1785" class="msg-line" marker-end="url(#arrowhead)"/>
+  <text x="215" y="1780" class="msg-text" text-anchor="middle">Navigate to /admin/list-bookings</text>
+
+  <line x1="320" y1="1810" x2="745" y2="1810" class="msg-line" marker-end="url(#arrowhead)"/>
+  <text x="535" y="1805" class="msg-text" text-anchor="middle">GET /api/admin/all-bookings (+ JWT)</text>
+
+  <rect x="740" y="1820" width="20" height="90" class="activation"/>
+
+  <line x1="750" y1="1840" x2="945" y2="1840" class="msg-line" marker-end="url(#arrowhead)"/>
+  <text x="850" y="1835" class="msg-text" text-anchor="middle">Booking.find()</text>
+
+  <line x1="750" y1="1865" x2="945" y2="1865" class="msg-line" marker-end="url(#arrowhead)"/>
+  <text x="850" y="1860" class="msg-text" text-anchor="middle">.populate("user show")</text>
+
+  <line x1="950" y1="1890" x2="755" y2="1890" class="msg-line-dash" marker-end="url(#arrowhead-red)"/>
+  <text x="850" y="1885" class="msg-text" text-anchor="middle">Bookings with user + show + movie</text>
+
+  <!-- Return -->
+  <line x1="750" y1="1940" x2="325" y2="1940" class="msg-line-dash" marker-end="url(#arrowhead-red)"/>
+  <text x="535" y="1935" class="msg-text" text-anchor="middle">{ user, movie, showTime, seats, amount, isPaid }</text>
+
+  <line x1="320" y1="1965" x2="115" y2="1965" class="msg-line-dash" marker-end="url(#arrowhead-red)"/>
+  <text x="215" y="1960" class="msg-text" text-anchor="middle">Render bookings table</text>
+
+  <!-- Note -->
+  <rect x="70" y="1975" width="250" height="25" class="note"/>
+  <text x="80" y="1992" class="note-text">Sorted by createdAt descending (newest first)</text>
+
+  <!-- ============================================================ -->
+  <!-- SECTION 6: STRIPE WEBHOOK (background) -->
+  <!-- ============================================================ -->
+  <line x1="30" y1="2025" x2="1380" y2="2025" class="section-divider"/>
+  <text x="40" y="2048" class="section-text">6. Background: Stripe Webhook + Inngest Events</text>
+
+  <rect x="40" y="2060" width="1330" height="330" class="group-box" style="stroke: #9b59b6;"/>
+  <rect x="40" y="2060" width="80" height="22" style="fill: #9b59b6; rx: 3;"/>
+  <text x="80" y="2075" class="group-label-text">background</text>
+  <text x="130" y="2075" class="group-title">Automated Processes (visible to Admin in Dashboard)</text>
+
+  <!-- Stripe webhook -->
+  <rect x="60" y="2090" width="280" height="45" class="note" style="fill: #f0e6ff; stroke: #9b59b6;"/>
+  <text x="70" y="2108" class="note-text" style="fill: #6c3483;">When a customer completes payment,</text>
+  <text x="70" y="2120" class="note-text" style="fill: #6c3483;">Stripe sends a webhook to the backend</text>
+
+  <!-- Stripe to Express -->
+  <rect x="390" y="2095" width="100" height="30" style="fill: #635bff; rx: 6;"/>
+  <text x="440" y="2115" style="fill: white; font-size: 12px; font-weight: bold; text-anchor: middle;">Stripe</text>
+
+  <line x1="490" y1="2150" x2="745" y2="2150" class="msg-line" marker-end="url(#arrowhead)"/>
+  <text x="620" y="2145" class="msg-text" text-anchor="middle">POST /api/stripe (checkout.session.completed)</text>
+
+  <rect x="740" y="2160" width="20" height="100" class="activation"/>
+
+  <!-- Update booking -->
+  <line x1="750" y1="2180" x2="945" y2="2180" class="msg-line" marker-end="url(#arrowhead)"/>
+  <text x="850" y="2175" class="msg-text" text-anchor="middle">Booking.update({ isPaid: true })</text>
+
+  <!-- Update occupied seats -->
+  <line x1="750" y1="2205" x2="945" y2="2205" class="msg-line" marker-end="url(#arrowhead)"/>
+  <text x="850" y="2200" class="msg-text" text-anchor="middle">Show.update({ occupiedSeats })</text>
+
+  <!-- Trigger inngest -->
+  <line x1="750" y1="2235" x2="1305" y2="2235" class="msg-line" marker-end="url(#arrowhead)"/>
+  <text x="1030" y="2230" class="msg-text" text-anchor="middle">inngest.send("app/show.booked")</text>
+
+  <!-- Inngest sends email -->
+  <rect x="1220" y="2250" width="140" height="35" class="note"/>
+  <text x="1230" y="2268" class="note-text">Sends booking confirmation</text>
+  <text x="1230" y="2280" class="note-text">email to customer</text>
+
+  <!-- Unpaid check -->
+  <line x1="750" y1="2310" x2="1305" y2="2310" class="msg-line" marker-end="url(#arrowhead)"/>
+  <text x="1030" y="2305" class="msg-text" text-anchor="middle">inngest.send("app/checkpayment") — 10 min delay</text>
+
+  <rect x="1220" y="2325" width="140" height="45" class="note"/>
+  <text x="1230" y="2343" class="note-text">If unpaid after 10 min:</text>
+  <text x="1230" y="2355" class="note-text">release seats, delete</text>
+  <text x="1230" y="2367" class="note-text">booking from DB</text>
+
+  <!-- ============================================================ -->
+  <!-- SECTION 7: CRON JOB -->
+  <!-- ============================================================ -->
+  <line x1="30" y1="2410" x2="1380" y2="2410" class="section-divider"/>
+  <text x="40" y="2433" class="section-text">7. Scheduled: Show Reminders (Cron every 8 hours)</text>
+
+  <rect x="40" y="2445" width="1330" height="130" class="group-box" style="stroke: #e67e22;"/>
+  <rect x="40" y="2445" width="55" height="22" style="fill: #e67e22; rx: 3;"/>
+  <text x="68" y="2460" class="group-label-text">cron</text>
+  <text x="105" y="2460" class="group-title">0 */8 * * * — Send show reminders</text>
+
+  <line x1="1310" y1="2485" x2="755" y2="2485" class="msg-line" marker-end="url(#arrowhead-red)"/>
+  <text x="1030" y="2480" class="msg-text" text-anchor="middle">Trigger reminder check</text>
+
+  <rect x="740" y="2495" width="20" height="50" class="activation"/>
+
+  <line x1="750" y1="2510" x2="945" y2="2510" class="msg-line" marker-end="url(#arrowhead)"/>
+  <text x="850" y="2505" class="msg-text" text-anchor="middle">Find shows starting in 8 hours</text>
+
+  <line x1="950" y1="2530" x2="755" y2="2530" class="msg-line-dash" marker-end="url(#arrowhead-red)"/>
+  <text x="850" y="2527" class="msg-text" text-anchor="middle">Upcoming shows + booked users</text>
+
+  <rect x="770" y="2550" width="220" height="22" class="note" style="fill: #fde8d0; stroke: #e67e22;"/>
+  <text x="780" y="2566" class="note-text" style="fill: #a04000;">Email reminders sent to booked users</text>
+
+  <!-- ============================================================ -->
+  <!-- LEGEND -->
+  <!-- ============================================================ -->
+  <line x1="30" y1="2600" x2="1380" y2="2600" class="section-divider"/>
+  <text x="40" y="2625" class="section-text">Legend</text>
+
+  <rect x="40" y="2640" width="500" height="120" rx="8" fill="#f8f9fa" stroke="#dee2e6" stroke-width="1"/>
+
+  <!-- Sync request -->
+  <line x1="60" y1="2665" x2="140" y2="2665" class="msg-line" marker-end="url(#arrowhead)"/>
+  <text x="155" y="2669" class="msg-text">Synchronous request</text>
+
+  <!-- Async response -->
+  <line x1="60" y1="2690" x2="140" y2="2690" class="msg-line-dash" marker-end="url(#arrowhead-red)"/>
+  <text x="155" y="2694" class="msg-text">Response / return</text>
+
+  <!-- Activation -->
+  <rect x="60" y="2710" width="15" height="25" class="activation"/>
+  <text x="155" y="2727" class="msg-text">Processing activation</text>
+
+  <!-- Note -->
+  <rect x="60" y="2740" width="70" height="15" class="note"/>
+  <text x="155" y="2752" class="msg-text">Contextual note</text>
+
+  <!-- Arrow markers -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" class="arrow"/>
+    </marker>
+    <marker id="arrowhead-red" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" class="arrow-red"/>
+    </marker>
+  </defs>
+
+  <!-- Bottom actor boxes -->
+  <rect x="50" y="2770" width="120" height="30" class="actor-box"/>
+  <text x="110" y="2790" class="actor-text">Admin</text>
+
+  <rect x="260" y="2770" width="120" height="30" class="actor-box"/>
+  <text x="320" y="2790" class="actor-text">React App</text>
+
+  <rect x="470" y="2770" width="120" height="30" class="actor-box"/>
+  <text x="530" y="2790" class="actor-text">Clerk Auth</text>
+
+  <rect x="680" y="2770" width="140" height="30" class="actor-box"/>
+  <text x="750" y="2790" class="actor-text">Express API</text>
+
+  <rect x="890" y="2770" width="120" height="30" class="actor-box"/>
+  <text x="950" y="2790" class="actor-text">MongoDB</text>
+
+  <rect x="1080" y="2770" width="120" height="30" class="actor-box"/>
+  <text x="1140" y="2790" class="actor-text">TMDB API</text>
+
+  <rect x="1260" y="2770" width="100" height="30" class="actor-box"/>
+  <text x="1310" y="2790" class="actor-text">Inngest</text>
+</svg>
