@@ -1,11 +1,27 @@
-import React from 'react'
+import { useEffect } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
+
+const ALLOWED_REDIRECTS = ['my-bookings', 'movies', 'favorite', 'admin', 'releases', 'theaters'];
 
 const Loading = () => {
-  return (
-    <div className='flex justify-center items-center h-[80vh]'>
-        <div className='animate-spin rounded-full h-14 w-14 border-2 border-t-primary'></div>
-    </div>
-  )
+    const { nextUrl } = useParams()
+    const navigate = useNavigate()
+
+    // If a redirect URL is provided, navigate there after a delay (e.g. post-payment)
+    useEffect(() => {
+        if (nextUrl && ALLOWED_REDIRECTS.includes(nextUrl)) {
+            const timer = setTimeout(() => {
+                navigate(`/${nextUrl}`)
+            }, 8000)
+            return () => clearTimeout(timer)
+        }
+    }, [nextUrl, navigate])
+
+    return (
+        <div className='flex justify-center items-center h-[80vh]'>
+            <div className='animate-spin rounded-full h-14 w-14 border-2 border-t-primary'></div>
+        </div>
+    )
 }
 
 export default Loading

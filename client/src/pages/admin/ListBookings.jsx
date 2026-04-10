@@ -1,64 +1,65 @@
-import React, { useEffect, useState } from 'react'
-import { dummyBookingData } from '../../assets/assets';
+import { useEffect, useState } from 'react'
 import Loading from '../../components/Loading';
 import Title from '../../components/admin/Title';
 import { dateFormat } from '../../library/dateFormat';
 import { useAppContext } from '../../context/AppContext';
 
 const ListBookings = () => {
+    const { axios, getToken, user } = useAppContext()
+    const currency = import.meta.env.VITE_CURRENCY
 
-  const {axios, getToken, user} = useAppContext()
+    const [bookings, setBookings] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
 
-  const currency = import.meta.env.VITE_CURRENCY
+    const getAllBookings = async () => {
+        try {
+            const { data } = await axios.get('/api/admin/all-bookings', {
+                headers: { Authorization: `Bearer ${await getToken()}` }
+            });
+            setBookings(data.bookings)
+        } catch (error) {
+            // Fetch failed
+        }
+        setIsLoading(false)
+    };
 
-  const [bookings, setBookings] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+    useEffect(() => {
+        if (user) {
+            getAllBookings();
+        }
+    }, [user]);
 
-  const getAllBookings = async () => {
-    try {
-    const {data} = await axios.get('/api/admin/all-bookings', {headers: { Authorization: `Bearer ${await getToken()}` }});
-    setBookings(data.bookings)
-  } catch (error) {
-    console.log(error);
-  }
-  setIsLoading(false)  
-};
+    return !isLoading ? (
+        <>
+            <Title text1="List" text2="Bookings" />
 
-  useEffect(() => {
-    if(user){
-      getAllBookings();
-    }
-  }, [user]);
-
-  return !isLoading ? (
-    <>
-    <Title text1="List" text2="Bookings"/>
-    <div className="max-w-4xl mt-6 overflow-x-auto">
-      <table className="w-full border-collapse rounded-md overflow-hidden text-nowrap">
-        <thead>
-          <tr className="bg-primary/20 text-left text-white">
-            <th className="p-2 font-medium pl-5">User Name</th>
-            <th className="p-2 font-medium">Movie Name</th>
-            <th className="p-2 font-medium">Show Time</th>
-            <th className="p-2 font-medium">Seats</th>
-            <th className="p-2 font-medium">Amount</th>
-          </tr>
-        </thead>
-          <tbody className="text-sm font-light">
-            {bookings.map((item, index) => (
-              <tr key={index} className="border-b border-primary/10 bg-primary/5 even:bg-primary/10">
-              <td className="p-2 font-medium pl-5">{item.user.name}</td>
-              <td className="p-2">{item.show.movie.title}</td>
-              <td className="p-2">{dateFormat(item.show.showDateTime)}</td>
-              <td className="p-2">{item.bookedSeats.join(", ")}</td>
-              <td className="p-2">{currency} {item.amount}</td>
-              </tr>
-            ))}
-          </tbody>
-      </table>
-    </div>
-    </>
-  ) : <Loading />
+            {/* Bookings table */}
+            <div className="max-w-4xl mt-6 overflow-x-auto">
+                <table className="w-full border-collapse rounded-md overflow-hidden text-nowrap">
+                    <thead>
+                        <tr className="bg-primary/20 text-left text-white">
+                            <th className="p-2 font-medium pl-5">User Name</th>
+                            <th className="p-2 font-medium">Movie Name</th>
+                            <th className="p-2 font-medium">Show Time</th>
+                            <th className="p-2 font-medium">Seats</th>
+                            <th className="p-2 font-medium">Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody className="text-sm font-light">
+                        {bookings.map((item, index) => (
+                            <tr key={index} className="border-b border-primary/10 bg-primary/5 even:bg-primary/10">
+                                <td className="p-2 font-medium pl-5">{item.user.name}</td>
+                                <td className="p-2">{item.show.movie_id.title}</td>
+                                <td className="p-2">{dateFormat(item.show.showDateTime)}</td>
+                                <td className="p-2">{item.bookSeats.join(", ")}</td>
+                                <td className="p-2">{currency} {item.amount.toFixed(2)}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+        </>
+    ) : <Loading />
 }
 
 export default ListBookings

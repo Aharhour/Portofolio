@@ -1,4 +1,3 @@
-import React from 'react'
 import Navbar from './components/Navbar'
 import { Route, Routes, useLocation } from 'react-router-dom'
 import Home from './pages/Home'
@@ -16,37 +15,47 @@ import ListShows from './pages/admin/ListShows'
 import ListBookings from './pages/admin/ListBookings'
 import { useAppContext } from './context/AppContext'
 import { SignIn } from '@clerk/react'
+import Loading from './components/Loading'
+import Theaters from './pages/Theaters'
+import Releases from './pages/Releases'
 
 const App = () => {
-
-  // Hide navbar/footer on admin pages
   const isAdminRoute = useLocation().pathname.startsWith('/admin')
-
   const { user } = useAppContext()
 
   return (
     <>
       <Toaster />
-      {!isAdminRoute && <Navbar/>}
+
+      {/* Show public navbar/footer only on non-admin pages */}
+      {!isAdminRoute && <Navbar />}
+
       <Routes>
-        <Route path='/' element={<Home/>}/>
-        <Route path='/movies' element={<Movies/>}/>
-        <Route path='/movies/:id' element={<MovieDetails/>}/>
-        <Route path='/movies/:id/:date' element={<SeatLayout/>}/>
-        <Route path='/my-bookings' element={<MyBookings/>}/>
-        <Route path='/favorite' element={<Favorite/>} />
-        <Route path='/admin/*' element={user ? <Layout/> : (
+        {/* Public routes */}
+        <Route path='/' element={<Home />} />
+        <Route path='/movies' element={<Movies />} />
+        <Route path='/theaters' element={<Theaters />} />
+        <Route path='/releases' element={<Releases />} />
+        <Route path='/movies/:id' element={<MovieDetails />} />
+        <Route path='/movies/:id/:date' element={<SeatLayout />} />
+        <Route path='/my-bookings' element={<MyBookings />} />
+        <Route path='/loading/:nextUrl' element={<Loading />} />
+        <Route path='/favorite' element={<Favorite />} />
+
+        {/* Admin routes - require auth, nested under Layout */}
+        <Route path='/admin/*' element={user ? <Layout /> : (
           <div className='min-h-screen flex justify-center items-center'>
-            <SignIn fallbackRedirectUrl={'/admin'}/>
+            <SignIn fallbackRedirectUrl={'/admin'} />
           </div>
         )}>
-          <Route index element={<Dashboard/>}/>
-          <Route path="add-shows" element={<AddShows/>}/>
-          <Route path="list-shows" element={<ListShows/>}/>
-          <Route path="list-bookings" element={<ListBookings/>}/>
+          <Route index element={<Dashboard />} />
+          <Route path="add-shows" element={<AddShows />} />
+          <Route path="list-shows" element={<ListShows />} />
+          <Route path="list-bookings" element={<ListBookings />} />
         </Route>
       </Routes>
-      {!isAdminRoute && <Footer/>}
+
+      {!isAdminRoute && <Footer />}
     </>
   )
 }

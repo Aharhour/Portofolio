@@ -184,9 +184,9 @@
 
 ## Sprint 2 (Week 3–4)
 
-- [ ] US-02 – Film details bekijken *(6 uur)*
-- [ ] US-07 – Showtime selecteren *(6 uur)*
-- [ ] US-14 – Admin login & beveiligd dashboard *(4 uur)*
-- [ ] US-20 – Form validatie *(4 uur)*
+- [ ] US-02 – Film details bekijken *(6 uur)*✅
+- [ ] US-07 – Showtime selecteren *(6 uur)*✅
+- [ ] US-14 – Admin login & beveiligd dashboard *(4 uur)*✅
+- [ ] US-20 – Form validatie *(4 uur)*✅
 
-**Sprint 2 afgerond: 0/20 uur —0/4 stories ✅**
+**Sprint 2 afgerond: 20/20 uur —4/4 stories ✅**

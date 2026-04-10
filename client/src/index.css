@@ -10,16 +10,27 @@
 * {
   font-family: "Outfit", sans-serif;
   scrollbar-width: thin;
-  scrollbar-color: #787777 #1e1e1e;
+  scrollbar-color: #3a3a3a #111111;
+}
+
+html {
+    scroll-behavior: smooth;
 }
 
 body {
-    color: white;
+    color: #f0f0f0;
     background-color: #09090b;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
-.no-scrollbar{
-    scrollbar-width: none
+::selection {
+    background-color: #F84565;
+    color: white;
+}
+
+.no-scrollbar {
+    scrollbar-width: none;
 }
 
 input::-webkit-outer-spin-button,
@@ -29,4 +40,13 @@ input::-webkit-inner-spin-button {
 
 ::-webkit-calendar-picker-indicator {
     filter: invert(1);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.35s ease-out;
 }

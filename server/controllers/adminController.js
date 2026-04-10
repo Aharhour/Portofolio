@@ -2,55 +2,58 @@ import Booking from "../models/Booking.js";
 import Show from "../models/Show.js";
 import User from "../models/User.js";
 
-//API to check if user is admin 
+// Confirm that the authenticated user is an admin (middleware already checked)
 export const isAdmin = async (req, res) => {
-    res.json({success: true, isAdmin: true})
+    res.json({ success: true, isAdmin: true })
 }
 
-//API to get dashboard data
+// Aggregate dashboard KPIs: bookings, revenue, active shows, total users
 export const getDashboardData = async (req, res) => {
     try {
-        const bookings = await Booking.find({isPaid: true});
-        const activeShows = await Show.find({showDateTime: {$gt: new Date()}}).populate('movie_id');
+        const [allBookings, activeShows, totalUser] = await Promise.allSettled([
+            Booking.find({}),
+            Show.find({ showDateTime: { $gt: new Date() } }).populate('movie_id'),
+            User.countDocuments()
+        ]);
 
-        const totalUser = await User.countDocuments();
+        const bookings = allBookings.status === 'fulfilled' ? allBookings.value : [];
+        const paidBookings = bookings.filter(b => b.isPaid === true);
 
         const dashboardData = {
             totalBookings: bookings.length,
-            totalRevenue: bookings.reduce((acc, booking) => acc + booking.amount, 0),
-            activeShows,
-            totalUser
+            paidBookings: paidBookings.length,
+            totalRevenue: paidBookings.reduce((acc, booking) => acc + (booking.amount || 0), 0),
+            activeShows: activeShows.status === 'fulfilled' ? activeShows.value : [],
+            totalUser: totalUser.status === 'fulfilled' ? totalUser.value : 0
         }
 
-        res.json({success: true, data: dashboardData})
+        res.json({ success: true, data: dashboardData })
     } catch (error) {
-        console.error(error);
-        res.json({success: false, message: error.message})
+        res.status(500).json({ success: false, message: "Failed to load dashboard data." })
     }
 }
 
-
-// API to get all shows
+// Get all upcoming shows sorted by date
 export const getAllShows = async (req, res) => {
     try {
-        const shows = await Show.find({showDateTime: {$gt: new Date()}}).populate('movie_id').sort({showDateTime: 1});
-        res.json({success: true, shows})
-    } catch (error) { 
-        console.error(error);
-        res.json({success: false, message: error.message})
+        const shows = await Show.find({ showDateTime: { $gt: new Date() } })
+            .populate('movie_id')
+            .sort({ showDateTime: 1 });
+        res.json({ success: true, shows })
+    } catch (error) {
+        res.status(500).json({ success: false, message: "Failed to load shows." })
     }
 }
 
-// API to get all bookings
+// Get all bookings with user and show details, newest first
 export const getAllBookings = async (req, res) => {
     try {
-        const bookings = await Booking.find().populate('user').populate({
-            path: 'show',
-            populate: {path: "movie_id"}
-        }).sort({ createdAt: -1 })
-        res.json({success: true, bookings})
+        const bookings = await Booking.find()
+            .populate('user')
+            .populate({ path: 'show', populate: { path: "movie_id" } })
+            .sort({ createdAt: -1 })
+        res.json({ success: true, bookings })
     } catch (error) {
-        console.error(error);
-        res.json({success: false, message: error.message})
+        res.status(500).json({ success: false, message: "Failed to load bookings." })
     }
 }

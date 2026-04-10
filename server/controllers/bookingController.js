@@ -1,75 +1,139 @@
 import Show from "../models/Show.js";
 import Booking from "../models/Booking.js";
+import stripe from "stripe";
+import { inngest } from "../inngest/index.js";
+import theaters from "../configs/theaters.js";
 
-// Function to check availability of selected seats for a movie 
-const checkSeatAvailability = async (showId, selectedSeats) => { 
+const allowedOrigins = process.env.ALLOWED_ORIGINS
+    ? process.env.ALLOWED_ORIGINS.split(',')
+    : ['http://localhost:5173'];
+
+// Check if all selected seats are still available for a given show
+const checkSeatAvailability = async (showId, selectedSeats) => {
+    const showData = await Show.findById(showId);
+    if (!showData) return false;
+
+    const occupiedSeats = showData.occupiedSeats;
+    return !selectedSeats.some(seat => occupiedSeats[seat]);
+}
+
+// Create a booking: validate seats, reserve them, create Stripe checkout session
+export const createBooking = async (req, res) => {
     try {
-        const showData = await Show.findById(showId)
-        if (!showData) return false;
+        const { userId } = req.auth();
+        const { showId, selectedSeats, theater: theaterId } = req.body;
 
-        const occupiedSeats = showData.occupiedSeats;
+        if (!showId || !Array.isArray(selectedSeats) || selectedSeats.length === 0) {
+            return res.status(400).json({ success: false, message: "Show ID and at least one seat are required." });
+        }
 
-        const isAnySeatTaken = selectedSeats.some(seat => occupiedSeats[seat]);
+        if (!theaterId || !theaters[theaterId]) {
+            return res.status(400).json({ success: false, message: "Please select a valid zaal." });
+        }
 
-        return !isAnySeatTaken;
-    } catch (error) {
-        console.error(error.message);
-        throw false;
-    }
- }
+        if (selectedSeats.length > 5) {
+            return res.status(400).json({ success: false, message: "You can select a maximum of 5 seats." });
+        }
 
- export const createBooking = async (req, res) => { 
-    try {
-        const {userId} = req.auth();
-        const {showId, selectedSeats} = req.body;
-        const { origin } = req.headers;
+        const showData = await Show.findById(showId).populate('movie_id');
+        if (!showData || !showData.movie_id) {
+            return res.status(404).json({ success: false, message: "Show not found." });
+        }
 
-        // Check if the seat is available for the selected show 
+        // Validate seats against the chosen theater's layout
+        const theater = theaters[theaterId];
+        const validRows = theater.rows;
+        const maxSeat = theater.seatsPerRow;
+
+        if (!selectedSeats.every(seat => {
+            if (typeof seat !== 'string') return false;
+            const row = seat[0];
+            const num = parseInt(seat.slice(1));
+            if (isNaN(num)) return false;
+            return validRows.includes(row) && num >= 1 && num <= maxSeat;
+        })) {
+            return res.status(400).json({ success: false, message: "Invalid seat for this zaal." });
+        }
+
         const isAvailable = await checkSeatAvailability(showId, selectedSeats);
+        if (!isAvailable) {
+            return res.status(409).json({ success: false, message: "Selected seats are already occupied. Please choose different seats." });
+        }
 
-        if (!isAvailable) { 
-            return res.json({success: false, message: "Selected seats are already occupied. Please choose different seats."})
-         }
+        // Calculate total: base price + theater upcharge per seat
+        const pricePerSeat = showData.showPrice + theater.upcharge;
+        const totalAmount = pricePerSeat * selectedSeats.length;
 
-         // Get the show details 
-         const showData = await Show.findById(showId).populate('movie_id');
-
-         // Create a new booking 
-         const booking = await Booking.create({
+        // Create booking record
+        const booking = await Booking.create({
             user: userId,
             show: showId,
-            amount: showData.showPrice * selectedSeats.length,
-            bookSeats: selectedSeats
-         })
+            amount: totalAmount,
+            bookSeats: selectedSeats,
+            theater: theaterId
+        })
 
-         selectedSeats.map((seat) => {
-             showData.occupiedSeats[seat] = userId;
-         })
-
-         showData.markModified('occupiedSeats');
-    
+        // Mark seats as occupied
+        selectedSeats.forEach((seat) => {
+            showData.occupiedSeats[seat] = userId;
+        })
+        showData.markModified('occupiedSeats');
         await showData.save();
 
-        // Stripe Gateway Initialize
-        res.json({success: true, message: 'Booking created successfully'})
+        // Validate origin against whitelist
+        const { origin } = req.headers;
+        const safeOrigin = allowedOrigins.includes(origin) ? origin : allowedOrigins[0];
 
+        // Create Stripe checkout session
+        const stripeInstance = new stripe(process.env.STRIPE_SECRET_KEY);
+
+        const line_items = [{
+            price_data: {
+                currency: 'eur',
+                product_data: { name: `${showData.movie_id.title} — ${theater.name}` },
+                unit_amount: Math.round(totalAmount * 100)
+            },
+            quantity: 1
+        }]
+
+        const session = await stripeInstance.checkout.sessions.create({
+            success_url: `${safeOrigin}/loading/my-bookings`,
+            cancel_url: `${safeOrigin}/my-bookings`,
+            line_items,
+            mode: 'payment',
+            metadata: { bookingId: booking._id.toString() },
+            expires_at: Math.floor(Date.now() / 1000) + 30 * 60,
+        })
+
+        booking.paymentLink = session.url;
+        booking.stripeSessionId = session.id;
+        await booking.save();
+
+        // Schedule payment check - releases seats if unpaid after 10 minutes
+        await inngest.send({
+            name: "app/checkpayment",
+            data: { bookingId: booking._id.toString() }
+        })
+
+        res.json({ success: true, url: session.url })
     } catch (error) {
-        console.log(error.message);
-        res.json({success: false, message: error.message });
+        res.status(500).json({ success: false, message: "Failed to create booking." });
     }
-  }
+}
 
-  export const getUserBookings = async (req, res) => {
+// Get occupied seat IDs for a specific show
+export const getOccupiedSeats = async (req, res) => {
     try {
-        const {showId} = req.params;
-        const showData = await Show.findById(showId)
+        const { showId } = req.params;
+        const showData = await Show.findById(showId);
 
-        const occupiedSeats = Object.keys(showData.occupiedSeats)
+        if (!showData) {
+            return res.status(404).json({ success: false, message: "Show not found." });
+        }
 
-        res.json({success: true, occupiedSeats})
-        
+        const occupiedSeats = Object.keys(showData.occupiedSeats);
+        res.json({ success: true, occupiedSeats })
     } catch (error) {
-        console.log(error.message);
-        res.json({success: false, message: error.message });
+        res.status(500).json({ success: false, message: "Failed to retrieve seat data." });
     }
-  }
+}
