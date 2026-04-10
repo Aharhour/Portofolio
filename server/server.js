@@ -18,6 +18,12 @@ const allowedOrigins = process.env.ALLOWED_ORIGINS
     ? process.env.ALLOWED_ORIGINS.split(',')
     : ['http://localhost:5173', 'https://betatickets.vercel.app'];
 
+// CORS must be the very first middleware (before anything else)
+app.use(cors({ origin: allowedOrigins, credentials: true }))
+
+// Explicitly handle preflight for all routes
+app.options('*', cors({ origin: allowedOrigins, credentials: true }))
+
 await connectDB()
 
 // Stripe webhook must use raw body parsing (before express.json)
@@ -25,7 +31,6 @@ app.use('/api/stripe', express.raw({ type: 'application/json' }), stripeWebhooks
 
 // Global middleware
 app.use(express.json({ limit: '1mb' }))
-app.use(cors({ origin: allowedOrigins, credentials: true }))
 app.use(clerkMiddleware())
 
 // Health check
@@ -48,8 +53,10 @@ app.use((err, req, res, _next) => {
     });
 });
 
-app.listen(port, () => {
-    if (process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV !== 'production') {
+    app.listen(port, () => {
         console.log(`Server listening at http://localhost:${port}`);
-    }
-});
+    });
+}
+
+export default app;
