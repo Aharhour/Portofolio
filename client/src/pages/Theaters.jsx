@@ -1,6 +1,7 @@
 import { MapPinIcon, ArmchairIcon, MonitorIcon, Volume2Icon } from 'lucide-react'
 import theaters from '../config/theaters'
 import BlurCircle from '../components/BlurCircle'
+import useScrollReveal from '../library/useScrollReveal'
 
 const theaterExtras = {
     "zaal-1": {
@@ -21,9 +22,11 @@ const theaterExtras = {
 }
 
 const Theaters = () => {
+    const ref = useScrollReveal()
+
     return (
-        <div className="px-6 md:px-16 lg:px-40 pt-30 md:pt-50 pb-20">
-            <div className="relative text-center mb-16">
+        <div ref={ref} className="px-6 md:px-16 lg:px-40 pt-30 md:pt-50 pb-20">
+            <div className="relative text-center mb-16 reveal reveal-blur">
                 <BlurCircle top="-100px" left="30%" />
                 <h1 className="text-4xl font-bold">Onze Zalen</h1>
                 <p className="text-gray-400 mt-3 max-w-xl mx-auto">
@@ -33,15 +36,15 @@ const Theaters = () => {
             </div>
 
             <div className="grid gap-10">
-                {Object.values(theaters).map((theater) => {
+                {Object.values(theaters).map((theater, i) => {
                     const extra = theaterExtras[theater.id]
                     return (
                         <div
                             key={theater.id}
-                            className="relative flex flex-col md:flex-row gap-6 bg-primary/5 border border-primary/15 rounded-2xl overflow-hidden hover:border-primary/40 transition"
+                            className={`relative flex flex-col md:flex-row gap-6 bg-primary/5 border border-primary/15 rounded-2xl overflow-hidden card-hover reveal stagger-${(i + 1) * 2}`}
                         >
                             {/* Theater image */}
-                            <div className="md:w-80 h-56 md:h-auto shrink-0">
+                            <div className="md:w-80 h-56 md:h-auto shrink-0 img-zoom">
                                 <img
                                     src={extra.image}
                                     alt={theater.name}
@@ -61,15 +64,15 @@ const Theaters = () => {
 
                                 {/* Stats */}
                                 <div className="flex flex-wrap gap-4 mt-5">
-                                    <div className="bg-primary/10 border border-primary/20 rounded-lg px-4 py-3 text-center">
+                                    <div className="bg-primary/10 border border-primary/20 rounded-lg px-4 py-3 text-center hover:bg-primary/15 transition-colors">
                                         <p className="text-2xl font-bold text-primary">{theater.totalSeats}</p>
                                         <p className="text-xs text-gray-400">Stoelen</p>
                                     </div>
-                                    <div className="bg-primary/10 border border-primary/20 rounded-lg px-4 py-3 text-center">
+                                    <div className="bg-primary/10 border border-primary/20 rounded-lg px-4 py-3 text-center hover:bg-primary/15 transition-colors">
                                         <p className="text-2xl font-bold text-primary">{theater.rows.length}</p>
                                         <p className="text-xs text-gray-400">Rijen</p>
                                     </div>
-                                    <div className="bg-primary/10 border border-primary/20 rounded-lg px-4 py-3 text-center">
+                                    <div className="bg-primary/10 border border-primary/20 rounded-lg px-4 py-3 text-center hover:bg-primary/15 transition-colors">
                                         <p className="text-2xl font-bold text-primary">{theater.seatsPerRow}</p>
                                         <p className="text-xs text-gray-400">Per rij</p>
                                     </div>
@@ -82,7 +85,7 @@ const Theaters = () => {
                                         {extra.features.map((feature) => (
                                             <span
                                                 key={feature}
-                                                className="text-xs bg-white/5 border border-gray-700 text-gray-300 px-3 py-1.5 rounded-full"
+                                                className="text-xs bg-white/5 border border-gray-700 text-gray-300 px-3 py-1.5 rounded-full hover:border-primary/30 hover:text-white transition-all duration-300"
                                             >
                                                 {feature}
                                             </span>

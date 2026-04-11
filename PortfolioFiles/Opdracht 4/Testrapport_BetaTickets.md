@@ -21,7 +21,19 @@
 
 ## Samenvatting
 
-Dit testrapport bevat de resultaten van de handmatige testen uitgevoerd op de BetaTickets applicatie. In totaal zijn **7 testscenario's** uitgevoerd, elk met **1 hoofdscenario** en **2 alternatieve scenario's**, resulterend in **21 individuele testuitvoeringen**.
+Dit testrapport bevat de resultaten van zowel de **geautomatiseerde** als **handmatige** testen uitgevoerd op de BetaTickets applicatie.
+
+### Geautomatiseerde testen (Vitest)
+
+| Totaal testen | Geslaagd | Gefaald |
+|---------------|----------|---------|
+| 18 | 18 | 0 |
+
+Alle 18 geautomatiseerde testen slagen. Testen zijn uit te voeren via `cd server && npm test`.
+
+### Handmatige testen
+
+In totaal zijn **7 testscenario's** uitgevoerd, elk met **1 hoofdscenario** en **2 alternatieve scenario's**, resulterend in **21 individuele testuitvoeringen**.
 
 | Totaal testen | Geslaagd | Gefaald | Deels geslaagd |
 |---------------|----------|---------|----------------|
@@ -388,11 +400,62 @@ Dit testrapport bevat de resultaten van de handmatige testen uitgevoerd op de Be
 
 ---
 
+## Geautomatiseerde testresultaten
+
+De geautomatiseerde testen zijn geschreven met **Vitest** en testen de backend controllers, models, middleware en configuratie.
+
+### Resultaat
+
+```
+ ✓ __tests__/models.test.js (6 tests) — Model validatie (Movie, Booking, Show)
+ ✓ __tests__/shows.test.js (3 tests) — Show API endpoints
+ ✓ __tests__/booking.test.js (3 tests) — Stoelselectie en beschikbaarheid
+ ✓ __tests__/auth.test.js (4 tests) — Authenticatie en autorisatie middleware
+ ✓ __tests__/theaters.test.js (2 tests) — Theater configuratie validatie
+
+ Test Files  5 passed (5)
+      Tests  18 passed (18)
+   Duration  1.07s
+```
+
+### Overzicht per test
+
+| Test # | Bestand | Testnaam | User Story | Status |
+|--------|---------|----------|------------|--------|
+| 1 | models.test.js | Accepteert volledig filmobject | US-01, US-02 | PASS |
+| 2 | models.test.js | Weigert film zonder verplichte velden | US-01, US-02 | PASS |
+| 3 | models.test.js | Maakt geldige boeking aan | US-10 | PASS |
+| 4 | models.test.js | Weigert boeking met ongeldig theater | US-10 | PASS |
+| 5 | models.test.js | Weigert boeking met negatief bedrag | US-10 | PASS |
+| 6 | models.test.js | Maakt geldige show aan | US-07 | PASS |
+| 7 | shows.test.js | Retourneert unieke films | US-01 | PASS |
+| 8 | shows.test.js | Retourneert gegroepeerde showtimes | US-02 | PASS |
+| 9 | shows.test.js | Retourneert 404 voor onbekende film | US-02 | PASS |
+| 10 | booking.test.js | Retourneert bezette stoelen | US-08 | PASS |
+| 11 | booking.test.js | Retourneert 404 voor onbekende show | US-08 | PASS |
+| 12 | booking.test.js | Retourneert lege array zonder bezetting | US-08, US-09 | PASS |
+| 13 | auth.test.js | Blokkeert niet-ingelogde gebruikers | US-21 | PASS |
+| 14 | auth.test.js | Laat ingelogde gebruikers door | US-21 | PASS |
+| 15 | auth.test.js | Blokkeert niet-admin gebruikers | US-14 | PASS |
+| 16 | auth.test.js | Laat admin gebruikers door | US-14 | PASS |
+| 17 | theaters.test.js | Valideert zaal structuur | US-08 | PASS |
+| 18 | theaters.test.js | Valideert zaal capaciteiten | US-08 | PASS |
+
+### Conclusie geautomatiseerde testen
+
+Alle 18 geautomatiseerde testen slagen. De testen dekken:
+- **Model validatie**: Verplichte velden, enum-constrains, min-waarden
+- **API endpoints**: Correcte responses, foutafhandeling, data-aggregatie
+- **Authenticatie/autorisatie**: JWT-verificatie, rollencontrole (admin vs. gebruiker)
+- **Configuratie**: Theater/zaal opzet en capaciteiten
+
+---
+
 ## Conclusie
 
 ### Algehele beoordeling
 
-De BetaTickets applicatie functioneert **goed** en voldoet aan de belangrijkste functionele eisen. Van de 21 uitgevoerde testen zijn er 18 volledig geslaagd (86%), 2 deels geslaagd en 1 gefaald.
+De BetaTickets applicatie functioneert **goed** en voldoet aan de belangrijkste functionele eisen. Alle **18 geautomatiseerde testen** slagen (100%). Van de **21 handmatige testuitvoeringen** zijn er 18 volledig geslaagd (86%), 2 deels geslaagd en 1 gefaald.
 
 ### Kernfunctionaliteit
 

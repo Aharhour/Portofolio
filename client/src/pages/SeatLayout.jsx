@@ -212,19 +212,20 @@ const SeatLayout = () => {
         <div className='px-6 md:px-16 lg:px-40 py-30 md:pt-50'>
 
             {/* Step 1: Zaal selection */}
-            <div className='mb-12'>
+            <div className='mb-12' style={{ animation: 'revealUp 0.5s cubic-bezier(0.16,1,0.3,1)' }}>
                 <h2 className='text-2xl font-semibold mb-2'>Kies een zaal</h2>
                 <p className='text-gray-400 text-sm mb-6'>Elke zaal heeft een unieke indeling en ervaring</p>
 
                 <div className='grid grid-cols-1 sm:grid-cols-3 gap-4'>
-                    {Object.values(theaters).map((theater) => (
+                    {Object.values(theaters).map((theater, i) => (
                         <div
                             key={theater.id}
                             onClick={() => handleTheaterSelect(theater.id)}
-                            className={`relative border rounded-xl p-5 cursor-pointer transition hover:border-primary/50 ${selectedTheater === theater.id ? "border-primary bg-primary/10" : "border-gray-700 bg-primary/5"}`}
+                            className={`relative border rounded-xl p-5 cursor-pointer transition-all duration-300 hover:border-primary/50 hover:-translate-y-1 hover:shadow-lg hover:shadow-primary/5 ${selectedTheater === theater.id ? "border-primary bg-primary/10 shadow-lg shadow-primary/10" : "border-gray-700 bg-primary/5"}`}
+                            style={{ animation: `revealUp 0.5s cubic-bezier(0.16,1,0.3,1) ${0.1 + i * 0.08}s both` }}
                         >
                             {selectedTheater === theater.id && (
-                                <div className="absolute top-3 right-3 flex items-center justify-center bg-primary h-6 w-6 rounded-full">
+                                <div className="absolute top-3 right-3 flex items-center justify-center bg-primary h-6 w-6 rounded-full shadow-lg shadow-primary/30" style={{ animation: 'revealScale 0.3s cubic-bezier(0.16,1,0.3,1)' }}>
                                     <CheckIcon className="w-4 h-4 text-white" strokeWidth={3} />
                                 </div>
                             )}
@@ -277,19 +278,19 @@ const SeatLayout = () => {
 
             {/* Step 2 & 3: Time + Seats (only show after zaal is picked) */}
             {selectedTheater && (
-                <div className='flex flex-col md:flex-row'>
+                <div className='flex flex-col md:flex-row' style={{ animation: 'revealUp 0.5s cubic-bezier(0.16,1,0.3,1)' }}>
                     {/* Time slot sidebar */}
-                    <div className='w-64 bg-primary/10 border border-primary/20 rounded-lg py-10 h-max md:sticky md:top-30'>
+                    <div className='w-64 bg-gradient-to-b from-primary/10 to-primary/5 border border-primary/20 rounded-xl py-10 h-max md:sticky md:top-30'>
                         <p className='text-lg font-semibold px-6'>Beschikbare tijden</p>
                         <div className='mt-5 space-y-1'>
                             {show.dateTime[date]?.map((item) => (
                                 <div
                                     key={item.showId}
                                     onClick={() => handleTimeSelect(item)}
-                                    className={`flex items-center gap-2 px-6 py-2 rounded-r-md cursor-pointer transition ${selectedTime?.showId === item.showId ? "bg-primary text-white" : "hover:bg-primary/20"}`}
+                                    className={`flex items-center gap-2 px-6 py-2.5 cursor-pointer transition-all duration-300 ${selectedTime?.showId === item.showId ? "bg-primary text-white shadow-lg shadow-primary/20 rounded-r-lg" : "hover:bg-primary/20 hover:pl-7 rounded-r-md"}`}
                                 >
                                     <ClockIcon className="w-4 h-4" />
-                                    <p className='text-sm'>{isoTimeFormat(item.time)}</p>
+                                    <p className='text-sm font-medium'>{isoTimeFormat(item.time)}</p>
                                 </div>
                             ))}
                         </div>
@@ -349,14 +350,14 @@ const SeatLayout = () => {
 
                         {/* Price summary + checkout button */}
                         {selectedSeats.length > 0 && (
-                            <div className='mt-12 bg-primary/10 border border-primary/20 rounded-xl p-6 w-full max-w-md text-center'>
+                            <div className='mt-12 bg-gradient-to-br from-primary/10 via-primary/5 to-transparent border border-primary/20 rounded-2xl p-6 w-full max-w-md text-center' style={{ animation: 'revealScale 0.4s cubic-bezier(0.16,1,0.3,1)' }}>
                                 <p className='text-sm text-gray-400 mb-2'>Overzicht</p>
-                                <p className='text-sm'>{selectedSeats.length}x stoel ({selectedSeats.join(', ')})</p>
+                                <p className='text-sm font-medium'>{selectedSeats.length}x stoel ({selectedSeats.join(', ')})</p>
                                 <p className='text-sm text-gray-400'>{currentTheater.name}</p>
                                 {upcharge > 0 && (
                                     <p className='text-xs text-gray-500 mt-1'>Incl. {currency}{upcharge.toFixed(2)} toeslag per stoel</p>
                                 )}
-                                <button onClick={bookTickets} className='flex items-center justify-center gap-2 mt-4 mx-auto px-10 py-3 text-sm bg-primary hover:bg-primary-dull transition rounded-full font-medium cursor-pointer active:scale-95'>
+                                <button onClick={bookTickets} className='flex items-center justify-center gap-2 mt-4 mx-auto px-10 py-3 text-sm bg-primary hover:bg-primary-dull transition-all duration-200 rounded-full font-medium cursor-pointer btn-press glow-primary'>
                                     Afrekenen
                                     <ArrowRightIcon strokeWidth={3} className='w-4 h-4' />
                                 </button>

@@ -18,7 +18,7 @@ const Layout = () => {
             {/* Sidebar + main content area */}
             <div className='flex'>
                 <AdminSidebar />
-                <div className='flex-1 px-6 py-10 md:px-12 h-[calc(100vh-64px)] overflow-y-auto animate-fade-in'>
+                <div className='flex-1 px-6 py-10 md:px-12 h-[calc(100vh-64px)] overflow-y-auto page-enter'>
                     <Outlet />
                 </div>
             </div>

@@ -3,12 +3,14 @@ import { CalendarIcon, StarIcon, XIcon, TrendingUpIcon, ClockIcon } from 'lucide
 import BlurCircle from '../components/BlurCircle'
 import Loading from '../components/Loading'
 import { useAppContext } from '../context/AppContext'
+import useScrollReveal from '../library/useScrollReveal'
 
 const Releases = () => {
     const { axios, image_base_url } = useAppContext()
     const [movies, setMovies] = useState([])
     const [loading, setLoading] = useState(true)
     const [selectedMovie, setSelectedMovie] = useState(null)
+    const ref = useScrollReveal()
 
     const fetchUpcoming = async () => {
         try {
@@ -53,11 +55,11 @@ const Releases = () => {
         })
     }
 
-    if (loading) return <Loading />
+    if (loading) return <div ref={ref}><Loading /></div>
 
     return (
-        <div className='px-6 md:px-16 lg:px-40 pt-30 md:pt-50 pb-20 min-h-screen'>
-            <div className='relative text-center mb-16'>
+        <div ref={ref} className='px-6 md:px-16 lg:px-40 pt-30 md:pt-50 pb-20 min-h-screen'>
+            <div className='relative text-center mb-16 reveal reveal-blur'>
                 <BlurCircle top="-100px" left="30%" />
                 <h1 className='text-4xl font-bold'>Aankomende Releases</h1>
                 <p className='text-gray-400 mt-3 max-w-xl mx-auto'>
@@ -72,7 +74,7 @@ const Releases = () => {
                 Object.entries(grouped)
                     .sort(([a], [b]) => a.localeCompare(b))
                     .map(([key, { label, movies: monthMovies }]) => (
-                    <div key={key} className='mb-14'>
+                    <div key={key} className='mb-14 reveal'>
                         <div className='flex items-center gap-3 mb-6 sticky top-20 z-10 bg-black/80 backdrop-blur-md py-3 -mx-2 px-2 rounded-lg'>
                             <CalendarIcon className='w-5 h-5 text-primary' />
                             <h2 className='text-xl font-semibold capitalize'>{label}</h2>
@@ -136,10 +138,11 @@ const Releases = () => {
 
             {/* Detail Modal */}
             {selectedMovie && (
-                <div className='fixed inset-0 z-50 flex items-center justify-center p-4' onClick={() => setSelectedMovie(null)}>
+                <div className='fixed inset-0 z-50 flex items-center justify-center p-4' onClick={() => setSelectedMovie(null)} style={{ animation: 'fadeIn 0.2s ease-out' }}>
                     <div className='absolute inset-0 bg-black/70 backdrop-blur-sm' />
                     <div
                         className='relative max-w-3xl w-full max-h-[90vh] overflow-y-auto rounded-2xl bg-gray-900 border border-gray-700'
+                        style={{ animation: 'revealScale 0.35s cubic-bezier(0.16,1,0.3,1)' }}
                         onClick={(e) => e.stopPropagation()}
                     >
                         {/* Backdrop header */}

@@ -25,6 +25,12 @@
       .arrow-red { fill: #e74c3c; }
       .self-msg { stroke: #333; stroke-width: 1.5; fill: none; }
     </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" class="arrow"/>
+    </marker>
+    <marker id="arrowhead-red" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" class="arrow-red"/>
+    </marker>
   </defs>
 
   <!-- Background -->
@@ -428,16 +434,6 @@
   <!-- Note -->
   <rect x="60" y="2740" width="70" height="15" class="note"/>
   <text x="155" y="2752" class="msg-text">Contextual note</text>
-
-  <!-- Arrow markers -->
-  <defs>
-    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
-      <polygon points="0 0, 10 3.5, 0 7" class="arrow"/>
-    </marker>
-    <marker id="arrowhead-red" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
-      <polygon points="0 0, 10 3.5, 0 7" class="arrow-red"/>
-    </marker>
-  </defs>
 
   <!-- Bottom actor boxes -->
   <rect x="50" y="2770" width="120" height="30" class="actor-box"/>

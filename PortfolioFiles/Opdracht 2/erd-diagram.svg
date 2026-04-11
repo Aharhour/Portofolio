@@ -1,0 +1,180 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 1100" font-family="Arial, sans-serif" font-size="12">
+  <defs>
+    <style>
+      .title { font-size: 22px; font-weight: bold; fill: #1a1a2e; }
+      .subtitle { font-size: 14px; fill: #555; }
+      .entity-header { fill: #1a1a2e; rx: 6; }
+      .entity-header-text { fill: white; font-size: 14px; font-weight: bold; text-anchor: middle; }
+      .entity-body { fill: #f8f9fa; stroke: #1a1a2e; stroke-width: 2; }
+      .attr-text { font-size: 11px; fill: #333; }
+      .attr-pk { font-size: 11px; fill: #e74c3c; font-weight: bold; }
+      .attr-fk { font-size: 11px; fill: #3498db; font-style: italic; }
+      .rel-line { stroke: #555; stroke-width: 2; fill: none; }
+      .rel-text { font-size: 11px; fill: #2c3e50; font-weight: bold; }
+      .note { fill: #fff3cd; stroke: #ffc107; stroke-width: 1.5; rx: 4; }
+      .note-text { font-size: 10px; fill: #856404; }
+      .junction { fill: #e8f4fd; stroke: #3498db; stroke-width: 2; rx: 6; }
+      .junction-text { font-size: 11px; fill: #1565c0; font-weight: bold; text-anchor: middle; }
+    </style>
+    <marker id="crow-one" markerWidth="12" markerHeight="12" refX="12" refY="6" orient="auto">
+      <line x1="0" y1="0" x2="12" y2="6" stroke="#555" stroke-width="2"/>
+      <line x1="0" y1="12" x2="12" y2="6" stroke="#555" stroke-width="2"/>
+      <line x1="8" y1="0" x2="8" y2="12" stroke="#555" stroke-width="2"/>
+    </marker>
+    <marker id="one" markerWidth="12" markerHeight="12" refX="0" refY="6" orient="auto">
+      <line x1="4" y1="0" x2="4" y2="12" stroke="#555" stroke-width="2"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1500" height="1100" fill="#fafbfc"/>
+
+  <!-- Title -->
+  <text x="750" y="40" class="title" text-anchor="middle">Entity Relationship Diagram (ERD)</text>
+  <text x="750" y="62" class="subtitle" text-anchor="middle">BetaTickets — Movie Ticket Booking System</text>
+
+  <!-- ========== ENTITY: User ========== -->
+  <rect x="50" y="120" width="220" height="35" class="entity-header" rx="6" ry="6"/>
+  <rect x="50" y="148" width="220" height="7" fill="#1a1a2e"/>
+  <text x="160" y="143" class="entity-header-text">User</text>
+  <rect x="50" y="155" width="220" height="120" class="entity-body"/>
+  <text x="65" y="175" class="attr-pk">PK  _id : String (Clerk ID)</text>
+  <text x="65" y="195" class="attr-text">name : String</text>
+  <text x="65" y="215" class="attr-text">email : String (unique)</text>
+  <text x="65" y="235" class="attr-text">image : String</text>
+
+  <!-- ========== ENTITY: Movie ========== -->
+  <rect x="640" y="100" width="250" height="35" class="entity-header" rx="6" ry="6"/>
+  <rect x="640" y="128" width="250" height="7" fill="#1a1a2e"/>
+  <text x="765" y="123" class="entity-header-text">Movie</text>
+  <rect x="640" y="135" width="250" height="280" class="entity-body"/>
+  <text x="655" y="157" class="attr-pk">PK  _id : String (TMDB ID)</text>
+  <text x="655" y="177" class="attr-text">title : String</text>
+  <text x="655" y="197" class="attr-text">overview : String</text>
+  <text x="655" y="217" class="attr-text">poster_path : String</text>
+  <text x="655" y="237" class="attr-text">backdrop_path : String</text>
+  <text x="655" y="257" class="attr-text">release_date : String</text>
+  <text x="655" y="277" class="attr-text">original_language : String</text>
+  <text x="655" y="297" class="attr-text">tagline : String</text>
+  <text x="655" y="317" class="attr-text">vote_average : Number</text>
+  <text x="655" y="337" class="attr-text">runtime : Number</text>
+  <text x="655" y="357" class="attr-text">createdAt : Date</text>
+  <text x="655" y="377" class="attr-text">updatedAt : Date</text>
+
+  <!-- ========== ENTITY: Genre ========== -->
+  <rect x="1100" y="120" width="200" height="35" class="entity-header" rx="6" ry="6"/>
+  <rect x="1100" y="148" width="200" height="7" fill="#1a1a2e"/>
+  <text x="1200" y="143" class="entity-header-text">Genre</text>
+  <rect x="1100" y="155" width="200" height="70" class="entity-body"/>
+  <text x="1115" y="178" class="attr-pk">PK  id : Number</text>
+  <text x="1115" y="198" class="attr-text">name : String</text>
+
+  <!-- ========== ENTITY: Show ========== -->
+  <rect x="640" y="500" width="250" height="35" class="entity-header" rx="6" ry="6"/>
+  <rect x="640" y="528" width="250" height="7" fill="#1a1a2e"/>
+  <text x="765" y="523" class="entity-header-text">Show</text>
+  <rect x="640" y="535" width="250" height="140" class="entity-body"/>
+  <text x="655" y="557" class="attr-pk">PK  _id : ObjectId</text>
+  <text x="655" y="577" class="attr-fk">FK  movie_id : String -> Movie</text>
+  <text x="655" y="597" class="attr-text">showDateTime : Date</text>
+  <text x="655" y="617" class="attr-text">showPrice : Number</text>
+  <text x="655" y="637" class="attr-text">occupiedSeats : Object</text>
+
+  <!-- ========== ENTITY: Booking ========== -->
+  <rect x="50" y="470" width="250" height="35" class="entity-header" rx="6" ry="6"/>
+  <rect x="50" y="498" width="250" height="7" fill="#1a1a2e"/>
+  <text x="175" y="493" class="entity-header-text">Booking</text>
+  <rect x="50" y="505" width="250" height="220" class="entity-body"/>
+  <text x="65" y="527" class="attr-pk">PK  _id : ObjectId</text>
+  <text x="65" y="547" class="attr-fk">FK  user : String -> User</text>
+  <text x="65" y="567" class="attr-fk">FK  show : String -> Show</text>
+  <text x="65" y="587" class="attr-text">amount : Number</text>
+  <text x="65" y="607" class="attr-text">bookSeats : [String]</text>
+  <text x="65" y="627" class="attr-text">theater : String (enum)</text>
+  <text x="65" y="647" class="attr-text">isPaid : Boolean</text>
+  <text x="65" y="667" class="attr-text">stripeSessionId : String</text>
+  <text x="65" y="687" class="attr-text">paymentLink : String</text>
+  <text x="65" y="707" class="attr-text">createdAt : Date</text>
+
+  <!-- ========== ENTITY: Payment ========== -->
+  <rect x="50" y="800" width="250" height="35" class="entity-header" rx="6" ry="6"/>
+  <rect x="50" y="828" width="250" height="7" fill="#1a1a2e"/>
+  <text x="175" y="823" class="entity-header-text">Payment</text>
+  <rect x="50" y="835" width="250" height="140" class="entity-body"/>
+  <text x="65" y="857" class="attr-pk">PK  _id : ObjectId</text>
+  <text x="65" y="877" class="attr-fk">FK  booking_id : ObjectId -> Booking</text>
+  <text x="65" y="897" class="attr-text">stripeSessionId : String</text>
+  <text x="65" y="917" class="attr-text">paymentStatus : String</text>
+  <text x="65" y="937" class="attr-text">paymentLink : String</text>
+  <text x="65" y="957" class="attr-text">paidAt : Date</text>
+
+  <!-- ========== JUNCTION: MovieGenre (N:N) ========== -->
+  <rect x="940" y="180" width="110" height="45" class="junction"/>
+  <text x="995" y="207" class="junction-text">MovieGenre</text>
+
+  <!-- ========== RELATIONSHIPS ========== -->
+
+  <!-- User 1:N Booking -->
+  <path d="M 160 275 L 160 470" class="rel-line"/>
+  <text x="100" y="370" class="rel-text">1</text>
+  <text x="145" y="460" class="rel-text">N</text>
+  <text x="170" y="370" class="attr-text" fill="#666">heeft</text>
+
+  <!-- Movie 1:N Show -->
+  <path d="M 765 415 L 765 500" class="rel-line"/>
+  <text x="775" y="435" class="rel-text">1</text>
+  <text x="775" y="495" class="rel-text">N</text>
+  <text x="720" y="460" class="attr-text" fill="#666">draait in</text>
+
+  <!-- Show 1:N Booking -->
+  <path d="M 640 590 L 300 590" class="rel-line"/>
+  <text x="615" y="583" class="rel-text">1</text>
+  <text x="310" y="583" class="rel-text">N</text>
+  <text x="440" y="583" class="attr-text" fill="#666">bevat</text>
+
+  <!-- Booking 1:1 Payment -->
+  <path d="M 175 725 L 175 800" class="rel-line"/>
+  <text x="185" y="748" class="rel-text">1</text>
+  <text x="185" y="795" class="rel-text">1</text>
+  <text x="195" y="770" class="attr-text" fill="#666">betaald via</text>
+
+  <!-- Movie N:N Genre (through MovieGenre) -->
+  <path d="M 890 200 L 940 200" class="rel-line"/>
+  <text x="900" y="193" class="rel-text">N</text>
+  <path d="M 1050 200 L 1100 200" class="rel-line"/>
+  <text x="1075" y="193" class="rel-text">N</text>
+
+  <!-- Movie to MovieGenre -->
+  <text x="905" y="215" class="attr-text" fill="#666">heeft</text>
+
+  <!-- ========== LEGEND ========== -->
+  <rect x="1050" y="880" width="400" height="180" rx="8" fill="#f8f9fa" stroke="#dee2e6" stroke-width="1"/>
+  <text x="1070" y="910" style="font-size: 14px; font-weight: bold; fill: #2c3e50;">Legenda</text>
+
+  <text x="1070" y="935" class="attr-pk">PK  Primary Key</text>
+  <text x="1070" y="955" class="attr-fk">FK  Foreign Key</text>
+
+  <line x1="1070" y1="975" x2="1130" y2="975" class="rel-line"/>
+  <text x="1140" y="979" class="attr-text">Relatie</text>
+
+  <text x="1070" y="1000" class="rel-text">1 --- N    Een-op-veel</text>
+  <text x="1070" y="1020" class="rel-text">N --- N    Veel-op-veel</text>
+  <text x="1070" y="1040" class="rel-text">1 --- 1    Een-op-een</text>
+
+  <!-- ========== NOTE ========== -->
+  <rect x="1050" y="500" width="380" height="100" class="note"/>
+  <text x="1065" y="520" class="note-text" style="font-weight: bold;">Opmerking MongoDB-implementatie:</text>
+  <text x="1065" y="540" class="note-text">- Genres en Casts zijn embedded arrays in Movie</text>
+  <text x="1065" y="555" class="note-text">  (gedenormaliseerd voor performance)</text>
+  <text x="1065" y="575" class="note-text">- Payment-velden zitten in Booking document</text>
+  <text x="1065" y="590" class="note-text">  (hier apart gemodelleerd voor conceptueel ERD)</text>
+
+  <!-- Relatie labels -->
+  <rect x="1050" y="640" width="380" height="120" class="note" style="fill: #e8f4fd; stroke: #3498db;"/>
+  <text x="1065" y="660" class="note-text" style="fill: #1565c0; font-weight: bold;">Relatie-overzicht:</text>
+  <text x="1065" y="680" class="note-text" style="fill: #1565c0;">1:1  Booking - Payment (elke boeking heeft 1 betaling)</text>
+  <text x="1065" y="700" class="note-text" style="fill: #1565c0;">1:N  User - Booking (gebruiker heeft meerdere boekingen)</text>
+  <text x="1065" y="720" class="note-text" style="fill: #1565c0;">1:N  Movie - Show (film draait in meerdere voorstellingen)</text>
+  <text x="1065" y="740" class="note-text" style="fill: #1565c0;">1:N  Show - Booking (voorstelling heeft meerdere boekingen)</text>
+  <text x="1065" y="760" class="note-text" style="fill: #1565c0;">N:N  Movie - Genre (film heeft meerdere genres, v.v.)</text>
+</svg>
