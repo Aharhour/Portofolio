@@ -22,7 +22,7 @@ const allowedOrigins = process.env.ALLOWED_ORIGINS
 app.use(cors({ origin: allowedOrigins, credentials: true }))
 
 // Explicitly handle preflight for all routes
-app.options('*', cors({ origin: allowedOrigins, credentials: true }))
+app.options('/{*splat}', cors({ origin: allowedOrigins, credentials: true }))
 
 await connectDB()
 

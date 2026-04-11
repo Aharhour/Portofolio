@@ -1,0 +1,185 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1000" font-family="Arial, sans-serif" font-size="12">
+  <defs>
+    <style>
+      .title { font-size: 22px; font-weight: bold; fill: #1a1a2e; }
+      .subtitle { font-size: 14px; fill: #555; }
+      .system-box { fill: none; stroke: #1a1a2e; stroke-width: 2; rx: 10; }
+      .system-label { font-size: 18px; font-weight: bold; fill: #1a1a2e; text-anchor: middle; }
+      .actor-text { font-size: 13px; fill: #1a1a2e; font-weight: bold; text-anchor: middle; }
+      .usecase { fill: #e8f4fd; stroke: #3498db; stroke-width: 2; rx: 25; ry: 25; }
+      .usecase-text { font-size: 11px; fill: #1a1a2e; text-anchor: middle; }
+      .assoc-line { stroke: #555; stroke-width: 1.5; }
+      .include-line { stroke: #27ae60; stroke-width: 1.5; stroke-dasharray: 6,4; }
+      .extend-line { stroke: #e67e22; stroke-width: 1.5; stroke-dasharray: 6,4; }
+      .rel-label { font-size: 9px; fill: #666; font-style: italic; text-anchor: middle; }
+    </style>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="1000" fill="#fafbfc"/>
+
+  <!-- Title -->
+  <text x="600" y="35" class="title" text-anchor="middle">Use Case Diagram</text>
+  <text x="600" y="55" class="subtitle" text-anchor="middle">BetaTickets — Movie Ticket Booking System</text>
+
+  <!-- ========== SYSTEM BOUNDARY ========== -->
+  <rect x="200" y="80" width="750" height="870" class="system-box"/>
+  <text x="575" y="110" class="system-label">BetaTickets Platform</text>
+
+  <!-- ========== ACTOR: Bezoeker (left) ========== -->
+  <!-- Stick figure -->
+  <circle cx="80" cy="220" r="15" fill="none" stroke="#1a1a2e" stroke-width="2"/>
+  <line x1="80" y1="235" x2="80" y2="280" stroke="#1a1a2e" stroke-width="2"/>
+  <line x1="55" y1="255" x2="105" y2="255" stroke="#1a1a2e" stroke-width="2"/>
+  <line x1="80" y1="280" x2="55" y2="315" stroke="#1a1a2e" stroke-width="2"/>
+  <line x1="80" y1="280" x2="105" y2="315" stroke="#1a1a2e" stroke-width="2"/>
+  <text x="80" y="335" class="actor-text">Bezoeker</text>
+
+  <!-- ========== ACTOR: Gebruiker (left, lower) ========== -->
+  <circle cx="80" cy="520" r="15" fill="none" stroke="#1a1a2e" stroke-width="2"/>
+  <line x1="80" y1="535" x2="80" y2="580" stroke="#1a1a2e" stroke-width="2"/>
+  <line x1="55" y1="555" x2="105" y2="555" stroke="#1a1a2e" stroke-width="2"/>
+  <line x1="80" y1="580" x2="55" y2="615" stroke="#1a1a2e" stroke-width="2"/>
+  <line x1="80" y1="580" x2="105" y2="615" stroke="#1a1a2e" stroke-width="2"/>
+  <text x="80" y="635" class="actor-text">Geregistreerde</text>
+  <text x="80" y="650" class="actor-text">Gebruiker</text>
+
+  <!-- ========== ACTOR: Admin (right) ========== -->
+  <circle cx="1110" cy="420" r="15" fill="none" stroke="#1a1a2e" stroke-width="2"/>
+  <line x1="1110" y1="435" x2="1110" y2="480" stroke="#1a1a2e" stroke-width="2"/>
+  <line x1="1085" y1="455" x2="1135" y2="455" stroke="#1a1a2e" stroke-width="2"/>
+  <line x1="1110" y1="480" x2="1085" y2="515" stroke="#1a1a2e" stroke-width="2"/>
+  <line x1="1110" y1="480" x2="1135" y2="515" stroke="#1a1a2e" stroke-width="2"/>
+  <text x="1110" y="535" class="actor-text">Admin</text>
+
+  <!-- ========== USE CASES ========== -->
+
+  <!-- UC1: Films bekijken -->
+  <ellipse cx="380" cy="160" rx="110" ry="28" class="usecase"/>
+  <text x="380" y="155" class="usecase-text">UC-01</text>
+  <text x="380" y="168" class="usecase-text">Films bekijken</text>
+
+  <!-- UC2: Film details bekijken -->
+  <ellipse cx="380" cy="240" rx="110" ry="28" class="usecase"/>
+  <text x="380" y="235" class="usecase-text">UC-02</text>
+  <text x="380" y="248" class="usecase-text">Film details bekijken</text>
+
+  <!-- UC3: Account aanmaken -->
+  <ellipse cx="380" cy="320" rx="110" ry="28" class="usecase"/>
+  <text x="380" y="315" class="usecase-text">UC-03</text>
+  <text x="380" y="328" class="usecase-text">Account aanmaken</text>
+
+  <!-- UC4: Inloggen -->
+  <ellipse cx="380" cy="400" rx="110" ry="28" class="usecase"/>
+  <text x="380" y="395" class="usecase-text">UC-04</text>
+  <text x="380" y="408" class="usecase-text">Inloggen</text>
+
+  <!-- UC5: Showtime selecteren -->
+  <ellipse cx="380" cy="480" rx="110" ry="28" class="usecase"/>
+  <text x="380" y="475" class="usecase-text">UC-05</text>
+  <text x="380" y="488" class="usecase-text">Showtime selecteren</text>
+
+  <!-- UC6: Stoelen selecteren -->
+  <ellipse cx="380" cy="560" rx="110" ry="28" class="usecase"/>
+  <text x="380" y="555" class="usecase-text">UC-06</text>
+  <text x="380" y="568" class="usecase-text">Stoelen selecteren</text>
+
+  <!-- UC7: Ticket boeken -->
+  <ellipse cx="380" cy="640" rx="110" ry="28" class="usecase"/>
+  <text x="380" y="635" class="usecase-text">UC-07</text>
+  <text x="380" y="648" class="usecase-text">Ticket boeken</text>
+
+  <!-- UC8: Betaling uitvoeren -->
+  <ellipse cx="580" cy="700" rx="110" ry="28" class="usecase"/>
+  <text x="580" y="695" class="usecase-text">UC-08</text>
+  <text x="580" y="708" class="usecase-text">Betaling uitvoeren</text>
+
+  <!-- UC9: Boekingen bekijken -->
+  <ellipse cx="380" cy="770" rx="110" ry="28" class="usecase"/>
+  <text x="380" y="765" class="usecase-text">UC-09</text>
+  <text x="380" y="778" class="usecase-text">Boekingen bekijken</text>
+
+  <!-- UC10: Favoriet markeren -->
+  <ellipse cx="380" cy="850" rx="110" ry="28" class="usecase"/>
+  <text x="380" y="845" class="usecase-text">UC-10</text>
+  <text x="380" y="858" class="usecase-text">Favoriet markeren</text>
+
+  <!-- UC11: Film toevoegen -->
+  <ellipse cx="770" cy="250" rx="110" ry="28" class="usecase"/>
+  <text x="770" y="245" class="usecase-text">UC-11</text>
+  <text x="770" y="258" class="usecase-text">Film toevoegen</text>
+
+  <!-- UC12: Film bewerken -->
+  <ellipse cx="770" cy="330" rx="110" ry="28" class="usecase"/>
+  <text x="770" y="325" class="usecase-text">UC-12</text>
+  <text x="770" y="338" class="usecase-text">Film bewerken</text>
+
+  <!-- UC13: Shows beheren -->
+  <ellipse cx="770" cy="410" rx="110" ry="28" class="usecase"/>
+  <text x="770" y="405" class="usecase-text">UC-13</text>
+  <text x="770" y="418" class="usecase-text">Shows beheren</text>
+
+  <!-- UC14: Dashboard bekijken -->
+  <ellipse cx="770" cy="490" rx="110" ry="28" class="usecase"/>
+  <text x="770" y="485" class="usecase-text">UC-14</text>
+  <text x="770" y="498" class="usecase-text">Dashboard bekijken</text>
+
+  <!-- UC15: Boekingen inzien -->
+  <ellipse cx="770" cy="570" rx="110" ry="28" class="usecase"/>
+  <text x="770" y="565" class="usecase-text">UC-15</text>
+  <text x="770" y="578" class="usecase-text">Alle boekingen inzien</text>
+
+  <!-- ========== ASSOCIATIONS: Bezoeker ========== -->
+  <line x1="105" y1="230" x2="270" y2="165" class="assoc-line"/>
+  <line x1="105" y1="255" x2="270" y2="240" class="assoc-line"/>
+  <line x1="105" y1="280" x2="270" y2="320" class="assoc-line"/>
+
+  <!-- ========== ASSOCIATIONS: Gebruiker ========== -->
+  <line x1="105" y1="520" x2="270" y2="400" class="assoc-line"/>
+  <line x1="105" y1="540" x2="270" y2="480" class="assoc-line"/>
+  <line x1="105" y1="555" x2="270" y2="560" class="assoc-line"/>
+  <line x1="105" y1="570" x2="270" y2="640" class="assoc-line"/>
+  <line x1="105" y1="590" x2="270" y2="770" class="assoc-line"/>
+  <line x1="105" y1="600" x2="270" y2="850" class="assoc-line"/>
+
+  <!-- ========== ASSOCIATIONS: Admin ========== -->
+  <line x1="1085" y1="425" x2="880" y2="255" class="assoc-line"/>
+  <line x1="1085" y1="435" x2="880" y2="330" class="assoc-line"/>
+  <line x1="1085" y1="445" x2="880" y2="410" class="assoc-line"/>
+  <line x1="1085" y1="455" x2="880" y2="490" class="assoc-line"/>
+  <line x1="1085" y1="465" x2="880" y2="570" class="assoc-line"/>
+
+  <!-- ========== INCLUDE: Ticket boeken includes Betaling ========== -->
+  <line x1="470" y1="655" x2="490" y2="690" class="include-line"/>
+  <text x="510" y="665" class="rel-label">&lt;&lt;include&gt;&gt;</text>
+
+  <!-- ========== INCLUDE: Stoelen selecteren includes Showtime ========== -->
+  <line x1="380" y1="532" x2="380" y2="508" class="include-line"/>
+  <text x="430" y="523" class="rel-label">&lt;&lt;include&gt;&gt;</text>
+
+  <!-- ========== EXTEND: Film details extends Films bekijken ========== -->
+  <line x1="380" y1="212" x2="380" y2="188" class="extend-line"/>
+  <text x="430" y="203" class="rel-label">&lt;&lt;extend&gt;&gt;</text>
+
+  <!-- ========== Generalization: Gebruiker erft van Bezoeker ========== -->
+  <line x1="80" y1="340" x2="80" y2="505" stroke="#1a1a2e" stroke-width="1.5"/>
+  <polygon points="80,350 72,370 88,370" fill="white" stroke="#1a1a2e" stroke-width="1.5"/>
+
+  <!-- ========== LEGEND ========== -->
+  <rect x="220" y="910" width="700" height="55" rx="6" fill="#f8f9fa" stroke="#dee2e6" stroke-width="1"/>
+  <text x="240" y="932" style="font-size: 12px; font-weight: bold; fill: #2c3e50;">Legenda:</text>
+
+  <line x1="310" y1="928" x2="360" y2="928" class="assoc-line"/>
+  <text x="370" y="932" class="attr-text">Associatie</text>
+
+  <line x1="440" y1="928" x2="490" y2="928" class="include-line"/>
+  <text x="500" y="932" class="attr-text">&lt;&lt;include&gt;&gt;</text>
+
+  <line x1="580" y1="928" x2="630" y2="928" class="extend-line"/>
+  <text x="640" y="932" class="attr-text">&lt;&lt;extend&gt;&gt;</text>
+
+  <ellipse cx="760" cy="928" rx="30" ry="12" class="usecase"/>
+  <text x="800" y="932" class="attr-text">Use Case</text>
+
+  <text x="240" y="955" style="font-size: 11px; fill: #666;">3 Actoren: Bezoeker, Geregistreerde Gebruiker (erft van Bezoeker), Admin  |  1 Systeem: BetaTickets Platform  |  15 Use Cases</text>
+</svg>

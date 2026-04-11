@@ -13,16 +13,18 @@ const MovieCard = ({ movie }) => {
     }
 
     return (
-        <div className='flex flex-col justify-between p-3 bg-gray-800 rounded-2xl hover:-translate-y-1 transition duration-300 w-60'>
+        <div className='flex flex-col justify-between p-3 bg-gray-800 rounded-2xl card-hover w-60 group'>
             {/* Movie poster thumbnail */}
-            <img
-                onClick={goToMovie}
-                src={image_base_url + movie.backdrop_path}
-                alt={movie.title}
-                className='rounded-lg h-52 w-full object-cover object-bottom-right cursor-pointer'
-            />
+            <div className='img-zoom rounded-lg'>
+                <img
+                    onClick={goToMovie}
+                    src={image_base_url + movie.backdrop_path}
+                    alt={movie.title}
+                    className='rounded-lg h-52 w-full object-cover object-bottom-right cursor-pointer'
+                />
+            </div>
 
-            <p className='font-semibold mt-2 truncate'>{movie.title}</p>
+            <p className='font-semibold mt-2 truncate group-hover:text-primary transition-colors duration-300'>{movie.title}</p>
 
             <p className='text-sm text-gray-400 mt-2'>
                 {new Date(movie.release_date).getFullYear()} &bull; {movie.genres.slice(0, 2).map(g => g.name).join(" | ")} &bull; {timeFormat(movie.runtime)}
@@ -32,7 +34,7 @@ const MovieCard = ({ movie }) => {
             <div className='flex items-center justify-between mt-4 pb-3'>
                 <button
                     onClick={goToMovie}
-                    className='px-4 py-2 text-xs bg-primary hover:bg-primary-dull transition rounded-full font-medium cursor-pointer'
+                    className='px-4 py-2 text-xs bg-primary hover:bg-primary-dull transition rounded-full font-medium cursor-pointer btn-press'
                 >
                     Buy Tickets
                 </button>

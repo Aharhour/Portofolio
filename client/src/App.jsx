@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import Navbar from './components/Navbar'
 import { Route, Routes, useLocation } from 'react-router-dom'
 import Home from './pages/Home'
@@ -18,6 +19,32 @@ import { SignIn } from '@clerk/react'
 import Loading from './components/Loading'
 import Theaters from './pages/Theaters'
 import Releases from './pages/Releases'
+import AboutUs from './pages/AboutUs'
+import ContactUs from './pages/ContactUs'
+import PrivacyPolicy from './pages/PrivacyPolicy'
+
+const PageTransition = ({ children }) => {
+  const location = useLocation()
+  const [displayLocation, setDisplayLocation] = useState(location)
+  const [transitionClass, setTransitionClass] = useState('page-enter')
+
+  useEffect(() => {
+    if (location.pathname !== displayLocation.pathname) {
+      setTransitionClass('page-exit')
+      const timeout = setTimeout(() => {
+        setDisplayLocation(location)
+        setTransitionClass('page-enter')
+      }, 150)
+      return () => clearTimeout(timeout)
+    }
+  }, [location, displayLocation])
+
+  return (
+    <div className={transitionClass}>
+      {children}
+    </div>
+  )
+}
 
 const App = () => {
   const isAdminRoute = useLocation().pathname.startsWith('/admin')
@@ -30,6 +57,7 @@ const App = () => {
       {/* Show public navbar/footer only on non-admin pages */}
       {!isAdminRoute && <Navbar />}
 
+      <PageTransition>
       <Routes>
         {/* Public routes */}
         <Route path='/' element={<Home />} />
@@ -41,6 +69,9 @@ const App = () => {
         <Route path='/my-bookings' element={<MyBookings />} />
         <Route path='/loading/:nextUrl' element={<Loading />} />
         <Route path='/favorite' element={<Favorite />} />
+        <Route path='/about' element={<AboutUs />} />
+        <Route path='/contact' element={<ContactUs />} />
+        <Route path='/privacy' element={<PrivacyPolicy />} />
 
         {/* Admin routes - require auth, nested under Layout */}
         <Route path='/admin/*' element={user ? <Layout /> : (
@@ -54,6 +85,7 @@ const App = () => {
           <Route path="list-bookings" element={<ListBookings />} />
         </Route>
       </Routes>
+      </PageTransition>
 
       {!isAdminRoute && <Footer />}
     </>

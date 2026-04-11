@@ -1,0 +1,239 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 1500" font-family="Arial, sans-serif" font-size="12">
+  <defs>
+    <style>
+      .title { font-size: 22px; font-weight: bold; fill: #1a1a2e; }
+      .subtitle { font-size: 14px; fill: #555; }
+      .action { fill: #e8f4fd; stroke: #3498db; stroke-width: 2; rx: 12; }
+      .action-text { font-size: 12px; fill: #1a1a2e; text-anchor: middle; }
+      .decision { fill: #fff3cd; stroke: #ffc107; stroke-width: 2; }
+      .decision-text { font-size: 10px; fill: #856404; text-anchor: middle; }
+      .flow-line { stroke: #555; stroke-width: 2; fill: none; }
+      .guard-text { font-size: 10px; fill: #27ae60; font-weight: bold; }
+      .guard-text-red { font-size: 10px; fill: #e74c3c; font-weight: bold; }
+      .lane-header { fill: #1a1a2e; rx: 0; }
+      .lane-header-text { fill: white; font-size: 13px; font-weight: bold; text-anchor: middle; writing-mode: tb; }
+      .lane-border { stroke: #ccc; stroke-width: 1; }
+      .note { fill: #fff3cd; stroke: #ffc107; stroke-width: 1.5; rx: 4; }
+      .note-text { font-size: 10px; fill: #856404; }
+      .fork-bar { fill: #1a1a2e; }
+      .signal { fill: #f0e6ff; stroke: #9b59b6; stroke-width: 2; }
+      .signal-text { font-size: 11px; fill: #6c3483; text-anchor: middle; }
+    </style>
+    <marker id="arrow" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#555"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1100" height="1500" fill="#fafbfc"/>
+
+  <!-- Title -->
+  <text x="550" y="35" class="title" text-anchor="middle">Activity Diagram — Ticket Boekingsproces</text>
+  <text x="550" y="55" class="subtitle" text-anchor="middle">BetaTickets — Van film selectie tot bevestiging</text>
+
+  <!-- ========== SWIMLANES ========== -->
+  <!-- Lane: Customer -->
+  <rect x="40" y="75" width="30" height="1380" class="lane-header"/>
+  <text x="55" y="500" class="lane-header-text">Klant (Browser)</text>
+  <rect x="70" y="75" width="300" height="1380" fill="none" class="lane-border"/>
+
+  <!-- Lane: React Frontend -->
+  <rect x="370" y="75" width="30" height="1380" class="lane-header"/>
+  <text x="385" y="500" class="lane-header-text">React Frontend</text>
+  <rect x="400" y="75" width="250" height="1380" fill="none" class="lane-border"/>
+
+  <!-- Lane: Express Backend -->
+  <rect x="650" y="75" width="30" height="1380" class="lane-header"/>
+  <text x="665" y="500" class="lane-header-text">Express API</text>
+  <rect x="680" y="75" width="200" height="1380" fill="none" class="lane-border"/>
+
+  <!-- Lane: External Services -->
+  <rect x="880" y="75" width="30" height="1380" class="lane-header"/>
+  <text x="895" y="500" class="lane-header-text">Externe Services</text>
+  <rect x="910" y="75" width="160" height="1380" fill="none" class="lane-border"/>
+
+  <!-- ========== START ========== -->
+  <circle cx="200" cy="110" r="12" fill="#1a1a2e"/>
+  <line x1="200" y1="122" x2="200" y2="150" class="flow-line" marker-end="url(#arrow)"/>
+
+  <!-- Action 1: Bekijk filmoverzicht -->
+  <rect x="115" y="155" width="170" height="40" class="action"/>
+  <text x="200" y="179" class="action-text">Bekijk filmoverzicht</text>
+  <line x1="200" y1="195" x2="200" y2="225" class="flow-line" marker-end="url(#arrow)"/>
+
+  <!-- Action 2: Selecteer film -->
+  <rect x="115" y="230" width="170" height="40" class="action"/>
+  <text x="200" y="254" class="action-text">Selecteer een film</text>
+  <line x1="285" y1="250" x2="430" y2="250" class="flow-line" marker-end="url(#arrow)"/>
+
+  <!-- Action 3: Laad film details -->
+  <rect x="430" y="230" width="190" height="40" class="action"/>
+  <text x="525" y="247" class="action-text">GET /api/show/:movieId</text>
+  <text x="525" y="260" class="action-text">Laad filmdetails</text>
+  <line x1="525" y1="270" x2="525" y2="300" class="flow-line" marker-end="url(#arrow)"/>
+
+  <!-- Action 4: Toon filmdetails -->
+  <rect x="430" y="305" width="190" height="40" class="action"/>
+  <text x="525" y="329" class="action-text">Toon filmdetails + showtimes</text>
+  <line x1="430" y1="325" x2="285" y2="370" class="flow-line" marker-end="url(#arrow)"/>
+
+  <!-- Action 5: Selecteer datum -->
+  <rect x="115" y="360" width="170" height="40" class="action"/>
+  <text x="200" y="384" class="action-text">Selecteer datum + tijd</text>
+  <line x1="200" y1="400" x2="200" y2="430" class="flow-line" marker-end="url(#arrow)"/>
+
+  <!-- Decision: Ingelogd? -->
+  <polygon points="200,435 260,470 200,505 140,470" class="decision"/>
+  <text x="200" y="473" class="decision-text">Ingelogd?</text>
+
+  <!-- Guard: Nee -->
+  <line x1="140" y1="470" x2="90" y2="470" class="flow-line"/>
+  <line x1="90" y1="470" x2="90" y2="540" class="flow-line"/>
+  <line x1="90" y1="540" x2="115" y2="540" class="flow-line" marker-end="url(#arrow)"/>
+  <text x="95" y="462" class="guard-text-red">[nee]</text>
+
+  <!-- Action: Login via Clerk -->
+  <rect x="115" y="520" width="170" height="40" class="action" style="fill: #fde8d0; stroke: #e67e22;"/>
+  <text x="200" y="544" class="action-text">Login via Clerk</text>
+  <line x1="200" y1="560" x2="200" y2="585" class="flow-line"/>
+  <line x1="200" y1="585" x2="310" y2="585" class="flow-line"/>
+  <line x1="310" y1="585" x2="310" y2="510" class="flow-line"/>
+  <line x1="310" y1="510" x2="260" y2="480" class="flow-line"/>
+
+  <!-- Guard: Ja -->
+  <line x1="200" y1="505" x2="200" y2="610" class="flow-line" marker-end="url(#arrow)"/>
+  <text x="215" y="520" class="guard-text">[ja]</text>
+
+  <!-- Action 6: Selecteer stoelen -->
+  <rect x="115" y="615" width="170" height="40" class="action"/>
+  <text x="200" y="632" class="action-text">Selecteer stoelen</text>
+  <text x="200" y="645" class="action-text">(max 5 per boeking)</text>
+  <line x1="285" y1="635" x2="430" y2="635" class="flow-line" marker-end="url(#arrow)"/>
+
+  <!-- Action 7: Check bezette stoelen -->
+  <rect x="430" y="615" width="190" height="40" class="action"/>
+  <text x="525" y="632" class="action-text">GET /api/booking/seats</text>
+  <text x="525" y="645" class="action-text">Toon vrije/bezette stoelen</text>
+  <line x1="620" y1="635" x2="700" y2="635" class="flow-line" marker-end="url(#arrow)"/>
+
+  <!-- Action 8: Backend check -->
+  <rect x="700" y="615" width="170" height="40" class="action"/>
+  <text x="785" y="639" class="action-text">Query occupiedSeats</text>
+  <line x1="700" y1="635" x2="620" y2="635" class="flow-line" marker-end="url(#arrow)" style="stroke-dasharray: 6,4; stroke: #e74c3c;"/>
+
+  <!-- Action 9: Klik Proceed -->
+  <line x1="200" y1="655" x2="200" y2="695" class="flow-line" marker-end="url(#arrow)"/>
+  <rect x="115" y="700" width="170" height="40" class="action"/>
+  <text x="200" y="724" class="action-text">Klik "Proceed"</text>
+  <line x1="285" y1="720" x2="430" y2="720" class="flow-line" marker-end="url(#arrow)"/>
+
+  <!-- Action 10: Create booking -->
+  <rect x="430" y="700" width="190" height="40" class="action"/>
+  <text x="525" y="724" class="action-text">POST /api/booking/create</text>
+  <line x1="620" y1="720" x2="700" y2="720" class="flow-line" marker-end="url(#arrow)"/>
+
+  <!-- Action 11: Backend validates -->
+  <rect x="700" y="700" width="170" height="40" class="action"/>
+  <text x="785" y="724" class="action-text">Valideer beschikbaarheid</text>
+  <line x1="785" y1="740" x2="785" y2="770" class="flow-line" marker-end="url(#arrow)"/>
+
+  <!-- Decision: Stoelen beschikbaar? -->
+  <polygon points="785,775 845,810 785,845 725,810" class="decision"/>
+  <text x="785" y="808" class="decision-text">Stoelen</text>
+  <text x="785" y="818" class="decision-text">vrij?</text>
+
+  <!-- Guard: Nee - stoelen bezet -->
+  <line x1="725" y1="810" x2="525" y2="810" class="flow-line" marker-end="url(#arrow)"/>
+  <text x="630" y="803" class="guard-text-red">[nee - bezet]</text>
+  <rect x="430" y="790" width="190" height="40" class="action" style="fill: #fde2e2; stroke: #e74c3c;"/>
+  <text x="525" y="814" class="action-text">Toon foutmelding 400</text>
+
+  <!-- Guard: Ja -->
+  <line x1="785" y1="845" x2="785" y2="880" class="flow-line" marker-end="url(#arrow)"/>
+  <text x="800" y="865" class="guard-text">[ja]</text>
+
+  <!-- Action 12: Create booking + Stripe session -->
+  <rect x="700" y="885" width="170" height="50" class="action"/>
+  <text x="785" y="905" class="action-text">Maak Booking (isPaid: false)</text>
+  <text x="785" y="920" class="action-text">+ Stripe Checkout Session</text>
+  <line x1="870" y1="910" x2="920" y2="910" class="flow-line" marker-end="url(#arrow)"/>
+
+  <!-- Signal: Stripe -->
+  <rect x="920" y="890" width="140" height="40" class="signal" rx="8"/>
+  <text x="990" y="914" class="signal-text">Stripe Checkout</text>
+
+  <!-- Action 13: Trigger Inngest -->
+  <line x1="785" y1="935" x2="785" y2="965" class="flow-line" marker-end="url(#arrow)"/>
+  <rect x="700" y="970" width="170" height="40" class="action" style="fill: #f0e6ff; stroke: #9b59b6;"/>
+  <text x="785" y="994" class="action-text">Inngest: checkpayment (10m)</text>
+
+  <!-- Return URL to frontend -->
+  <line x1="700" y1="990" x2="620" y2="990" class="flow-line" marker-end="url(#arrow)" style="stroke-dasharray: 6,4; stroke: #e74c3c;"/>
+  <rect x="430" y="970" width="190" height="40" class="action"/>
+  <text x="525" y="994" class="action-text">Redirect naar Stripe URL</text>
+  <line x1="430" y1="990" x2="285" y2="990" class="flow-line" marker-end="url(#arrow)"/>
+
+  <!-- Action 14: Betaling -->
+  <rect x="115" y="970" width="170" height="40" class="action" style="fill: #e8e0ff; stroke: #635bff;"/>
+  <text x="200" y="994" class="action-text">Vul betaalgegevens in</text>
+  <line x1="200" y1="1010" x2="200" y2="1050" class="flow-line" marker-end="url(#arrow)"/>
+
+  <!-- Decision: Betaling succesvol? -->
+  <polygon points="200,1055 260,1090 200,1125 140,1090" class="decision"/>
+  <text x="200" y="1088" class="decision-text">Betaald?</text>
+
+  <!-- Guard: Nee - geannuleerd -->
+  <line x1="140" y1="1090" x2="90" y2="1090" class="flow-line"/>
+  <text x="115" y="1083" class="guard-text-red">[nee]</text>
+  <line x1="90" y1="1090" x2="90" y2="1220" class="flow-line"/>
+  <line x1="90" y1="1220" x2="430" y2="1220" class="flow-line" marker-end="url(#arrow)"/>
+
+  <!-- Action: Redirect my-bookings -->
+  <rect x="430" y="1200" width="190" height="40" class="action" style="fill: #fde8d0; stroke: #e67e22;"/>
+  <text x="525" y="1217" class="action-text">Redirect /my-bookings</text>
+  <text x="525" y="1230" class="action-text">(onbetaald, Pay Now link)</text>
+
+  <!-- Guard: Ja - betaald -->
+  <line x1="200" y1="1125" x2="200" y2="1160" class="flow-line" marker-end="url(#arrow)"/>
+  <text x="215" y="1145" class="guard-text">[ja]</text>
+
+  <!-- Action 15: Stripe webhook -->
+  <rect x="115" y="1165" width="170" height="40" class="action"/>
+  <text x="200" y="1189" class="action-text">Redirect naar loading page</text>
+
+  <!-- Stripe webhook to backend -->
+  <line x1="990" y1="930" x2="990" y2="1120" class="flow-line"/>
+  <line x1="990" y1="1120" x2="870" y2="1120" class="flow-line" marker-end="url(#arrow)"/>
+  <rect x="700" y="1100" width="170" height="50" class="action" style="fill: #f0e6ff; stroke: #9b59b6;"/>
+  <text x="785" y="1118" class="action-text">Stripe Webhook:</text>
+  <text x="785" y="1133" class="action-text">Booking.isPaid = true</text>
+
+  <!-- Inngest confirmation email -->
+  <line x1="870" y1="1125" x2="920" y2="1280" class="flow-line" marker-end="url(#arrow)"/>
+  <rect x="920" y="1265" width="140" height="40" class="signal" rx="8"/>
+  <text x="990" y="1282" class="signal-text">Inngest: bevestigings-</text>
+  <text x="990" y="1295" class="signal-text">email versturen</text>
+
+  <!-- Final: Show bookings -->
+  <line x1="200" y1="1205" x2="200" y2="1280" class="flow-line" marker-end="url(#arrow)"/>
+  <rect x="115" y="1285" width="170" height="40" class="action" style="fill: #d4edda; stroke: #27ae60;"/>
+  <text x="200" y="1309" class="action-text">Bekijk bevestigde boeking</text>
+
+  <!-- ========== END ========== -->
+  <line x1="200" y1="1325" x2="200" y2="1370" class="flow-line" marker-end="url(#arrow)"/>
+  <circle cx="200" cy="1385" r="12" fill="none" stroke="#1a1a2e" stroke-width="3"/>
+  <circle cx="200" cy="1385" r="8" fill="#1a1a2e"/>
+
+  <!-- ========== LEGEND ========== -->
+  <rect x="430" y="1340" width="500" height="80" rx="6" fill="#f8f9fa" stroke="#dee2e6" stroke-width="1"/>
+  <text x="450" y="1362" style="font-size: 12px; font-weight: bold; fill: #2c3e50;">Legenda:</text>
+  <rect x="450" y="1370" width="50" height="18" class="action"/>
+  <text x="510" y="1383" class="attr-text">Actie</text>
+  <polygon points="580,1379 600,1370 620,1379 600,1388" class="decision"/>
+  <text x="630" y="1383" class="attr-text">Beslissing</text>
+  <circle cx="700" cy="1379" r="7" fill="#1a1a2e"/>
+  <text x="715" y="1383" class="attr-text">Start/Einde</text>
+  <rect x="770" y="1370" width="50" height="18" class="signal" rx="5"/>
+  <text x="830" y="1383" class="attr-text">Extern signaal</text>
+  <text x="450" y="1410" style="font-size: 10px; fill: #666;">Swimlanes: Klant | React Frontend | Express API | Externe Services (Stripe, Inngest)</text>
+</svg>

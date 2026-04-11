@@ -18,8 +18,12 @@ const Loading = () => {
     }, [nextUrl, navigate])
 
     return (
-        <div className='flex justify-center items-center h-[80vh]'>
-            <div className='animate-spin rounded-full h-14 w-14 border-2 border-t-primary'></div>
+        <div className='flex flex-col justify-center items-center h-[80vh] gap-4'>
+            <div className='relative'>
+                <div className='h-16 w-16 rounded-full border-2 border-white/10'></div>
+                <div className='absolute inset-0 h-16 w-16 rounded-full border-2 border-transparent border-t-primary animate-spin'></div>
+            </div>
+            <p className='text-gray-500 text-sm animate-pulse'>Laden...</p>
         </div>
     )
 }

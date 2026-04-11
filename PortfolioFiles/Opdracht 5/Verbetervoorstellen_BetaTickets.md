@@ -12,6 +12,7 @@
 1. [5.1 Verbetervoorstellen op basis van testresultaten](#51-verbetervoorstellen-op-basis-van-testresultaten)
 2. [5.2 Verbetervoorstellen op basis van oplevering](#52-verbetervoorstellen-op-basis-van-oplevering)
 3. [5.3 Reflectie op het proces](#53-reflectie-op-het-proces)
+4. [Planning](#planning)
 
 ---
 
@@ -244,3 +245,54 @@ In dit onderdeel reflecteer ik op het doorlopen ontwikkelproces en mijn eigen ro
 - Wekelijks 30 minuten reserveren voor het bijwerken van documentatie
 
 **Verwacht effect:** Betere en completere documentatie die het ontwikkelproces nauwkeurig reflecteert. Minder tijdsdruk aan het einde van het project en een duidelijker beeld van de gemaakte keuzes.
+
+---
+
+## Planning
+
+De verbetervoorstellen zijn geprioriteerd op basis van impact en urgentie. De planning is opgesteld als een mogelijke volgende sprint.
+
+### Sprint: Verbeteringen (18 april — 2 mei 2026)
+
+| Prio | Voorstel | Bron | Geschatte uren | Week |
+|------|----------|------|---------------|------|
+| 1 | Lege-staat meldingen toevoegen (5.1-V1) | Testen: DEF-01 | 3 | Week 1 |
+| 2 | Error-handling dashboard verbeteren (5.1-V2) | Testen: DEF-02 | 4 | Week 1 |
+| 3 | Film bewerken/verwijderen (5.2-V4) | Oplevering: US-16 | 8 | Week 1 |
+| 4 | Correcte HTTP-statuscodes (5.1-V3) | Testen | 4 | Week 1 |
+| 5 | Zoek- en filterfunctionaliteit (5.2-V1) | Oplevering: US-01 | 6 | Week 2 |
+| 6 | E-mailbevestiging (5.2-V2) | Oplevering: US-10 | 6 | Week 2 |
+| 7 | Prestatie-optimalisatie (5.2-V3) | Oplevering: US-22 | 6 | Week 2 |
+| 8 | Realtime stoelstatus (5.1-V4) | Testen: TS-02 | 10 | Backlog |
+
+**Totaal gepland:** 47 uur (exclusief V4 op backlog)
+
+### Prioritering
+
+1. **5.1-V1 en 5.1-V2** eerst: direct gekoppeld aan gefaalde/deels geslaagde testen, snel te fixen
+2. **5.2-V4** vervolgens: niet-geïmplementeerde user story die de opdrachtgever verwacht
+3. **5.1-V3** daarna: technische kwaliteitsverbetering met impact op alle API-endpoints
+4. **5.2-V1, V2, V3** als functionele uitbreidingen die de gebruikerservaring verbeteren
+5. **5.1-V4** op backlog: meest complex, niet direct noodzakelijk voor huidige schaal
+
+### Procesverbeteringen (5.3)
+
+De reflectie-voorstellen zijn procesverbeteringen die niet in een sprint passen, maar structureel worden toegepast:
+
+| Voorstel | Wanneer toepassen |
+|----------|-------------------|
+| 5.3-V1: Eerder testen | Vanaf dag 1 van het volgende project |
+| 5.3-V2: Betere tijdsplanning | Vanaf de planningsfase, wekelijks evalueren |
+| 5.3-V3: Code-structuur en herbruikbaarheid | Bij elke sprint, code-review na elke feature |
+| 5.3-V4: Documentatie bijhouden | Continu, 30 min per week reserveren |
+
+---
+
+## Overzicht
+
+| Criterium | Aantal voorstellen |
+|-----------|-------------------|
+| 5.1 Testen | 4 voorstellen (lege-staat, error handling, HTTP codes, realtime stoelen) |
+| 5.2 Oplevering | 4 voorstellen (zoeken/filteren, e-mail, performance, film CRUD) |
+| 5.3 Reflectie | 4 voorstellen (testen, planning, code-structuur, documentatie) |
+| **Totaal** | **12 verbetervoorstellen + planning** |

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import Title from '../../components/admin/Title';
 import Loading from '../../components/Loading';
-import { CheckIcon, CalendarIcon, ClockIcon, DeleteIcon, SearchIcon, StarIcon, XIcon } from 'lucide-react'
+import { CheckIcon, CalendarIcon, ClockIcon, SearchIcon, StarIcon, XIcon } from 'lucide-react'
 import { kConverter } from '../../library/kConverter';
 import { useAppContext } from '../../context/AppContext';
 import toast from 'react-hot-toast';
@@ -109,20 +109,22 @@ const AddShows = () => {
     const totalShowtimes = Object.values(dateTimeSelection).reduce((acc, times) => acc + times.length, 0)
 
     return nowPlayingMovies.length > 0 ? (
-        <div className='animate-fade-in'>
-            <Title text1="Add" text2="Shows" />
-            <p className='text-gray-500 text-sm mt-1'>Selecteer een film, stel showtimes in en publiceer</p>
+        <div>
+            <div style={{ animation: 'revealUp 0.5s cubic-bezier(0.16,1,0.3,1)' }}>
+                <Title text1="Add" text2="Shows" />
+                <p className='text-gray-500 text-sm mt-1'>Selecteer een film, stel showtimes in en publiceer</p>
+            </div>
 
             {/* Step 1: Movie selection */}
-            <div className='mt-8'>
+            <div className='mt-8' style={{ animation: 'revealUp 0.5s cubic-bezier(0.16,1,0.3,1) 0.1s both' }}>
                 <div className='flex items-center justify-between mb-4'>
                     <h2 className='text-base font-semibold flex items-center gap-2'>
-                        <span className='flex items-center justify-center w-6 h-6 rounded-full bg-primary text-white text-xs font-bold'>1</span>
+                        <span className='flex items-center justify-center w-7 h-7 rounded-full bg-primary text-white text-xs font-bold shadow-lg shadow-primary/20'>1</span>
                         Kies een film
                     </h2>
 
                     {/* Search */}
-                    <div className='flex items-center gap-2 bg-white/[0.04] border border-white/[0.08] rounded-lg px-3 py-1.5'>
+                    <div className='flex items-center gap-2 bg-white/[0.04] border border-white/[0.08] rounded-xl px-3 py-2 focus-within:border-primary/30 transition-all duration-300'>
                         <SearchIcon className='w-4 h-4 text-gray-500' />
                         <input
                             type='text'
@@ -132,7 +134,7 @@ const AddShows = () => {
                             className='bg-transparent outline-none text-sm w-40 placeholder:text-gray-600'
                         />
                         {searchQuery && (
-                            <XIcon className='w-3.5 h-3.5 text-gray-500 cursor-pointer' onClick={() => setSearchQuery("")} />
+                            <XIcon className='w-3.5 h-3.5 text-gray-500 cursor-pointer hover:text-white transition-colors' onClick={() => setSearchQuery("")} />
                         )}
                     </div>
                 </div>
@@ -142,12 +144,12 @@ const AddShows = () => {
                         {filteredMovies.map((movie) => (
                             <div
                                 key={movie.id}
-                                className={`relative w-36 shrink-0 cursor-pointer group-hover:not-hover:opacity-40 hover:-translate-y-1 transition duration-300 ${selectedMovie === movie.id ? 'ring-2 ring-primary rounded-lg' : ''}`}
+                                className={`relative w-36 shrink-0 cursor-pointer group-hover:not-hover:opacity-40 hover:-translate-y-1.5 transition-all duration-300 ${selectedMovie === movie.id ? 'ring-2 ring-primary rounded-lg shadow-lg shadow-primary/15' : ''}`}
                                 onClick={() => setSelectedMovie(movie.id)}
                             >
                                 <div className="relative rounded-lg overflow-hidden">
-                                    <img src={image_base_url + movie.poster_path} alt={movie.title} className="w-full aspect-[2/3] object-cover brightness-90" />
-                                    <div className="text-xs flex items-center justify-between p-1.5 bg-black/70 w-full absolute bottom-0 left-0">
+                                    <img src={image_base_url + movie.poster_path} alt={movie.title} className="w-full aspect-[2/3] object-cover brightness-90 hover:brightness-100 transition-all duration-300" />
+                                    <div className="text-xs flex items-center justify-between p-1.5 bg-black/70 backdrop-blur-sm w-full absolute bottom-0 left-0">
                                         <p className="flex items-center gap-1 text-gray-400">
                                             <StarIcon className="w-3 h-3 text-primary fill-primary" />
                                             {movie.vote_average.toFixed(1)}
@@ -156,7 +158,7 @@ const AddShows = () => {
                                     </div>
                                 </div>
                                 {selectedMovie === movie.id && (
-                                    <div className="absolute top-2 right-2 flex items-center justify-center bg-primary h-6 w-6 rounded-full shadow-lg">
+                                    <div className="absolute top-2 right-2 flex items-center justify-center bg-primary h-6 w-6 rounded-full shadow-lg shadow-primary/30" style={{ animation: 'revealScale 0.3s cubic-bezier(0.16,1,0.3,1)' }}>
                                         <CheckIcon className="w-4 h-4 text-white" strokeWidth={3} />
                                     </div>
                                 )}
@@ -167,40 +169,43 @@ const AddShows = () => {
                 </div>
 
                 {filteredMovies.length === 0 && (
-                    <p className='text-gray-500 text-sm text-center py-8'>Geen films gevonden voor "{searchQuery}"</p>
+                    <div className='text-center py-12 bg-white/[0.02] rounded-xl border border-dashed border-white/[0.08]'>
+                        <SearchIcon className='w-8 h-8 text-gray-600 mx-auto mb-2' />
+                        <p className='text-gray-500 text-sm'>Geen films gevonden voor "{searchQuery}"</p>
+                    </div>
                 )}
             </div>
 
             {/* Selected movie preview */}
             {selectedMovieData && (
-                <div className='flex items-center gap-4 mt-2 p-4 bg-primary/[0.06] border border-primary/15 rounded-xl'>
-                    <img src={image_base_url + selectedMovieData.poster_path} alt={selectedMovieData.title} className='w-14 h-20 object-cover rounded-lg' />
-                    <div>
+                <div className='flex items-center gap-4 mt-2 p-4 bg-primary/[0.06] border border-primary/15 rounded-xl' style={{ animation: 'revealUp 0.4s cubic-bezier(0.16,1,0.3,1)' }}>
+                    <img src={image_base_url + selectedMovieData.poster_path} alt={selectedMovieData.title} className='w-14 h-20 object-cover rounded-lg shadow-md' />
+                    <div className='flex-1 min-w-0'>
                         <p className='font-semibold'>{selectedMovieData.title}</p>
                         <p className='text-xs text-gray-400 mt-0.5'>
                             {selectedMovieData.release_date} &bull; {selectedMovieData.vote_average.toFixed(1)} rating &bull; {kConverter(selectedMovieData.vote_count)} stemmen
                         </p>
                         <p className='text-xs text-gray-500 mt-1 line-clamp-1'>{selectedMovieData.overview}</p>
                     </div>
-                    <button onClick={() => setSelectedMovie(null)} className='ml-auto text-gray-500 hover:text-white transition cursor-pointer'>
+                    <button onClick={() => setSelectedMovie(null)} className='text-gray-500 hover:text-white hover:bg-white/[0.05] p-2 rounded-lg transition-all duration-300 cursor-pointer'>
                         <XIcon className='w-5 h-5' />
                     </button>
                 </div>
             )}
 
             {/* Step 2: Price & Showtimes */}
-            <div className='mt-10 grid grid-cols-1 lg:grid-cols-2 gap-8'>
+            <div className='mt-10 grid grid-cols-1 lg:grid-cols-2 gap-8' style={{ animation: 'revealUp 0.5s cubic-bezier(0.16,1,0.3,1) 0.2s both' }}>
                 {/* Left: Price + Date/Time input */}
                 <div>
                     <h2 className='text-base font-semibold flex items-center gap-2 mb-5'>
-                        <span className='flex items-center justify-center w-6 h-6 rounded-full bg-primary text-white text-xs font-bold'>2</span>
+                        <span className='flex items-center justify-center w-7 h-7 rounded-full bg-primary text-white text-xs font-bold shadow-lg shadow-primary/20'>2</span>
                         Prijs & Showtimes
                     </h2>
 
                     {/* Price */}
                     <div className='mb-6'>
                         <label className="block text-xs font-medium text-gray-400 mb-2 uppercase tracking-wider">Basisprijs per stoel</label>
-                        <div className="flex items-center gap-3 bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 w-fit">
+                        <div className="flex items-center gap-3 bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 w-fit focus-within:border-primary/30 transition-all duration-300">
                             <span className="text-gray-400 text-sm font-medium">{currency}</span>
                             <input
                                 min={0}
@@ -218,7 +223,7 @@ const AddShows = () => {
                     <div>
                         <label className="block text-xs font-medium text-gray-400 mb-2 uppercase tracking-wider">Datum & Tijd toevoegen</label>
                         <div className="flex items-center gap-3">
-                            <div className='flex items-center gap-2 bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 flex-1'>
+                            <div className='flex items-center gap-2 bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 flex-1 focus-within:border-primary/30 transition-all duration-300'>
                                 <CalendarIcon className='w-4 h-4 text-gray-500' />
                                 <input
                                     type="datetime-local"
@@ -229,7 +234,7 @@ const AddShows = () => {
                             </div>
                             <button
                                 onClick={handleDateTimeAdd}
-                                className="bg-primary hover:bg-primary-dull text-white px-5 py-3 text-sm rounded-xl transition cursor-pointer font-medium"
+                                className="bg-primary hover:bg-primary-dull text-white px-5 py-3 text-sm rounded-xl transition-all duration-200 cursor-pointer font-medium btn-press"
                             >
                                 Toevoegen
                             </button>
@@ -244,7 +249,7 @@ const AddShows = () => {
                             Geselecteerde showtimes
                         </label>
                         {totalShowtimes > 0 && (
-                            <span className='text-xs bg-primary/20 text-primary px-2 py-0.5 rounded-full font-medium'>
+                            <span className='text-xs bg-primary/20 text-primary px-2.5 py-0.5 rounded-full font-medium'>
                                 {totalShowtimes} showtime{totalShowtimes !== 1 ? 's' : ''}
                             </span>
                         )}
@@ -255,7 +260,7 @@ const AddShows = () => {
                             {Object.entries(dateTimeSelection)
                                 .sort(([a], [b]) => a.localeCompare(b))
                                 .map(([date, times]) => (
-                                <div key={date} className='bg-white/[0.03] border border-white/[0.06] rounded-xl p-4'>
+                                <div key={date} className='bg-white/[0.03] border border-white/[0.06] rounded-xl p-4 hover:border-white/[0.1] transition-all duration-300' style={{ animation: 'revealUp 0.3s cubic-bezier(0.16,1,0.3,1)' }}>
                                     <div className='flex items-center gap-2 mb-3'>
                                         <CalendarIcon className='w-4 h-4 text-primary' />
                                         <span className='text-sm font-medium'>
@@ -264,10 +269,10 @@ const AddShows = () => {
                                     </div>
                                     <div className="flex flex-wrap gap-2">
                                         {times.sort().map((time) => (
-                                            <div key={time} className="flex items-center gap-2 bg-white/[0.05] border border-white/[0.08] px-3 py-1.5 rounded-lg text-sm group">
+                                            <div key={time} className="flex items-center gap-2 bg-white/[0.05] border border-white/[0.08] px-3 py-1.5 rounded-lg text-sm group hover:border-primary/20 transition-all duration-300">
                                                 <ClockIcon className='w-3.5 h-3.5 text-gray-500' />
                                                 <span>{time}</span>
-                                                <button onClick={() => handleRemoveTime(date, time)} className="text-gray-600 hover:text-red-400 transition cursor-pointer">
+                                                <button onClick={() => handleRemoveTime(date, time)} className="text-gray-600 hover:text-red-400 transition-colors duration-300 cursor-pointer">
                                                     <XIcon className='w-3.5 h-3.5' />
                                                 </button>
                                             </div>
@@ -287,7 +292,7 @@ const AddShows = () => {
             </div>
 
             {/* Summary & Submit */}
-            <div className='mt-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pt-6 border-t border-white/[0.06]'>
+            <div className='mt-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pt-6 border-t border-white/[0.06]' style={{ animation: 'revealUp 0.5s cubic-bezier(0.16,1,0.3,1) 0.3s both' }}>
                 <div className='text-sm text-gray-400'>
                     {selectedMovieData && totalShowtimes > 0 && showPrice ? (
                         <p>
@@ -303,7 +308,7 @@ const AddShows = () => {
                 <button
                     onClick={handleSubmit}
                     disabled={addingShow || !selectedMovie || totalShowtimes === 0 || !showPrice}
-                    className="bg-primary hover:bg-primary-dull disabled:opacity-40 disabled:cursor-not-allowed text-white px-8 py-3 rounded-xl transition-all cursor-pointer font-medium text-sm"
+                    className="bg-primary hover:bg-primary-dull disabled:opacity-40 disabled:cursor-not-allowed text-white px-8 py-3 rounded-xl transition-all duration-200 cursor-pointer font-medium text-sm btn-press shadow-lg shadow-primary/20 disabled:shadow-none"
                 >
                     {addingShow ? 'Toevoegen...' : 'Show Publiceren'}
                 </button>

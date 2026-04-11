@@ -399,7 +399,46 @@ De user stories zijn niet op zichzelf staand maar vormen samen complete gebruike
 | Gedekte User Stories | 16 van 23 |
 | Must Have dekking | 12 van 13 (92%) |
 
-**Opmerking:** Alle 13 testen zijn succesvol uitgevoerd. Dit overschrijdt de minimumvereiste van 10 testen. 16 van de 23 user stories zijn gedekt, waaronder 12 van de 13 Must Have stories.
+**Opmerking:** Alle 18 testen zijn succesvol uitgevoerd. Dit overschrijdt de minimumvereiste van 10 testen. 16 van de 23 user stories zijn gedekt, waaronder 12 van de 13 Must Have stories.
+
+---
+
+## 5.1 Geautomatiseerde testresultaten
+
+De geautomatiseerde testen zijn geschreven met **Vitest** en draaien via `npm test` in de `server/` directory. Hieronder het overzicht:
+
+### Testbestanden
+
+| Bestand | Aantal testen | Geteste user stories |
+|---------|---------------|---------------------|
+| `__tests__/models.test.js` | 6 | US-01, US-02, US-07, US-10 |
+| `__tests__/shows.test.js` | 3 | US-01, US-02 |
+| `__tests__/booking.test.js` | 3 | US-08, US-09 |
+| `__tests__/auth.test.js` | 4 | US-14, US-21 |
+| `__tests__/theaters.test.js` | 2 | US-08 |
+| **Totaal** | **18** | |
+
+### Instructies om testen uit te voeren
+
+```bash
+cd server
+npm install       # Installeer dependencies (inclusief vitest)
+npm test          # Voer alle testen uit
+npm run test:watch  # Testen in watch-modus
+```
+
+### Resultaat
+
+```
+ ✓ __tests__/models.test.js (6 tests)
+ ✓ __tests__/shows.test.js (3 tests)
+ ✓ __tests__/booking.test.js (3 tests)
+ ✓ __tests__/auth.test.js (4 tests)
+ ✓ __tests__/theaters.test.js (2 tests)
+
+ Test Files  5 passed (5)
+      Tests  18 passed (18)
+```
 
 ---
 
@@ -407,7 +446,7 @@ De user stories zijn niet op zichzelf staand maar vormen samen complete gebruike
 
 ### Samenvatting
 
-Het testplan voor BetaTickets omvat 13 geautomatiseerde testen verdeeld over 16 van 23 user stories. Alle testen zijn succesvol uitgevoerd met een slagingspercentage van 100%. Van de 13 Must Have user stories zijn er 12 gedekt door testen (92% Must Have dekking).
+Het testplan voor BetaTickets omvat 18 geautomatiseerde testen en 21 handmatige testuitvoeringen, verdeeld over 16 van 23 user stories. Alle geautomatiseerde testen zijn succesvol uitgevoerd met een slagingspercentage van 100%. Van de 13 Must Have user stories zijn er 12 gedekt door testen (92% Must Have dekking).
 
 ### Dekking per categorie
 

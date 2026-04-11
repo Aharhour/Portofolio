@@ -3,12 +3,14 @@ import { ArrowRight, CalendarIcon, ChevronLeftIcon, ChevronRightIcon, StarIcon }
 import { useNavigate } from 'react-router-dom'
 import BlurCircle from './BlurCircle'
 import { useAppContext } from '../context/AppContext'
+import useScrollReveal from '../library/useScrollReveal'
 
 const UpcomingSection = () => {
     const navigate = useNavigate()
     const { axios, image_base_url } = useAppContext()
     const [movies, setMovies] = useState([])
     const scrollRef = useRef(null)
+    const sectionRef = useScrollReveal()
 
     useEffect(() => {
         const fetchUpcoming = async () => {
@@ -42,26 +44,26 @@ const UpcomingSection = () => {
         return `Over ${Math.ceil(diff / 30)} maanden`
     }
 
-    if (movies.length === 0) return null
+    if (movies.length === 0) return <div ref={sectionRef} />
 
     return (
-        <div className='relative px-6 md:px-16 lg:px-24 xl:px-44 pt-24 pb-10 overflow-hidden'>
+        <div ref={sectionRef} className='relative px-6 md:px-16 lg:px-24 xl:px-44 pt-24 pb-10 overflow-hidden'>
             <BlurCircle top='100px' left='-60px' />
 
             {/* Header */}
-            <div className='flex items-center justify-between mb-10'>
+            <div className='flex items-center justify-between mb-10 reveal'>
                 <div>
                     <p className='text-gray-300 font-medium text-lg'>Binnenkort in de bioscoop</p>
                     <p className='text-gray-500 text-sm mt-1'>De nieuwste films die eraan komen</p>
                 </div>
                 <div className='flex items-center gap-3'>
-                    <button onClick={() => scroll(-1)} className='p-2 rounded-full border border-gray-700 hover:border-primary/50 hover:bg-primary/10 transition cursor-pointer'>
+                    <button onClick={() => scroll(-1)} className='p-2 rounded-full border border-gray-700 hover:border-primary/50 hover:bg-primary/10 transition cursor-pointer btn-press'>
                         <ChevronLeftIcon className='w-5 h-5' />
                     </button>
-                    <button onClick={() => scroll(1)} className='p-2 rounded-full border border-gray-700 hover:border-primary/50 hover:bg-primary/10 transition cursor-pointer'>
+                    <button onClick={() => scroll(1)} className='p-2 rounded-full border border-gray-700 hover:border-primary/50 hover:bg-primary/10 transition cursor-pointer btn-press'>
                         <ChevronRightIcon className='w-5 h-5' />
                     </button>
-                    <button onClick={() => { navigate('/releases'); scrollTo(0, 0) }} className='group flex items-center gap-2 text-sm text-gray-300 ml-2'>
+                    <button onClick={() => { navigate('/releases'); scrollTo(0, 0) }} className='group flex items-center gap-2 text-sm text-gray-300 ml-2 hover-underline'>
                         Bekijk alles
                         <ArrowRight className='group-hover:translate-x-0.5 transition w-4.5 h-4.5' />
                     </button>
@@ -69,7 +71,7 @@ const UpcomingSection = () => {
             </div>
 
             {/* Horizontal scroll carousel */}
-            <div ref={scrollRef} className='flex gap-5 overflow-x-auto no-scrollbar scroll-smooth pb-4'>
+            <div ref={scrollRef} className='flex gap-5 overflow-x-auto no-scrollbar scroll-smooth pb-4 reveal'>
                 {movies.map((movie) => (
                     <div
                         key={movie.id}

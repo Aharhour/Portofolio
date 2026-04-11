@@ -5,6 +5,7 @@ import timeFormat from '../library/timeFormat'
 import { dateFormat } from '../library/dateFormat'
 import { Link } from 'react-router-dom'
 import { useAppContext } from '../context/AppContext'
+import useScrollReveal from '../library/useScrollReveal'
 
 const MyBookings = () => {
     const currency = import.meta.env.VITE_CURRENCY
@@ -12,6 +13,7 @@ const MyBookings = () => {
 
     const [bookings, setBookings] = useState([])
     const [isLoading, setIsLoading] = useState(true)
+    const ref = useScrollReveal()
 
     // Fetch all bookings for the current user
     const getMyBookings = async () => {
@@ -35,16 +37,18 @@ const MyBookings = () => {
     }, [user])
 
     return !isLoading ? (
-        <div className='relative px-6 md:px-16 lg:px-40 pt-30 md:pt-40 min-h-[80ch]'>
+        <div ref={ref} className='relative px-6 md:px-16 lg:px-40 pt-30 md:pt-40 min-h-[80ch]'>
             <BlurCircle top="100px" left="100px" />
             <BlurCircle bottom="0px" left="600px" />
-            <h1 className='text-lg font-semibold mb-4'>My Bookings</h1>
+            <h1 className='text-lg font-semibold mb-4 reveal'>My Bookings</h1>
 
             {/* Booking cards list */}
             {bookings.map((item, index) => (
-                <div key={index} className='flex flex-col md:flex-row justify-between bg-primary/8 border border-primary/20 rounded-lg mt-4 p-2 max-w-3xl'>
+                <div key={index} className={`flex flex-col md:flex-row justify-between bg-primary/8 border border-primary/20 rounded-lg mt-4 p-2 max-w-3xl card-hover reveal stagger-${Math.min(index + 1, 8)}`}>
                     <div className='flex flex-col md:flex-row'>
-                        <img src={image_base_url + item.show.movie_id.poster_path} alt={item.show.movie_id.title} className='md:max-w-45 aspect-video h-auto object-cover object-bottom rounded' />
+                        <div className='img-zoom md:max-w-45 rounded overflow-hidden'>
+                            <img src={image_base_url + item.show.movie_id.poster_path} alt={item.show.movie_id.title} className='aspect-video h-auto object-cover object-bottom' />
+                        </div>
                         <div className='flex flex-col p-4'>
                             <p className='text-lg font-semibold'>{item.show.movie_id.title}</p>
                             <p className='text-gray-400 text-sm'>{timeFormat(item.show.movie_id.runtime)}</p>
@@ -57,7 +61,7 @@ const MyBookings = () => {
                         <div className='flex items-center gap-4'>
                             <p className='text-2xl font-semibold mb-3'>{currency}{item.amount.toFixed(2)}</p>
                             {!item.isPaid && (
-                                <Link to={item.paymentLink} className='bg-primary px-4 py-1.5 mb-3 text-sm rounded-full font-medium cursor-pointer'>
+                                <Link to={item.paymentLink} className='bg-primary px-4 py-1.5 mb-3 text-sm rounded-full font-medium cursor-pointer btn-press'>
                                     Pay Now
                                 </Link>
                             )}
@@ -70,7 +74,7 @@ const MyBookings = () => {
                 </div>
             ))}
         </div>
-    ) : <Loading />
+    ) : <div ref={ref}><Loading /></div>
 }
 
 export default MyBookings
