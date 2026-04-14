@@ -139,8 +139,6 @@ De user stories zijn niet op zichzelf staand maar vormen samen complete gebruike
 | US-19 | Totale omzet bekijken | Test 10, 12 |
 | US-21 | Protected routes | Test 2 |
 
-**Niet-geteste user stories:** US-03 (Responsive), US-06 (Uitloggen), US-13 (Revenue auto-update), US-16 (Film bewerken/verwijderen), US-20 (Form validatie), US-22 (Snelle laadtijden) en US-23 (Navigatie) zijn niet opgenomen in de geautomatiseerde testen. Deze worden aanbevolen voor toekomstige testrondes.
-
 ---
 
 ## 4. Testscenario's
