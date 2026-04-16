@@ -24,7 +24,8 @@
       "Bash(where py:*)",
       "Bash(mkdir -p \"/tmp/docxbuild/_rels\" \"/tmp/docxbuild/word/_rels\")",
       "Read(//tmp/**)",
-      "Bash(node build.js)"
+      "Bash(node build.js)",
+      "Bash(node -e \"require\\('@babel/parser'\\).parse\\(require\\('fs'\\).readFileSync\\('src/pages/Releases.jsx','utf8'\\), { sourceType:'module', plugins:['jsx'] }\\); console.log\\('OK'\\)\")"
     ]
   }
 }

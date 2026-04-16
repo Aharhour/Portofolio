@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { CalendarIcon, StarIcon, XIcon, TrendingUpIcon, ClockIcon } from 'lucide-react'
 import BlurCircle from '../components/BlurCircle'
 import Loading from '../components/Loading'
@@ -136,8 +137,10 @@ const Releases = () => {
                 ))
             )}
 
-            {/* Detail Modal */}
-            {selectedMovie && (
+            {/* Detail Modal — rendered via portal to escape the PageTransition
+                wrapper, whose transform otherwise makes `fixed` descendants
+                position relative to the wrapper instead of the viewport. */}
+            {selectedMovie && createPortal(
                 <div className='fixed inset-0 z-50 flex items-center justify-center p-4' onClick={() => setSelectedMovie(null)} style={{ animation: 'fadeIn 0.2s ease-out' }}>
                     <div className='absolute inset-0 bg-black/70 backdrop-blur-sm' />
                     <div
@@ -259,7 +262,8 @@ const Releases = () => {
                             </div>
                         </div>
                     </div>
-                </div>
+                </div>,
+                document.body
             )}
         </div>
     )
