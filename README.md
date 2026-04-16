@@ -19,7 +19,7 @@
 
 ## 📖 Over het project
 
-**QuickShow** is een volledig werkende **Movie Ticket Booking App** waarmee gebruikers films kunnen ontdekken, showtimes kunnen kiezen en stoelen kunnen reserveren — allemaal in een vloeiende en responsive interface.
+**QuickShow** is een volledig werkende **Movie Ticket Booking App** waarmee gebruikers films kunnen ontdekken, showtimes kunnen kiezen en stoelen kunnen reserveren allemaal in een vloeiende en responsive interface.
 
 Achter de schermen draait een beveiligd **admin dashboard** met realtime statistieken (gebruikers, tickets, omzet) en een **event-driven backend** op basis van Inngest voor het verwerken van boekingen en achtergrondtaken.
 

@@ -3,7 +3,7 @@
 ## Projectgegevens
 
 - **Startdatum:** 23 maart 2026
-- **Sprintduur:** 2 weken
+- **Sprintduur:** 4 weken
 - **Beschikbare uren per sprint:** ~35 uur (gemiddeld 3,5 uur per werkdag)
 - **Totaal geschatte uren:** ~104 uur
 - **Aantal sprints:** 3
@@ -12,7 +12,7 @@
 
 ## Sprint 1: Basis en Authenticatie
 
-**Periode:** 23 maart - 5 april 2026
+**Periode:** 23 mrt - 29 mrt 2026
 **Sprint doel:** De basis van de applicatie opzetten inclusief authenticatie, filmpagina's en admin-toegang.
 
 | # | User Story | MoSCoW | Schatting |
@@ -35,7 +35,7 @@
 
 ## Sprint 2: Boekingssysteem
 
-**Periode:** 6 april - 19 april 2026
+**Periode:** 30 mrt - 12 apr 2026
 **Sprint doel:** Het volledige ticket-boekingsproces implementeren inclusief stoelselectie en event-driven verwerking.
 
 | # | User Story | MoSCoW | Schatting |
@@ -55,7 +55,7 @@
 
 ## Sprint 3: Admin Dashboard, Should Haves en Afronding
 
-**Periode:** 20 april - 3 mei 2026
+**Periode:** 13 april - 17 april 2026
 **Sprint doel:** Admin-statistieken afronden, boekingsoverzicht toevoegen, responsive maken en optimaliseren.
 
 | # | User Story | MoSCoW | Schatting |
@@ -78,7 +78,7 @@
 ## Visueel overzicht
 
 ```
-Sprint 1 (23 mrt - 5 apr)    Sprint 2 (6 apr - 19 apr)    Sprint 3 (20 apr - 3 mei)
+Sprint 1 (23 mrt - 29 mrt)    Sprint 2 (30 mrt - 12 apr)    Sprint 3 (13 apr - 17april)
 ========================    =========================    ==========================
 [Must Have] Auth setup       [Must Have] Booking flow      [Should Have] Admin stats
   - Account aanmaken           - Showtime selecteren         - Revenue updaten

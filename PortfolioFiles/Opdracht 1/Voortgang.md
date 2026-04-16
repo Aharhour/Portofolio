@@ -11,7 +11,7 @@ Tijdens het project wordt de voortgang bijgehouden door:
 
 ## Sprint 1: Basis en Authenticatie
 
-**Periode:** 23 maart - 5 april 2026
+**Periode:** 23 mrt - 29 mrt 2026
 **Sprint doel:** Basis applicatie met authenticatie, filmpagina's en admin-toegang.
 
 ### Dag 1-3 (23-25 maart)
@@ -83,10 +83,10 @@ Tijdens het project wordt de voortgang bijgehouden door:
 
 ## Sprint 2: Boekingssysteem
 
-**Periode:** 6 april - 19 april 2026
+**Periode:** 30 mrt - 12 apr 2026
 **Sprint doel:** Volledig ticket-boekingsproces met stoelselectie en event-driven verwerking.
 
-### Week 1 (6-10 april)
+### Week 1 (30 mrt - 3 apr)
 
 **Status:**
 | # | User Story | Gepland | Status |
@@ -99,7 +99,7 @@ Tijdens het project wordt de voortgang bijgehouden door:
 
 ---
 
-### Week 2 (13-17 april)
+### Week 2 (6-10 apr)
 
 **Status:**
 | # | User Story | Gepland | Status |
@@ -132,10 +132,10 @@ Tijdens het project wordt de voortgang bijgehouden door:
 
 ## Sprint 3: Admin Dashboard, Should Haves en Afronding
 
-**Periode:** 20 april - 3 mei 2026
+**Periode:** 13 april - 17 april 2026
 **Sprint doel:** Admin-statistieken, boekingsoverzicht, responsive design en optimalisatie.
 
-### Week 1 (20-24 april)
+### Dag 1-3 (13-15 april)
 
 **Status:**
 | # | User Story | Gepland | Status |
@@ -152,7 +152,7 @@ Tijdens het project wordt de voortgang bijgehouden door:
 
 ---
 
-### Week 2 (27 april - 1 mei)
+### Dag 4-5 (16-17 april)
 
 **Status:**
 | # | User Story | Gepland | Status |

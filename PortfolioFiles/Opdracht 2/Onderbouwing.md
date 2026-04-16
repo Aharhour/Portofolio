@@ -8,16 +8,8 @@ Dit document beschrijft de onderbouwing van de gemaakte keuzes in het technisch 
 
 ## 1. Keuze van diagrammen
 
-### ERD (Entity Relationship Diagram)
-Het ERD is gekozen omdat BetaTickets een data-intensieve applicatie is met meerdere entiteiten die onderling gerelateerd zijn. Het ERD maakt direct inzichtelijk hoe Users, Movies, Shows, Bookings, Payments en Genres met elkaar verbonden zijn. Dit helpt bij:
-- Het begrijpen van de datastructuur voordat er code geschreven wordt
-- Het voorkomen van ontwerpfouten zoals ontbrekende relaties of redundante data
-- Het communiceren van het datamodel naar teamleden
-
-De keuze voor MongoDB (NoSQL) betekent dat sommige relaties gedenormaliseerd zijn (genres/casts als embedded arrays in Movie), maar het conceptuele ERD toont de logische structuur zodat de relaties helder blijven.
-
 ### Sequence Diagrammen (Customer + Admin)
-Er zijn twee sequence diagrammen gemaakt — één voor de customer-flow en één voor de admin-flow — omdat de interactie tussen de verschillende systemen (React, Express API, Clerk, Stripe, MongoDB, Inngest, TMDB API) complex is. De sequence diagrammen laten precies zien:
+Er zijn twee sequence diagrammen gemaakt. één voor de customer-flow en één voor de admin-flow, omdat de interactie tussen de verschillende systemen (React, Express API, Clerk, Stripe, MongoDB, Inngest, TMDB API) complex is. De sequence diagrammen laten precies zien:
 - Welke component welk verzoek stuurt
 - In welke volgorde communicatie plaatsvindt
 - Waar achtergrondprocessen (webhooks, cron jobs) worden getriggerd
@@ -58,9 +50,6 @@ Gebruikersfavorieten worden opgeslagen in Clerk's `privateMetadata` in plaats va
 ### Betalingsgegevens bij Stripe
 Creditcardgegevens en betaalinformatie worden **nooit** in de eigen database opgeslagen. Stripe handelt alle PCI-DSS compliance af. In de eigen database wordt alleen een `stripeSessionId` opgeslagen als referentie, waarmee de betaling geverifieerd kan worden zonder gevoelige financiële data te bewaren.
 
-### Scheiding van data
-Het ontwerp scheidt persoonlijke gegevens (Clerk), financiële gegevens (Stripe) en applicatiedata (MongoDB). Als één systeem gecompromitteerd wordt, heeft een aanvaller niet automatisch toegang tot alle gebruikersgegevens. Dit volgt het principe van "defense in depth".
-
 ### GDPR-overwegingen
 - Gebruikers kunnen hun account verwijderen via Clerk
 - Er worden geen gegevens langer bewaard dan noodzakelijk
@@ -85,9 +74,6 @@ Het ERD en sequence diagram tonen hoe het systeem dubbele boekingen voorkomt:
 2. Als stoelen al bezet zijn, wordt een 400-fout teruggegeven
 3. Direct na een boeking worden de stoelen als bezet gemarkeerd in de database
 4. Dit voorkomt race conditions en overboeking
-
-### Onbetaalde boeking cleanup
-Via Inngest wordt na 10 minuten gecontroleerd of een boeking betaald is. Als dat niet het geval is, worden de stoelen vrijgegeven en de boeking verwijderd. Dit voorkomt denial-of-service aanvallen waarbij iemand alle stoelen blokkeert zonder te betalen.
 
 ### Environment variabelen
 Gevoelige configuratie (API-keys, database-URI, Stripe secret) wordt opgeslagen in environment variabelen (.env) en niet in de broncode. De server staat alleen CORS-verzoeken toe van gespecificeerde origins, wat Cross-Site Request Forgery (CSRF) helpt voorkomen.

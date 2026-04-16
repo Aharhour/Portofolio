@@ -71,7 +71,7 @@ Toont de systeemfunctionaliteit per actor:
 ### 5. Activity Diagram
 **Bestand:** `activity-diagram.svg`
 
-Modelleert het kernproces: **ticket boeken** — van filmselectie tot bevestiging.
+Modelleert het kernproces: **ticket boeken** van filmselectie tot bevestiging.
 
 **Kenmerken:**
 - 4 swimlanes (Klant, React Frontend, Express API, Externe Services)
