@@ -5,7 +5,7 @@ Een user story wordt als "Done" beschouwd wanneer aan alle onderstaande criteria
 ## Algemene criteria
 
 1. **Code is geschreven en werkend** - De functionaliteit is volledig geimplementeerd volgens de acceptatiecriteria van de user story.
-2. **Code is gereviewed** - De code is bekeken en goedgekeurd (self-review of peer review).
+2. **Code is gereviewed** - De code is bekeken en goedgekeurd (self-review).
 3. **Geen bekende bugs** - Er zijn geen openstaande bugs gerelateerd aan de user story.
 4. **Responsive** - De functionaliteit werkt correct op zowel mobiel (375px) als desktop (1440px).
 5. **Getest** - De functionaliteit is handmatig getest en werkt zoals verwacht.

@@ -416,28 +416,6 @@ De geautomatiseerde testen zijn geschreven met **Vitest** en draaien via `npm te
 | `__tests__/theaters.test.js` | 2 | US-08 |
 | **Totaal** | **18** | |
 
-### Instructies om testen uit te voeren
-
-```bash
-cd server
-npm install       # Installeer dependencies (inclusief vitest)
-npm test          # Voer alle testen uit
-npm run test:watch  # Testen in watch-modus
-```
-
-### Resultaat
-
-```
- ✓ __tests__/models.test.js (6 tests)
- ✓ __tests__/shows.test.js (3 tests)
- ✓ __tests__/booking.test.js (3 tests)
- ✓ __tests__/auth.test.js (4 tests)
- ✓ __tests__/theaters.test.js (2 tests)
-
- Test Files  5 passed (5)
-      Tests  18 passed (18)
-```
-
 ---
 
 ## 6. Conclusie

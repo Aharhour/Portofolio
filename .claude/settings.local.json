@@ -18,7 +18,13 @@
       "Bash(npx vite:*)",
       "Bash(npm update:*)",
       "Bash(claude:*)",
-      "Bash(npx vitest:*)"
+      "Bash(npx vitest:*)",
+      "WebFetch(domain:www.varuna-sentinels.com)",
+      "Bash(python:*)",
+      "Bash(where py:*)",
+      "Bash(mkdir -p \"/tmp/docxbuild/_rels\" \"/tmp/docxbuild/word/_rels\")",
+      "Read(//tmp/**)",
+      "Bash(node build.js)"
     ]
   }
 }
