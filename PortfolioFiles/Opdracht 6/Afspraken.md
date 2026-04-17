@@ -1,5 +1,7 @@
 # SMART Afspraken + Bewijs
 
+Standup Video Link: https://youtu.be/FHNFEOB323U
+
 ## Overzicht
 
 Dit document bevat de gemaakte afspraken binnen het project, inclusief:
