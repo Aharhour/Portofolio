@@ -15,12 +15,6 @@ Er zijn twee sequence diagrammen gemaakt. één voor de customer-flow en één v
 - Waar achtergrondprocessen (webhooks, cron jobs) worden getriggerd
 - Hoe foutscenario's worden afgehandeld (alt/loop fragmenten)
 
-### Use Case Diagram
-Het use case diagram is gekozen om de functionele eisen visueel te koppelen aan de drie typen gebruikers (Bezoeker, Geregistreerde Gebruiker, Admin). Het diagram toont in één oogopslag welke actor welke actie kan uitvoeren binnen het systeem, wat direct aansluit bij de user stories uit Opdracht 1.
-
-### Activity Diagram
-Het activity diagram modelleert het kernproces: het boeken van een ticket. Dit proces is het meest complexe pad in de applicatie met meerdere beslismomenten (ingelogd?, stoelen vrij?, betaling gelukt?) en interactie met externe services (Stripe, Inngest). De swimlanes tonen duidelijk welke verantwoordelijkheid bij welke laag hoort.
-
 ---
 
 ## 2. Ethiek
@@ -84,21 +78,3 @@ Het ontwerp bevat formuliervalidatie aan zowel de frontend (React) als backend (
 - **XSS**: Door React's standaard escaping van gebruikersinvoer
 - **Ongewenste data**: Door schema-validatie op Mongoose-modellen (required, maxlength, enum, min)
 
----
-
-## 5. Design Pattern
-
-### MVC (Model-View-Controller)
-Het project volgt het MVC-patroon:
-- **Model**: Mongoose schemas (User, Movie, Show, Booking) definiëren de datastructuur
-- **View**: React componenten renderen de gebruikersinterface
-- **Controller**: Express route-handlers verwerken de businesslogica
-
-### Event-Driven Architecture
-Via Inngest wordt een event-driven architectuur toegepast voor achtergrondprocessen:
-- `app/show.added` → Stuurt notificatie bij nieuwe show
-- `app/show.booked` → Stuurt bevestigingsmail na betaling
-- `app/checkpayment` → Controleert betaling na 10 minuten
-- Cron job → Stuurt show-reminders elke 8 uur
-
-Dit zorgt ervoor dat tijdintensieve taken de gebruikerservaring niet vertragen.
