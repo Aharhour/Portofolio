@@ -1,0 +1,179 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 1500" font-family="Arial, sans-serif" font-size="14">
+  <defs>
+    <style>
+      .title { font-size: 22px; font-weight: bold; fill: #1a1a2e; }
+      .subtitle { font-size: 14px; fill: #555; }
+      .actor-box { fill: #1a1a2e; stroke: #1a1a2e; stroke-width: 2; rx: 6; }
+      .actor-text { fill: white; font-size: 14px; font-weight: bold; text-anchor: middle; }
+      .lifeline { stroke: #999; stroke-width: 1.5; stroke-dasharray: 6,4; }
+      .msg-line { stroke: #333; stroke-width: 1.5; }
+      .msg-line-dash { stroke: #e74c3c; stroke-width: 1.5; stroke-dasharray: 6,4; }
+      .msg-text { font-size: 13px; fill: #222; }
+      .section-divider { stroke: #ddd; stroke-width: 1; }
+      .section-text { font-size: 16px; font-weight: bold; fill: #2c3e50; }
+      .arrow { fill: #333; }
+      .arrow-red { fill: #e74c3c; }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" class="arrow"/>
+    </marker>
+    <marker id="arrowhead-red" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" class="arrow-red"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1100" height="1500" fill="#fafbfc"/>
+
+  <!-- Title -->
+  <text x="550" y="40" class="title" text-anchor="middle">UML Sequence Diagram — Admin Side</text>
+  <text x="550" y="62" class="subtitle" text-anchor="middle">BetaTickets — Simplified Admin Workflows</text>
+
+  <!-- ========== ACTORS ========== -->
+  <rect x="40" y="85" width="120" height="40" class="actor-box"/>
+  <text x="100" y="110" class="actor-text">Admin</text>
+  <line x1="100" y1="125" x2="100" y2="1420" class="lifeline"/>
+
+  <rect x="260" y="85" width="140" height="40" class="actor-box"/>
+  <text x="330" y="110" class="actor-text">React App</text>
+  <line x1="330" y1="125" x2="330" y2="1420" class="lifeline"/>
+
+  <rect x="500" y="85" width="160" height="40" class="actor-box"/>
+  <text x="580" y="110" class="actor-text">Express API</text>
+  <line x1="580" y1="125" x2="580" y2="1420" class="lifeline"/>
+
+  <rect x="760" y="85" width="140" height="40" class="actor-box"/>
+  <text x="830" y="110" class="actor-text">MongoDB</text>
+  <line x1="830" y1="125" x2="830" y2="1420" class="lifeline"/>
+
+  <rect x="970" y="85" width="100" height="40" class="actor-box"/>
+  <text x="1020" y="110" class="actor-text">TMDB API</text>
+  <line x1="1020" y1="125" x2="1020" y2="1420" class="lifeline"/>
+
+  <!-- ============================================================ -->
+  <!-- 1. LOGIN -->
+  <!-- ============================================================ -->
+  <line x1="20" y1="155" x2="1080" y2="155" class="section-divider"/>
+  <text x="30" y="178" class="section-text">1. Admin Login</text>
+
+  <line x1="100" y1="210" x2="325" y2="210" class="msg-line" marker-end="url(#arrowhead)"/>
+  <text x="212" y="205" class="msg-text" text-anchor="middle">Open /admin</text>
+
+  <line x1="330" y1="245" x2="575" y2="245" class="msg-line" marker-end="url(#arrowhead)"/>
+  <text x="452" y="240" class="msg-text" text-anchor="middle">GET /api/admin/is-admin (+ JWT)</text>
+
+  <line x1="580" y1="280" x2="335" y2="280" class="msg-line-dash" marker-end="url(#arrowhead-red)"/>
+  <text x="457" y="275" class="msg-text" text-anchor="middle">{ isAdmin: true }</text>
+
+  <line x1="330" y1="315" x2="105" y2="315" class="msg-line-dash" marker-end="url(#arrowhead-red)"/>
+  <text x="212" y="310" class="msg-text" text-anchor="middle">Show admin panel</text>
+
+  <!-- ============================================================ -->
+  <!-- 2. DASHBOARD -->
+  <!-- ============================================================ -->
+  <line x1="20" y1="350" x2="1080" y2="350" class="section-divider"/>
+  <text x="30" y="373" class="section-text">2. Dashboard</text>
+
+  <line x1="100" y1="405" x2="325" y2="405" class="msg-line" marker-end="url(#arrowhead)"/>
+  <text x="212" y="400" class="msg-text" text-anchor="middle">Click "Dashboard"</text>
+
+  <line x1="330" y1="440" x2="575" y2="440" class="msg-line" marker-end="url(#arrowhead)"/>
+  <text x="452" y="435" class="msg-text" text-anchor="middle">GET /api/admin/dashboard</text>
+
+  <line x1="580" y1="470" x2="825" y2="470" class="msg-line" marker-end="url(#arrowhead)"/>
+  <text x="702" y="465" class="msg-text" text-anchor="middle">count bookings, shows, users</text>
+
+  <line x1="830" y1="500" x2="585" y2="500" class="msg-line-dash" marker-end="url(#arrowhead-red)"/>
+  <text x="707" y="495" class="msg-text" text-anchor="middle">stats data</text>
+
+  <line x1="580" y1="530" x2="105" y2="530" class="msg-line-dash" marker-end="url(#arrowhead-red)"/>
+  <text x="340" y="525" class="msg-text" text-anchor="middle">Show KPI cards (revenue, bookings, users)</text>
+
+  <!-- ============================================================ -->
+  <!-- 3. ADD SHOW -->
+  <!-- ============================================================ -->
+  <line x1="20" y1="565" x2="1080" y2="565" class="section-divider"/>
+  <text x="30" y="588" class="section-text">3. Add a Show</text>
+
+  <line x1="100" y1="620" x2="325" y2="620" class="msg-line" marker-end="url(#arrowhead)"/>
+  <text x="212" y="615" class="msg-text" text-anchor="middle">Open "Add Shows"</text>
+
+  <line x1="330" y1="655" x2="575" y2="655" class="msg-line" marker-end="url(#arrowhead)"/>
+  <text x="452" y="650" class="msg-text" text-anchor="middle">GET /api/show/now-playing</text>
+
+  <line x1="580" y1="685" x2="1015" y2="685" class="msg-line" marker-end="url(#arrowhead)"/>
+  <text x="797" y="680" class="msg-text" text-anchor="middle">fetch movies from TMDB</text>
+
+  <line x1="1020" y1="715" x2="105" y2="715" class="msg-line-dash" marker-end="url(#arrowhead-red)"/>
+  <text x="540" y="710" class="msg-text" text-anchor="middle">Movie list shown to admin</text>
+
+  <line x1="100" y1="750" x2="325" y2="750" class="msg-line" marker-end="url(#arrowhead)"/>
+  <text x="212" y="745" class="msg-text" text-anchor="middle">Pick movie + dates + price</text>
+
+  <line x1="330" y1="785" x2="575" y2="785" class="msg-line" marker-end="url(#arrowhead)"/>
+  <text x="452" y="780" class="msg-text" text-anchor="middle">POST /api/show/add</text>
+
+  <line x1="580" y1="815" x2="825" y2="815" class="msg-line" marker-end="url(#arrowhead)"/>
+  <text x="702" y="810" class="msg-text" text-anchor="middle">save shows</text>
+
+  <line x1="830" y1="845" x2="105" y2="845" class="msg-line-dash" marker-end="url(#arrowhead-red)"/>
+  <text x="467" y="840" class="msg-text" text-anchor="middle">Success message shown to admin</text>
+
+  <!-- ============================================================ -->
+  <!-- 4. LIST SHOWS -->
+  <!-- ============================================================ -->
+  <line x1="20" y1="880" x2="1080" y2="880" class="section-divider"/>
+  <text x="30" y="903" class="section-text">4. List Shows</text>
+
+  <line x1="100" y1="935" x2="325" y2="935" class="msg-line" marker-end="url(#arrowhead)"/>
+  <text x="212" y="930" class="msg-text" text-anchor="middle">Open "List Shows"</text>
+
+  <line x1="330" y1="970" x2="575" y2="970" class="msg-line" marker-end="url(#arrowhead)"/>
+  <text x="452" y="965" class="msg-text" text-anchor="middle">GET /api/admin/all-shows</text>
+
+  <line x1="580" y1="1000" x2="825" y2="1000" class="msg-line" marker-end="url(#arrowhead)"/>
+  <text x="702" y="995" class="msg-text" text-anchor="middle">find all shows + movie info</text>
+
+  <line x1="830" y1="1030" x2="585" y2="1030" class="msg-line-dash" marker-end="url(#arrowhead-red)"/>
+  <text x="707" y="1025" class="msg-text" text-anchor="middle">shows + earnings</text>
+
+  <line x1="580" y1="1060" x2="105" y2="1060" class="msg-line-dash" marker-end="url(#arrowhead-red)"/>
+  <text x="340" y="1055" class="msg-text" text-anchor="middle">Show table (movie, date, seats sold, earnings)</text>
+
+  <!-- ============================================================ -->
+  <!-- 5. LIST BOOKINGS -->
+  <!-- ============================================================ -->
+  <line x1="20" y1="1095" x2="1080" y2="1095" class="section-divider"/>
+  <text x="30" y="1118" class="section-text">5. List Bookings</text>
+
+  <line x1="100" y1="1150" x2="325" y2="1150" class="msg-line" marker-end="url(#arrowhead)"/>
+  <text x="212" y="1145" class="msg-text" text-anchor="middle">Open "List Bookings"</text>
+
+  <line x1="330" y1="1185" x2="575" y2="1185" class="msg-line" marker-end="url(#arrowhead)"/>
+  <text x="452" y="1180" class="msg-text" text-anchor="middle">GET /api/admin/all-bookings</text>
+
+  <line x1="580" y1="1215" x2="825" y2="1215" class="msg-line" marker-end="url(#arrowhead)"/>
+  <text x="702" y="1210" class="msg-text" text-anchor="middle">find all bookings + user + show</text>
+
+  <line x1="830" y1="1245" x2="585" y2="1245" class="msg-line-dash" marker-end="url(#arrowhead-red)"/>
+  <text x="707" y="1240" class="msg-text" text-anchor="middle">bookings list</text>
+
+  <line x1="580" y1="1275" x2="105" y2="1275" class="msg-line-dash" marker-end="url(#arrowhead-red)"/>
+  <text x="340" y="1270" class="msg-text" text-anchor="middle">Show bookings (user, movie, seats, amount, status)</text>
+
+  <!-- ========== BOTTOM ACTOR BOXES ========== -->
+  <rect x="40" y="1435" width="120" height="30" class="actor-box"/>
+  <text x="100" y="1455" class="actor-text">Admin</text>
+
+  <rect x="260" y="1435" width="140" height="30" class="actor-box"/>
+  <text x="330" y="1455" class="actor-text">React App</text>
+
+  <rect x="500" y="1435" width="160" height="30" class="actor-box"/>
+  <text x="580" y="1455" class="actor-text">Express API</text>
+
+  <rect x="760" y="1435" width="140" height="30" class="actor-box"/>
+  <text x="830" y="1455" class="actor-text">MongoDB</text>
+
+  <rect x="970" y="1435" width="100" height="30" class="actor-box"/>
+  <text x="1020" y="1455" class="actor-text">TMDB API</text>
+</svg>
