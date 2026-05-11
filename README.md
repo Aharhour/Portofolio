@@ -160,7 +160,7 @@ Beschikbaar op `http://localhost:5173`
 **Backend:**
 ```bash
 cd server
-npm run dev
+npm start server
 ```
 Beschikbaar op `http://localhost:3000`
 
