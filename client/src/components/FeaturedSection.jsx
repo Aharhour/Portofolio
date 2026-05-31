@@ -5,6 +5,8 @@ import MovieCard from './MovieCard'
 import { useAppContext } from '../context/AppContext'
 import useScrollReveal from '../library/useScrollReveal'
 
+// FeaturedSection: toont de top 8 films die nu draaien op de homepage.
+// Bij klik op "View All" of "Show more" gaat de gebruiker naar de volledige Movies-pagina.
 const FeaturedSection = () => {
     const navigate = useNavigate()
     const { shows } = useAppContext()
@@ -12,7 +14,7 @@ const FeaturedSection = () => {
 
     return (
         <div ref={ref} className='px-6 md:px-16 lg:px-24 xl:px-44 overflow-hidden'>
-            {/* Section header with "View All" link */}
+            {/* Header met titel links en "View All" link rechts */}
             <div className='relative flex items-center justify-between pt-20 pb-10 reveal'>
                 <BlurCircle top='0' right='-80px' />
                 <p className='text-gray-300 font-medium text-lg'>Now Showing</p>
@@ -22,7 +24,7 @@ const FeaturedSection = () => {
                 </button>
             </div>
 
-            {/* Movie card grid - shows up to 8 movies */}
+            {/* Grid met max 8 film-kaarten met gestaggerde fade-in animatie */}
             <div className='flex flex-wrap max-sm:justify-center gap-8 mt-8'>
                 {shows.slice(0, 8).map((show, i) => (
                     <div key={show._id} className={`reveal stagger-${Math.min(i + 1, 8)}`}>

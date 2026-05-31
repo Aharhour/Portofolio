@@ -1,6 +1,6 @@
-// Theater definitions with unique seating layouts
-// sectionLayout defines how groupRows are visually arranged:
-// each section is an array of groupRow indices shown side-by-side
+// Definities van de zalen met unieke stoel-indelingen
+// sectionLayout bepaalt hoe de groupRows visueel naast elkaar worden geplaatst:
+// elke sectie is een array van groupRow-indices die naast elkaar worden getoond
 const theaters = {
     "zaal-1": {
         id: "zaal-1",
@@ -10,7 +10,7 @@ const theaters = {
         seatsPerRow: 12,
         totalSeats: 168,
         groupRows: [["A", "B"], ["C", "D"], ["E", "F"], ["G", "H"], ["I", "J"], ["K", "L"], ["M", "N"]],
-        // 1 front block, 3 middle blocks side-by-side, 3 back blocks side-by-side
+        // 1 voorblok, 3 middenblokken naast elkaar, 3 achterblokken naast elkaar
         sectionLayout: [[0], [1, 2, 3], [4, 5, 6]],
         upcharge: 0,
     },
@@ -22,7 +22,7 @@ const theaters = {
         seatsPerRow: 8,
         totalSeats: 48,
         groupRows: [["A", "B"], ["C", "D"], ["E", "F"]],
-        // 1 front block, 2 blocks side-by-side
+        // 1 voorblok, 2 blokken naast elkaar
         sectionLayout: [[0], [1, 2]],
         upcharge: 7.99,
     },
@@ -34,7 +34,7 @@ const theaters = {
         seatsPerRow: 14,
         totalSeats: 140,
         groupRows: [["A", "B"], ["C", "D"], ["E", "F"], ["G", "H"], ["I", "J"]],
-        // 1 front block, 2 middle blocks side-by-side, 2 back blocks side-by-side
+        // 1 voorblok, 2 middenblokken naast elkaar, 2 achterblokken naast elkaar
         sectionLayout: [[0], [1, 2], [3, 4]],
         upcharge: 12.99,
     },

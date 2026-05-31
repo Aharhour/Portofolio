@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom'
 import { assets } from '../../assets/assets'
 
+// AdminNavbar: simpele navbar bovenin het admin paneel met logo en "Admin Panel" badge.
+// Het groene puntje is een visuele indicator dat de admin online/actief is.
 const AdminNavbar = () => {
     return (
         <div className='flex items-center justify-between px-6 md:px-10 h-16 bg-black/40 backdrop-blur-xl border-b border-white/[0.06] transition-all duration-300' style={{ animation: 'revealDown 0.4s cubic-bezier(0.16,1,0.3,1)' }}>

@@ -4,7 +4,8 @@ import { createBooking, getOccupiedSeats } from '../controllers/bookingControlle
 
 const bookingRouter = express.Router();
 
-bookingRouter.post('/create', requireAuth, createBooking);
-bookingRouter.get('/seats/:showId', getOccupiedSeats);
+// Boeken vereist een ingelogde user; de seat-info is publiek zodat ook bezoekers de zaal kunnen bekijken.
+bookingRouter.post('/create', requireAuth, createBooking);  // Nieuwe boeking + Stripe checkout starten
+bookingRouter.get('/seats/:showId', getOccupiedSeats);      // Welke stoelen zijn al bezet voor deze show
 
 export default bookingRouter;

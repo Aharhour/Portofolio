@@ -3,10 +3,13 @@ import { useNavigate } from 'react-router-dom'
 import timeFormat from '../library/timeFormat'
 import { useAppContext } from '../context/AppContext'
 
+// Herbruikbare film-kaart: poster + titel + meta + knoppen.
+// Wordt overal gebruikt waar films getoond worden (Home, Movies, Favorites, MovieDetails).
 const MovieCard = ({ movie }) => {
     const navigate = useNavigate()
     const { image_base_url } = useAppContext()
 
+    // Bij klik: navigeren naar de detailpagina + scroll naar boven
     const goToMovie = () => {
         navigate(`/movies/${movie._id}`)
         window.scrollTo(0, 0)
@@ -14,7 +17,6 @@ const MovieCard = ({ movie }) => {
 
     return (
         <div className='flex flex-col justify-between p-3 bg-gray-800 rounded-2xl card-hover w-60 group'>
-            {/* Movie poster thumbnail */}
             <div className='img-zoom rounded-lg'>
                 <img
                     onClick={goToMovie}
@@ -30,7 +32,7 @@ const MovieCard = ({ movie }) => {
                 {new Date(movie.release_date).getFullYear()} &bull; {movie.genres.slice(0, 2).map(g => g.name).join(" | ")} &bull; {timeFormat(movie.runtime)}
             </p>
 
-            {/* Buy button and rating */}
+            {/* Onderaan: koop-knop links en rating rechts */}
             <div className='flex items-center justify-between mt-4 pb-3'>
                 <button
                     onClick={goToMovie}

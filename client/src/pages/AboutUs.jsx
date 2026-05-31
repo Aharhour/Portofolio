@@ -1,6 +1,7 @@
 import { Film, Users, Armchair, Sparkles, Heart, Shield } from 'lucide-react'
 import useScrollReveal from '../library/useScrollReveal'
 
+// Onze kernwaarden - getoond in de "Waar Wij Voor Staan" sectie.
 const values = [
     {
         icon: <Film className="w-6 h-6 text-primary" />,
@@ -34,16 +35,18 @@ const values = [
     },
 ]
 
+// Team-leden voor de "Het Team" sectie.
 const team = [
     { name: "Adil Harhour", role: "Founder & Developer", initials: "AH" },
 ]
 
+// AboutUs pagina: marketing-pagina met verhaal, waarden en team.
 const AboutUs = () => {
     const ref = useScrollReveal()
 
     return (
         <div ref={ref} className="pt-28 pb-20 px-6 md:px-16 lg:px-36">
-            {/* Hero */}
+            {/* Hero sectie bovenaan met grote titel */}
             <div className="text-center max-w-3xl mx-auto mb-20 reveal reveal-blur">
                 <p className="text-primary text-sm font-medium tracking-widest uppercase mb-3">Over Ons</p>
                 <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
@@ -54,7 +57,7 @@ const AboutUs = () => {
                 </p>
             </div>
 
-            {/* Story section */}
+            {/* "Ons Verhaal" sectie met statistieken in een grid */}
             <div className="relative rounded-2xl border border-white/10 bg-white/[0.03] p-8 md:p-12 mb-20 overflow-hidden reveal">
                 <div className="absolute -top-24 -right-24 w-64 h-64 bg-primary/10 rounded-full blur-3xl pointer-events-none animate-float" />
                 <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
@@ -84,7 +87,7 @@ const AboutUs = () => {
                 </div>
             </div>
 
-            {/* Values */}
+            {/* Waarden sectie: 6 kaartjes met onze kernwaarden */}
             <div className="mb-20">
                 <div className="text-center mb-12 reveal">
                     <p className="text-primary text-sm font-medium tracking-widest uppercase mb-3">Onze Waarden</p>
@@ -103,7 +106,7 @@ const AboutUs = () => {
                 </div>
             </div>
 
-            {/* Team */}
+            {/* Team sectie onderaan */}
             <div className="text-center reveal">
                 <p className="text-primary text-sm font-medium tracking-widest uppercase mb-3">Het Team</p>
                 <h2 className="text-3xl font-bold text-white mb-12">De Mensen Achter BetaTickets</h2>

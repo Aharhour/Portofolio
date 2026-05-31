@@ -4,10 +4,10 @@ import { getAllBookings, getAllShows, getDashboardData, isAdmin } from '../contr
 
 const adminRouter = express.Router();
 
-// All admin routes require admin role verification
-adminRouter.get('/is-admin', protectAdmin, isAdmin);
-adminRouter.get('/dashboard', protectAdmin, getDashboardData);
-adminRouter.get('/all-shows', protectAdmin, getAllShows);
-adminRouter.get('/all-bookings', protectAdmin, getAllBookings);
+// Alle admin-routes lopen door protectAdmin: alleen accounts met admin-rol mogen erbij.
+adminRouter.get('/is-admin', protectAdmin, isAdmin);              // Check of de huidige user admin is
+adminRouter.get('/dashboard', protectAdmin, getDashboardData);    // Statistieken voor het dashboard
+adminRouter.get('/all-shows', protectAdmin, getAllShows);         // Lijst alle (toekomstige) voorstellingen
+adminRouter.get('/all-bookings', protectAdmin, getAllBookings);   // Lijst alle boekingen van alle gebruikers
 
 export default adminRouter;

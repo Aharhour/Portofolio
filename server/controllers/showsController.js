@@ -1,15 +1,14 @@
 import axios from 'axios';
 import Movie from '../models/Movie.js';
 import Show from '../models/Show.js';
-import { inngest } from '../inngest/index.js';
 import theaters from '../configs/theaters.js';
 
-// Get all theater configurations
+// Geeft alle zaal-configuraties terug (zaal-1, zaal-2, zaal-3 met hun rijen, stoelen en toeslag).
 export const getTheaters = (req, res) => {
     res.json({ success: true, theaters: Object.values(theaters) });
 }
 
-// Major upcoming releases hardcoded for months where TMDB data may be sparse
+// Belangrijke aankomende releases die we handmatig toevoegen.
 const hardcodedReleases = [
     { id: 10000001, title: "Mission: Impossible – The Final Reckoning", overview: "Ethan Hunt keert terug voor de ultieme missie in het laatste hoofdstuk van de iconische franchise. In een race tegen de klok moet hij een nieuwe dreiging stoppen die de hele wereld bedreigt.", poster_path: "/z0HjGMCOIv4xwDMJkNnMSPkLod1.jpg", backdrop_path: "/zCSKb1kFIigAabMmVOcGCVWOhaz.jpg", release_date: "2026-05-21", vote_average: 0, popularity: 450, original_language: "en", genre_ids: [28, 53, 12] },
     { id: 10000002, title: "The Batman Part II", overview: "Bruce Wayne wordt geconfronteerd met een nieuw gevaar in Gotham City dat hem dwingt om alles wat hij kent in twijfel te trekken. De duisternis keert terug, groter dan ooit.", poster_path: "/b0PlSFdDwbyK0cf5RxwDpaOJQvQ.jpg", backdrop_path: "/b0PlSFdDwbyK0cf5RxwDpaOJQvQ.jpg", release_date: "2026-10-02", vote_average: 0, popularity: 400, original_language: "en", genre_ids: [28, 80, 18] },
@@ -22,17 +21,17 @@ const hardcodedReleases = [
     { id: 10000009, title: "Wicked: For Good", overview: "Het vervolg op de hit-musical Wicked. Elphaba en Glinda's verhaal bereikt zijn emotionele climax wanneer hun vriendschap op de proef wordt gesteld.", poster_path: "/dI1bSBzKEgLMGlGNWPFmhVExOPZ.jpg", backdrop_path: "/dI1bSBzKEgLMGlGNWPFmhVExOPZ.jpg", release_date: "2026-11-20", vote_average: 0, popularity: 350, original_language: "en", genre_ids: [14, 10402, 18] },
     { id: 10000010, title: "Zootopia 2", overview: "Judy Hopps en Nick Wilde keren terug voor een nieuw avontuur in de bruisende stad Zootopia. Een mysterieuze verdwijning leidt hen naar een verborgen wereld.", poster_path: "/dI1bSBzKEgLMGlGNWPFmhVExOPZ.jpg", backdrop_path: "/dI1bSBzKEgLMGlGNWPFmhVExOPZ.jpg", release_date: "2026-11-26", vote_average: 0, popularity: 320, original_language: "en", genre_ids: [16, 12, 35] },
     { id: 10000011, title: "Supergirl: Woman of Tomorrow", overview: "Kara Zor-El verlaat de aarde op een interstellaire missie. Onderweg ontdekt ze haar ware kracht en komt ze oog in oog te staan met een kosmische dreiging.", poster_path: "/dI1bSBzKEgLMGlGNWPFmhVExOPZ.jpg", backdrop_path: "/dI1bSBzKEgLMGlGNWPFmhVExOPZ.jpg", release_date: "2026-06-26", vote_average: 0, popularity: 300, original_language: "en", genre_ids: [28, 878, 12] },
-    { id: 10000012, title: "Ice Age 6: Adventures of Buck Wild 2", overview: "Buck Wild en zijn vrienden gaan op een nieuw episch avontuur onder het ijs. Nieuwe personages en gevaren wachten in de diepte.", poster_path: "/dI1bSBzKEgLMGlGNWPFmhVExOPZ.jpg", backdrop_path: "/dI1bSBzKEgLMGlGNWPFmhVExOPZ.jpg", release_date: "2026-04-18", vote_average: 0, popularity: 250, original_language: "en", genre_ids: [16, 12, 35] },
 ];
 
-// Fetch upcoming movies from TMDB + hardcoded major releases (april 2026 - december 2026)
+// Aankomende films ophalen voor de Releases-pagina.
+// Combineert TMDB API resultaten met onze hardcoded major releases, vanaf vandaag tot eind 2026.
 export const getUpcomingMovies = async (req, res) => {
     try {
-        const today = new Date().toISOString().split('T')[0];
+        const today = new Date().toISOString().split('T')[0]; // Datum van vandaag in YYYY-MM-DD formaat
         const endDate = '2026-12-31';
         const headers = { Authorization: `Bearer ${process.env.TMDB_API_KEY}` };
 
-        // Fetch multiple pages from TMDB discover
+        // 5 pagina's tegelijk ophalen voor meer films (TMDB geeft 20 films per pagina)
         const pages = [1, 2, 3, 4, 5];
         const responses = await Promise.all(
             pages.map(page =>
@@ -41,14 +40,14 @@ export const getUpcomingMovies = async (req, res) => {
                     params: {
                         'primary_release_date.gte': today,
                         'primary_release_date.lte': endDate,
-                        sort_by: 'popularity.desc',
+                        sort_by: 'popularity.desc', // Meest populaire eerst
                         page,
                     }
                 })
             )
         );
 
-        // Merge TMDB results + hardcoded, deduplicate by id
+        // TMDB-resultaten + onze hardcoded lijst combineren en duplicaten verwijderen op basis van id
         const seen = new Set();
         const tmdbMovies = responses.flatMap(r => r.data.results);
         const allMovies = [...tmdbMovies, ...hardcodedReleases].filter(m => {
@@ -59,12 +58,13 @@ export const getUpcomingMovies = async (req, res) => {
 
         res.json({ success: true, movies: allMovies })
     } catch (error) {
-        // If TMDB fails, still return hardcoded releases
+        // Als TMDB faalt, geven we alsnog onze eigen hardcoded films terug zodat de pagina niet leeg is
         res.json({ success: true, movies: hardcodedReleases })
     }
 }
 
-// Fetch currently playing movies from TMDB
+// Films die op dit moment in de bioscoop draaien ophalen van TMDB.
+// Gebruikt door admins om snel een film te kunnen toevoegen aan ons aanbod.
 export const getNowPlayingMovies = async (req, res) => {
     try {
         const { data } = await axios.get('https://api.themoviedb.org/3/movie/now_playing', {
@@ -77,11 +77,13 @@ export const getNowPlayingMovies = async (req, res) => {
     }
 }
 
-// Add a new show - fetches movie from TMDB if not already in DB
+// Nieuwe voorstelling(en) toevoegen door de admin.
+// Als de film nog niet in onze DB staat, halen we de details eerst op bij TMDB.
 export const addShow = async (req, res) => {
     try {
         const { movieId, showsInput, showPrice } = req.body
 
+        // Validatie: alle velden zijn verplicht
         if (movieId === undefined || movieId === null || !showsInput || !showPrice) {
             return res.status(400).json({ success: false, message: "Movie ID, show times, and price are required." });
         }
@@ -90,16 +92,18 @@ export const addShow = async (req, res) => {
             return res.status(400).json({ success: false, message: "At least one show time is required." });
         }
 
+        // Prijs moet een positief getal zijn
         const parsedPrice = Number(showPrice);
         if (isNaN(parsedPrice) || parsedPrice <= 0) {
             return res.status(400).json({ success: false, message: "Price must be a positive number." });
         }
 
+        // Check of de film al in onze database staat
         const movieIdStr = String(movieId);
         let movie = await Movie.findById(movieIdStr)
 
         if (!movie) {
-            // Fetch movie details and credits from TMDB in parallel
+            // Film nog niet bekend → details + cast parallel ophalen bij TMDB
             const [movieDetailsResponse, movieCreditsResponse] = await Promise.all([
                 axios.get(`https://api.themoviedb.org/3/movie/${movieId}`, {
                     headers: { Authorization: `Bearer ${process.env.TMDB_API_KEY}` }
@@ -116,6 +120,7 @@ export const addShow = async (req, res) => {
                 return res.status(404).json({ success: false, message: "Movie not found on TMDB." });
             }
 
+            // Film-document samenstellen met alle data die we van TMDB krijgen
             const movieDetails = {
                 _id: movieIdStr,
                 title: movieApiData.title,
@@ -131,10 +136,11 @@ export const addShow = async (req, res) => {
                 runtime: movieApiData.runtime,
             }
 
+            // Film opslaan in onze database voor toekomstig gebruik
             movie = await Movie.create(movieDetails);
         }
 
-        // Build show documents from the date/time inputs
+        // Show-documenten bouwen: voor elke datum + tijd combinatie maken we een show aan
         const showsToCreate = [];
         showsInput.forEach(show => {
             const showDate = show.date;
@@ -144,20 +150,15 @@ export const addShow = async (req, res) => {
                     movie_id: movieIdStr,
                     showDateTime: new Date(dateTimeString),
                     showPrice: parsedPrice,
-                    occupiedSeats: {}
+                    occupiedSeats: {} // Begint leeg, wordt gevuld bij boekingen
                 })
             })
         });
 
+        // Alle shows in één DB-call invoegen (efficiënter dan losse inserts)
         if (showsToCreate.length > 0) {
             await Show.insertMany(showsToCreate);
         }
-
-        // Notify all users about the new show via Inngest
-        await inngest.send({
-            name: "app/show.added",
-            data: { movieTitle: movie.title }
-        })
 
         res.json({ success: true, message: 'Shows added successfully.' })
     } catch (error) {
@@ -165,20 +166,22 @@ export const addShow = async (req, res) => {
     }
 }
 
-// Get all shows, returning only unique movies sorted by showtime
+// Alle films met geplande shows ophalen voor de Movies-pagina.
+// Eén film per resultaat (gededupliceerd), gesorteerd op de eerstvolgende showtime.
 export const getShows = async (req, res) => {
     try {
+        // Alle shows met film-info, gesorteerd op datum (vroegste eerst)
         const shows = (await Show.find().populate('movie_id'))
             .toSorted((a, b) => new Date(a.showDateTime) - new Date(b.showDateTime));
 
-        // Deduplicate movies - keep only the first occurrence of each movie
+        // Dedupliceren: één film mag meerdere shows hebben, maar in de lijst tonen we elke film maar één keer
         const seen = new Set();
         const uniqueMovies = shows.filter(show => {
             const id = show.movie_id?._id;
             if (seen.has(id)) return false;
             seen.add(id);
             return true;
-        }).map(show => show.movie_id);
+        }).map(show => show.movie_id); // Alleen het film-object teruggeven, niet de show
 
         res.json({ success: true, shows: uniqueMovies })
     } catch (error) {
@@ -186,11 +189,13 @@ export const getShows = async (req, res) => {
     }
 }
 
-// Get a single movie with all its upcoming showtimes grouped by date
+// Eén film ophalen met alle bijbehorende toekomstige showtimes, gegroepeerd per datum.
+// Wordt gebruikt op de MovieDetails pagina om de gebruiker een datum/tijd te laten kiezen.
 export const getShow = async (req, res) => {
     try {
         const { movieId } = req.params;
 
+        // Alleen toekomstige voorstellingen ophalen
         const shows = await Show.find({
             movie_id: movieId,
             showDateTime: { $gte: new Date() }
@@ -202,10 +207,10 @@ export const getShow = async (req, res) => {
             return res.status(404).json({ success: false, message: "Movie not found." });
         }
 
-        // Group showtimes by date
+        // Showtimes groeperen per datum, zodat de frontend ze gemakkelijk per dag kan tonen
         const dateTime = {};
         shows.forEach((show) => {
-            const date = show.showDateTime.toISOString().split('T')[0];
+            const date = show.showDateTime.toISOString().split('T')[0]; // YYYY-MM-DD als key
             if (!dateTime[date]) {
                 dateTime[date] = [];
             }

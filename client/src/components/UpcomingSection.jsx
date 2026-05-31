@@ -5,13 +5,15 @@ import BlurCircle from './BlurCircle'
 import { useAppContext } from '../context/AppContext'
 import useScrollReveal from '../library/useScrollReveal'
 
+// UpcomingSection: horizontaal scrollbare carousel met aankomende releases op de homepage.
 const UpcomingSection = () => {
     const navigate = useNavigate()
     const { axios, image_base_url } = useAppContext()
     const [movies, setMovies] = useState([])
-    const scrollRef = useRef(null)
+    const scrollRef = useRef(null) // Referentie naar de scroll-container voor de pijl-knoppen
     const sectionRef = useScrollReveal()
 
+    // Aankomende films ophalen, filteren op posters/datum en de eerste 12 tonen.
     useEffect(() => {
         const fetchUpcoming = async () => {
             try {
@@ -19,13 +21,13 @@ const UpcomingSection = () => {
                 if (data.success) {
                     setMovies(
                         data.movies
-                            .filter(m => m.poster_path && m.backdrop_path && m.release_date)
-                            .sort((a, b) => new Date(a.release_date) - new Date(b.release_date))
-                            .slice(0, 12)
+                            .filter(m => m.poster_path && m.backdrop_path && m.release_date) // Alleen films met alle plaatjes
+                            .sort((a, b) => new Date(a.release_date) - new Date(b.release_date)) // Vroegste releases eerst
+                            .slice(0, 12) // Max 12 in de carousel
                     )
                 }
             } catch {
-                // Fetch failed
+                // Fout stilletjes negeren
             }
         }
         fetchUpcoming()
@@ -35,6 +37,7 @@ const UpcomingSection = () => {
         scrollRef.current?.scrollBy({ left: dir * 340, behavior: 'smooth' })
     }
 
+    // Hoeveel dagen tot release? Geeft een mensvriendelijke tekst terug voor de countdown badge.
     const getDaysUntil = (dateStr) => {
         const diff = Math.ceil((new Date(dateStr) - new Date()) / (1000 * 60 * 60 * 24))
         if (diff <= 0) return 'Nu in de bioscoop'
@@ -44,13 +47,14 @@ const UpcomingSection = () => {
         return `Over ${Math.ceil(diff / 30)} maanden`
     }
 
+    // Geen films? Helemaal niets renderen (lege state)
     if (movies.length === 0) return <div ref={sectionRef} />
 
     return (
         <div ref={sectionRef} className='relative px-6 md:px-16 lg:px-24 xl:px-44 pt-24 pb-10 overflow-hidden'>
             <BlurCircle top='100px' left='-60px' />
 
-            {/* Header */}
+            {/* Header met titel + scroll-pijlen + "Bekijk alles" link */}
             <div className='flex items-center justify-between mb-10 reveal'>
                 <div>
                     <p className='text-gray-300 font-medium text-lg'>Binnenkort in de bioscoop</p>
@@ -70,7 +74,7 @@ const UpcomingSection = () => {
                 </div>
             </div>
 
-            {/* Horizontal scroll carousel */}
+            {/* Horizontale carousel: scrollbaar via swipe of de pijl-knoppen */}
             <div ref={scrollRef} className='flex gap-5 overflow-x-auto no-scrollbar scroll-smooth pb-4 reveal'>
                 {movies.map((movie) => (
                     <div
@@ -78,7 +82,7 @@ const UpcomingSection = () => {
                         onClick={() => { navigate('/releases'); scrollTo(0, 0) }}
                         className='group relative shrink-0 w-72 cursor-pointer'
                     >
-                        {/* Backdrop image with gradient overlay */}
+                        {/* Backdrop afbeelding met gradient overlay voor leesbaarheid van de tekst */}
                         <div className='relative h-44 rounded-xl overflow-hidden'>
                             <img
                                 src={image_base_url + movie.backdrop_path}
@@ -87,7 +91,7 @@ const UpcomingSection = () => {
                             />
                             <div className='absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent' />
 
-                            {/* Countdown badge */}
+                            {/* Countdown badge linksboven (bv. "Over 3 weken") */}
                             <div className='absolute top-3 left-3'>
                                 <span className='flex items-center gap-1.5 bg-primary/90 backdrop-blur-sm text-white text-[10px] font-semibold px-2.5 py-1 rounded-full'>
                                     <CalendarIcon className='w-3 h-3' />
@@ -95,7 +99,7 @@ const UpcomingSection = () => {
                                 </span>
                             </div>
 
-                            {/* Rating */}
+                            {/* Rating rechtsboven (alleen tonen als er een rating bestaat) */}
                             {movie.vote_average > 0 && (
                                 <div className='absolute top-3 right-3 flex items-center gap-1 bg-black/60 backdrop-blur-sm text-xs px-2 py-1 rounded-full'>
                                     <StarIcon className='w-3 h-3 text-primary fill-primary' />
@@ -103,7 +107,7 @@ const UpcomingSection = () => {
                                 </div>
                             )}
 
-                            {/* Title overlay at bottom of image */}
+                            {/* Titel + datum overlay onderaan de afbeelding */}
                             <div className='absolute bottom-0 left-0 right-0 p-3'>
                                 <h3 className='font-semibold text-sm leading-tight truncate'>{movie.title}</h3>
                                 <p className='text-[11px] text-gray-300 mt-0.5'>
@@ -114,7 +118,7 @@ const UpcomingSection = () => {
                             </div>
                         </div>
 
-                        {/* Description below image */}
+                        {/* Korte beschrijving onder de afbeelding (max 2 regels) */}
                         <p className='text-xs text-gray-500 mt-2.5 line-clamp-2 leading-relaxed'>
                             {movie.overview || 'Geen beschrijving beschikbaar.'}
                         </p>

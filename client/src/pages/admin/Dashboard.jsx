@@ -45,7 +45,7 @@ const Dashboard = () => {
 
     return !loading ? (
         <div>
-            {/* Header */}
+            {/* Koptekst */}
             <div className='flex items-center justify-between' style={{ animation: 'revealUp 0.5s cubic-bezier(0.16,1,0.3,1)' }}>
                 <div>
                     <Title text1="Admin" text2="Dashboard" />
@@ -57,7 +57,7 @@ const Dashboard = () => {
                 </div>
             </div>
 
-            {/* KPI cards */}
+            {/* KPI-kaarten */}
             <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mt-8">
                 {dashboardCards.map((card, index) => (
                     <div
@@ -77,7 +77,7 @@ const Dashboard = () => {
                 ))}
             </div>
 
-            {/* Active shows */}
+            {/* Actieve shows */}
             <div className='mt-12' style={{ animation: 'revealUp 0.6s cubic-bezier(0.16,1,0.3,1) 0.4s both' }}>
                 <div className='flex items-center justify-between mb-6'>
                     <div>
@@ -94,7 +94,7 @@ const Dashboard = () => {
                                 className="group rounded-xl overflow-hidden bg-white/[0.03] border border-white/[0.06] hover:border-primary/30 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-primary/5"
                                 style={{ animation: `revealScale 0.5s cubic-bezier(0.16,1,0.3,1) ${0.5 + i * 0.06}s both` }}
                             >
-                                {/* Poster */}
+                                {/* Filmposter */}
                                 <div className='relative aspect-[2/3] overflow-hidden'>
                                     <img
                                         src={image_base_url + show.movie_id.poster_path}
@@ -103,19 +103,19 @@ const Dashboard = () => {
                                     />
                                     <div className='absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent' />
 
-                                    {/* Price badge */}
+                                    {/* Prijs-badge */}
                                     <div className='absolute top-3 right-3 bg-black/60 backdrop-blur-sm text-sm font-semibold px-2.5 py-1 rounded-lg border border-white/10'>
                                         {currency} {show.showPrice}
                                     </div>
 
-                                    {/* Rating */}
+                                    {/* Beoordeling */}
                                     <div className='absolute bottom-3 right-3 flex items-center gap-1 text-xs bg-black/40 backdrop-blur-sm px-2 py-0.5 rounded-full'>
                                         <StarIcon className="w-3.5 h-3.5 text-primary fill-primary" />
                                         {show.movie_id.vote_average.toFixed(1)}
                                     </div>
                                 </div>
 
-                                {/* Info */}
+                                {/* Info-blok */}
                                 <div className='p-4'>
                                     <p className="font-medium truncate group-hover:text-primary transition-colors duration-300">{show.movie_id.title}</p>
                                     <p className="text-xs text-gray-500 mt-1.5">{dateFormat(show.showDateTime)}</p>

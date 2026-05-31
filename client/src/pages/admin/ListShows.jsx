@@ -20,7 +20,7 @@ const ListShows = () => {
             setShows(data.shows)
             setLoading(false);
         } catch (error) {
-            // Fetch failed
+            // Ophalen mislukt
         }
     }
 
@@ -37,7 +37,7 @@ const ListShows = () => {
                 <p className='text-gray-500 text-sm mt-1'>{shows.length} shows gevonden</p>
             </div>
 
-            {/* Shows table with earnings calculation */}
+            {/* Tabel met voorstellingen en omzetberekening */}
             <div className="max-w-5xl mt-6 overflow-x-auto rounded-xl border border-white/[0.06]" style={{ animation: 'revealUp 0.5s cubic-bezier(0.16,1,0.3,1) 0.1s both' }}>
                 {shows.length > 0 ? (
                     <table className="w-full border-collapse text-nowrap">

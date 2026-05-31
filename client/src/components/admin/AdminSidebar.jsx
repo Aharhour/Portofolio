@@ -4,17 +4,20 @@ import { NavLink, useNavigate } from 'react-router-dom'
 import { assets } from '../../assets/assets'
 import { useAppContext } from '../../context/AppContext'
 
+// AdminSidebar: zijbalk met admin-navigatie + lijst aankomende films + terug-naar-site knop.
 const AdminSidebar = () => {
     const navigate = useNavigate()
     const { axios, image_base_url } = useAppContext()
     const [upcoming, setUpcoming] = useState([])
 
+    // Placeholder admin-gegevens (in een echte app komen die uit Clerk)
     const user = {
         firstName: 'Admin',
         lastName: 'User',
         imageUrl: assets.profile,
     }
 
+    // Definitie van alle admin-routes met bijbehorende iconen
     const adminNavlinks = [
         { name: 'Dashboard', path: '/admin', icon: LayoutDashboardIcon },
         { name: 'Add Shows', path: '/admin/add-shows', icon: PlusSquareIcon },
@@ -22,6 +25,7 @@ const AdminSidebar = () => {
         { name: 'List Bookings', path: '/admin/list-bookings', icon: ListCollapseIcon },
     ]
 
+    // Top 5 aankomende films ophalen om in de sidebar te tonen (handig voor admins).
     useEffect(() => {
         const fetchUpcoming = async () => {
             try {
@@ -31,11 +35,11 @@ const AdminSidebar = () => {
                         data.movies
                             .filter(m => m.poster_path && m.release_date)
                             .sort((a, b) => new Date(a.release_date) - new Date(b.release_date))
-                            .slice(0, 5)
+                            .slice(0, 5) // Max 5 in de sidebar
                     )
                 }
             } catch {
-                // Fetch failed
+                // Fout stilletjes negeren
             }
         }
         fetchUpcoming()
@@ -43,7 +47,7 @@ const AdminSidebar = () => {
 
     return (
         <div className='h-[calc(100vh-64px)] md:flex flex-col items-center pt-6 max-w-13 md:max-w-64 w-full bg-white/[0.02] border-r border-white/[0.06] text-sm overflow-y-auto no-scrollbar' style={{ animation: 'revealLeft 0.5s cubic-bezier(0.16,1,0.3,1)' }}>
-            {/* Profile */}
+            {/* Profielfoto + naam bovenaan met groene "online" indicator */}
             <div className='relative group'>
                 <img className='h-9 md:h-14 w-9 md:w-14 rounded-full mx-auto ring-2 ring-primary/20 ring-offset-2 ring-offset-[#09090b] group-hover:ring-primary/40 transition-all duration-300' src={user.imageUrl} alt="Admin avatar" />
                 <div className='absolute -bottom-0.5 -right-0.5 h-3.5 w-3.5 bg-green-500 rounded-full border-2 border-[#09090b] max-md:hidden' />
@@ -51,7 +55,7 @@ const AdminSidebar = () => {
             <p className='mt-3 text-sm font-medium max-md:hidden text-gray-200'>{user.firstName} {user.lastName}</p>
             <p className='text-[10px] text-gray-500 max-md:hidden'>Administrator</p>
 
-            {/* Navigation links */}
+            {/* Navigatie-links: actieve link krijgt primary kleur + bar aan de rechterkant */}
             <div className='w-full mt-5'>
                 {adminNavlinks.map((link, index) => (
                     <NavLink
@@ -72,7 +76,7 @@ const AdminSidebar = () => {
                 ))}
             </div>
 
-            {/* Upcoming movies (desktop only) */}
+            {/* Aankomende films lijstje (alleen op desktop, op mobile verborgen voor ruimte) */}
             {upcoming.length > 0 && (
                 <div className='w-full mt-6 px-4 max-md:hidden'>
                     <div className='h-px w-full bg-white/[0.06] mb-4' />
@@ -100,7 +104,7 @@ const AdminSidebar = () => {
                 </div>
             )}
 
-            {/* Back to website button */}
+            {/* Onderaan: knop om terug naar de publieke website te gaan */}
             <div className='w-full mt-auto px-4 pb-5 max-md:px-1'>
                 <div className='h-px w-full bg-white/[0.06] mb-4 max-md:hidden' />
                 <button

@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { Mail, Phone, MapPin, Send, Clock, MessageCircle } from 'lucide-react'
-import toast from 'react-hot-toast'
 import useScrollReveal from '../library/useScrollReveal'
 
+// Contactgegevens die als kaartjes naast het formulier getoond worden.
 const contactInfo = [
     {
         icon: <Mail className="w-5 h-5 text-primary" />,
@@ -30,6 +30,7 @@ const contactInfo = [
     },
 ]
 
+// Veelgestelde vragen onderaan de pagina.
 const faq = [
     {
         question: "Hoe boek ik een ticket?",
@@ -49,24 +50,23 @@ const faq = [
     },
 ]
 
+// ContactUs pagina: formulier voor berichten + contactinfo + FAQ.
 const ContactUs = () => {
+    // Form state met alle velden van het contactformulier
     const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' })
-    const [sending, setSending] = useState(false)
     const ref = useScrollReveal()
 
+    // Open de mailclient van de gebruiker met de ingevulde velden als mailto-link.
     const handleSubmit = (e) => {
         e.preventDefault()
-        setSending(true)
-        setTimeout(() => {
-            toast.success('Bericht succesvol verzonden!')
-            setForm({ name: '', email: '', subject: '', message: '' })
-            setSending(false)
-        }, 1000)
+        const body = `Naam: ${form.name}\nE-mail: ${form.email}\n\n${form.message}`
+        const mailto = `mailto:adilharhour@gmail.com?subject=${encodeURIComponent(form.subject)}&body=${encodeURIComponent(body)}`
+        window.location.href = mailto
     }
 
     return (
         <div ref={ref} className="pt-28 pb-20 px-6 md:px-16 lg:px-36">
-            {/* Hero */}
+            {/* Hero-sectie */}
             <div className="text-center max-w-3xl mx-auto mb-20 reveal reveal-blur">
                 <p className="text-primary text-sm font-medium tracking-widest uppercase mb-3">Contact</p>
                 <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
@@ -77,9 +77,9 @@ const ContactUs = () => {
                 </p>
             </div>
 
-            {/* Contact cards + Form */}
+            {/* Hoofdsectie: contactgegevens (links) + formulier (rechts) */}
             <div className="grid lg:grid-cols-5 gap-8 mb-20">
-                {/* Info cards */}
+                {/* Info-kaarten */}
                 <div className="lg:col-span-2 flex flex-col gap-4">
                     {contactInfo.map((item, i) => (
                         <div key={item.title} className={`group rounded-xl border border-white/10 bg-white/[0.03] p-5 card-hover hover:border-primary/30 reveal stagger-${i + 1}`}>
@@ -99,7 +99,7 @@ const ContactUs = () => {
                         </div>
                     ))}
 
-                    {/* Extra CTA */}
+                    {/* Extra oproep tot actie */}
                     <div className="rounded-xl border border-primary/20 bg-primary/[0.05] p-6 mt-2 reveal stagger-5">
                         <div className="flex items-center gap-3 mb-3">
                             <MessageCircle className="w-5 h-5 text-primary" />
@@ -111,7 +111,7 @@ const ContactUs = () => {
                     </div>
                 </div>
 
-                {/* Contact form */}
+                {/* Het daadwerkelijke contactformulier */}
                 <form onSubmit={handleSubmit} className="lg:col-span-3 rounded-2xl border border-white/10 bg-white/[0.03] p-8 md:p-10 reveal reveal-right">
                     <h2 className="text-2xl font-bold text-white mb-6">Stuur een Bericht</h2>
                     <div className="grid sm:grid-cols-2 gap-5 mb-5">
@@ -162,16 +162,15 @@ const ContactUs = () => {
                     </div>
                     <button
                         type="submit"
-                        disabled={sending}
-                        className="flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-3 bg-primary hover:bg-primary-dull rounded-full text-white font-medium transition-all duration-200 disabled:opacity-50 cursor-pointer btn-press glow-primary"
+                        className="flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-3 bg-primary hover:bg-primary-dull rounded-full text-white font-medium transition-all duration-200 cursor-pointer btn-press glow-primary"
                     >
                         <Send className="w-4 h-4" />
-                        {sending ? 'Verzenden...' : 'Verstuur Bericht'}
+                        Verstuur Bericht
                     </button>
                 </form>
             </div>
 
-            {/* FAQ */}
+            {/* FAQ sectie onderaan met veelgestelde vragen */}
             <div>
                 <div className="text-center mb-12 reveal">
                     <p className="text-primary text-sm font-medium tracking-widest uppercase mb-3">FAQ</p>

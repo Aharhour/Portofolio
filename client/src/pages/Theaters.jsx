@@ -3,6 +3,7 @@ import theaters from '../config/theaters'
 import BlurCircle from '../components/BlurCircle'
 import useScrollReveal from '../library/useScrollReveal'
 
+// Extra info per zaal die niet in de config staat (foto, icoon en kenmerken voor presentatie).
 const theaterExtras = {
     "zaal-1": {
         icon: <MonitorIcon className="w-8 h-8 text-primary" />,
@@ -21,6 +22,8 @@ const theaterExtras = {
     },
 }
 
+// Theaters pagina: presenteert de drie zalen met foto, kenmerken, statistieken en mini-layout.
+// Doel: gebruikers laten zien welke zaal bij welke ervaring past voordat ze gaan boeken.
 const Theaters = () => {
     const ref = useScrollReveal()
 
@@ -35,6 +38,7 @@ const Theaters = () => {
                 </p>
             </div>
 
+            {/* Loop door alle zalen en bouw voor elk een grote info-kaart */}
             <div className="grid gap-10">
                 {Object.values(theaters).map((theater, i) => {
                     const extra = theaterExtras[theater.id]
@@ -43,7 +47,7 @@ const Theaters = () => {
                             key={theater.id}
                             className={`relative flex flex-col md:flex-row gap-6 bg-primary/5 border border-primary/15 rounded-2xl overflow-hidden card-hover reveal stagger-${(i + 1) * 2}`}
                         >
-                            {/* Theater image */}
+                            {/* Foto van de zaal links */}
                             <div className="md:w-80 h-56 md:h-auto shrink-0 img-zoom">
                                 <img
                                     src={extra.image}
@@ -52,7 +56,7 @@ const Theaters = () => {
                                 />
                             </div>
 
-                            {/* Theater info */}
+                            {/* Rechterkant: alle info over de zaal */}
                             <div className="flex-1 p-6 md:py-8">
                                 <div className="flex items-center gap-3 mb-2">
                                     {extra.icon}
@@ -62,7 +66,7 @@ const Theaters = () => {
                                     </div>
                                 </div>
 
-                                {/* Stats */}
+                                {/* Statistieken: aantal stoelen, rijen en stoelen per rij */}
                                 <div className="flex flex-wrap gap-4 mt-5">
                                     <div className="bg-primary/10 border border-primary/20 rounded-lg px-4 py-3 text-center hover:bg-primary/15 transition-colors">
                                         <p className="text-2xl font-bold text-primary">{theater.totalSeats}</p>
@@ -78,7 +82,7 @@ const Theaters = () => {
                                     </div>
                                 </div>
 
-                                {/* Features */}
+                                {/* Kenmerken/features: chips met de USP's van deze zaal */}
                                 <div className="mt-5">
                                     <p className="text-sm font-medium text-gray-300 mb-2">Kenmerken</p>
                                     <div className="flex flex-wrap gap-2">
@@ -93,7 +97,7 @@ const Theaters = () => {
                                     </div>
                                 </div>
 
-                                {/* Seat layout preview */}
+                                {/* Visuele preview van de zaalindeling met scherm + rijen */}
                                 <div className="mt-6">
                                     <p className="text-sm font-medium text-gray-300 mb-3">Zaalindeling</p>
                                     <div className="flex flex-col items-center gap-2">
@@ -119,7 +123,7 @@ const Theaters = () => {
                                 </div>
                             </div>
 
-                            {/* Theater badge */}
+                            {/* Badge in de hoek met de zaal-naam */}
                             <div className="absolute top-4 right-4">
                                 <div className="flex items-center gap-1.5 bg-primary/20 border border-primary/30 text-primary text-xs font-medium px-3 py-1 rounded-full">
                                     <MapPinIcon className="w-3 h-3" />

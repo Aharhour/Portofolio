@@ -1,3 +1,4 @@
+// BlurCircle: een grote, vervaagde gekleurde cirkel als achtergrond-decoratie.
 const BlurCircle = ({top = "auto", left = "auto", right = "auto", bottom = "auto"}) => {
   return (
     <div className="absolute -z-50 h-56 w-56 aspect-square rounded-full bg-primary/30 blur-3xl"

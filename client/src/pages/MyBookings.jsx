@@ -7,6 +7,8 @@ import { Link } from 'react-router-dom'
 import { useAppContext } from '../context/AppContext'
 import useScrollReveal from '../library/useScrollReveal'
 
+// Pagina met alle boekingen van de ingelogde gebruiker.
+// Onbetaalde boekingen krijgen een "Pay Now" knop die teruggaat naar Stripe.
 const MyBookings = () => {
     const currency = import.meta.env.VITE_CURRENCY
     const { axios, getToken, user, image_base_url } = useAppContext()
@@ -15,7 +17,7 @@ const MyBookings = () => {
     const [isLoading, setIsLoading] = useState(true)
     const ref = useScrollReveal()
 
-    // Fetch all bookings for the current user
+    // Boekingen van de huidige gebruiker ophalen (auth-token vereist).
     const getMyBookings = async () => {
         try {
             const { data } = await axios.get('/api/user/bookings', {
@@ -25,11 +27,12 @@ const MyBookings = () => {
                 setBookings(data.bookings)
             }
         } catch (error) {
-            // Fetch failed
+            // Fout stilletjes negeren
         }
         setIsLoading(false)
     }
 
+    // Boekingen pas ophalen zodra de user beschikbaar is (Clerk klaar met laden)
     useEffect(() => {
         if (user) {
             getMyBookings()
@@ -42,7 +45,7 @@ const MyBookings = () => {
             <BlurCircle bottom="0px" left="600px" />
             <h1 className='text-lg font-semibold mb-4 reveal'>My Bookings</h1>
 
-            {/* Booking cards list */}
+            {/* Lijst met boekingskaartjes (één per boeking) */}
             {bookings.map((item, index) => (
                 <div key={index} className={`flex flex-col md:flex-row justify-between bg-primary/8 border border-primary/20 rounded-lg mt-4 p-2 max-w-3xl card-hover reveal stagger-${Math.min(index + 1, 8)}`}>
                     <div className='flex flex-col md:flex-row'>
@@ -56,7 +59,7 @@ const MyBookings = () => {
                         </div>
                     </div>
 
-                    {/* Payment info and seat details */}
+                    {/* Rechterkant: bedrag + (eventueel) Pay Now knop + stoel-info */}
                     <div className='flex flex-col md:items-end md:text-right justify-between p-4'>
                         <div className='flex items-center gap-4'>
                             <p className='text-2xl font-semibold mb-3'>{currency}{item.amount.toFixed(2)}</p>
