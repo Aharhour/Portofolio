@@ -11,8 +11,12 @@ import theaters from '../config/theaters'
 
 const currency = import.meta.env.VITE_CURRENCY || '€'
 
+// SeatLayout pagina: hier kiest de gebruiker zaal → tijd → stoelen → afrekenen.
+// Dit is het hart van het boekingsproces.
 const SeatLayout = () => {
+    // URL params: filmId en datum (bv. /movies/123/2026-05-08)
     const { id, date } = useParams()
+    // State voor de keuzes van de gebruiker
     const [selectedSeats, setSelectedSeats] = useState([])
     const [selectedTime, setSelectedTime] = useState(null)
     const [selectedTheater, setSelectedTheater] = useState(null)
@@ -21,9 +25,10 @@ const SeatLayout = () => {
 
     const { axios, getToken, user } = useAppContext()
 
+    // Snel toegang tot de config van de gekozen zaal (rijen, prijs, layout)
     const currentTheater = selectedTheater ? theaters[selectedTheater] : null
 
-    // Fetch show data for this movie
+    // Filmdata + alle showtimes ophalen
     const getShow = async () => {
         try {
             const { data } = await axios.get(`/api/show/${id}`)
@@ -31,35 +36,38 @@ const SeatLayout = () => {
                 setShow(data)
             }
         } catch (error) {
-            // Fetch failed
+            // Fout stilletjes negeren
         }
     }
 
-    // Handle zaal selection - reset everything
+    // Andere zaal kiezen → alle eerdere keuzes resetten (andere zaal = andere stoelen)
     const handleTheaterSelect = (theaterId) => {
         setSelectedTheater(theaterId)
         setSelectedSeats([])
         setOccupiedSeats([])
     }
 
-    // Handle time selection - reset seats
+    // Andere tijd kiezen → stoelen resetten (elke show heeft eigen bezette stoelen)
     const handleTimeSelect = (item) => {
         setSelectedTime(item)
         setSelectedSeats([])
         setOccupiedSeats([])
     }
 
-    // Handle seat toggle with validation
+    // Stoel klikken: toggle selectie met de regels (tijd vereist, max 5, niet bezet)
     const handleSeatClick = (seatId) => {
         if (!selectedTime) {
             return toast("Selecteer eerst een tijd")
         }
+        // Max 5 stoelen per boeking
         if (!selectedSeats.includes(seatId) && selectedSeats.length >= 5) {
             return toast("Je kunt maximaal 5 stoelen selecteren")
         }
+        // Bezette stoelen kunnen niet geselecteerd worden
         if (occupiedSeats.includes(seatId)) {
             return toast('Deze stoel is al bezet')
         }
+        // Toggle: zit erin → eruit halen, zit er niet in → toevoegen
         setSelectedSeats(prev =>
             prev.includes(seatId)
                 ? prev.filter(seat => seat !== seatId)
@@ -67,8 +75,9 @@ const SeatLayout = () => {
         )
     }
 
-    // Render a single seat button
-    // rotation: negative = tilt left (toward screen on left side), positive = tilt right
+    // Eén stoel-knop renderen.
+    // offset = aantal pixels naar onder (voor de gebogen "zaal-kromming")
+    // rotation = rotatie in graden (stoelen aan de zijkant kantelen naar het scherm toe)
     const renderSeat = (seatId, offset, rotation = 0) => (
         <button
             key={seatId}
@@ -80,28 +89,32 @@ const SeatLayout = () => {
         </button>
     )
 
-    // Render a single row of seats in a curved arc with rotation toward screen
-    const maxRotation = 15 // max degrees at the far edges
+    // Eén rij stoelen renderen met een gebogen curve (zoals een echte bioscoopzaal).
+    const maxRotation = 15 // Max graden rotatie aan de uiteinden van de rij
 
     const renderRow = (row, count, curveStrength) => {
-        const mid = (count - 1) / 2
+        const mid = (count - 1) / 2 // Middelste positie in de rij
         return (
             <div key={row} className="flex gap-1.5 mt-2 items-end">
                 {Array.from({ length: count }, (_, i) => {
                     const seatId = `${row}${i + 1}`;
-                    const normalized = (i - mid) / mid // -1 (left) to +1 (right)
+                    // -1 (uiterst links) tot +1 (uiterst rechts), 0 = midden
+                    const normalized = (i - mid) / mid
                     const distFromCenter = Math.abs(normalized)
+                    // Kwadratische curve: hoe verder van het midden, hoe meer offset (parabolisch)
                     const offset = Math.round(distFromCenter * distFromCenter * curveStrength)
-                    const rotation = Math.round(normalized * -maxRotation) // left seats rotate clockwise, right counter-clockwise
+                    // Stoelen links draaien rechtsom, rechts linksom (gericht op het scherm)
+                    const rotation = Math.round(normalized * -maxRotation)
                     return renderSeat(seatId, offset, rotation)
                 })}
             </div>
         )
     }
 
-    // Render a section: if multiple blocks, merge their rows into wide combined curved rows
-    // e.g. section [1,2,3] with groupRows [["C","D"],["E","F"],["G","H"]]
-    // renders row 0 of each block as one wide curved row: C seats + gap + E seats + gap + G seats
+    // Een sectie van rijen renderen. Een sectie kan uit meerdere blokken bestaan
+    // die naast elkaar getoond worden alsof ze één lange gebogen rij zijn.
+    // Voorbeeld: section [1,2,3] met groupRows [["C","D"],["E","F"],["G","H"]]
+    // → rij 0 van elk blok wordt één brede gebogen rij: C-stoelen + gap + E-stoelen + gap + G-stoelen.
     const renderSection = (section) => {
         const blocks = section.map(idx => groupRows[idx]).filter(Boolean)
         if (blocks.length === 0) return null
@@ -109,7 +122,8 @@ const SeatLayout = () => {
         const seatsPerRow = currentTheater?.seatsPerRow || 9
 
         if (blocks.length === 1) {
-            // Single block: curve normally
+            // Eén blok: gewoon de standaard curve toepassen
+            // Curve-strength schaalt mee met het aantal stoelen voor een natuurlijke vorm
             const curveStrength = seatsPerRow >= 12 ? 12 : seatsPerRow >= 10 ? 9 : 6
             return (
                 <div>
@@ -118,11 +132,12 @@ const SeatLayout = () => {
             )
         }
 
-        // Multiple blocks: combine rows across blocks into one wide curved row
+        // Meerdere blokken: rijen naast elkaar combineren tot één brede gebogen rij
         const maxRowsInBlock = Math.max(...blocks.map(b => b.length))
-        const gapSeats = 2 // virtual gap columns between blocks
+        const gapSeats = 2 // Virtuele gap-kolommen tussen de blokken (voor het gangpad-effect)
         const totalWidth = blocks.length * seatsPerRow + (blocks.length - 1) * gapSeats
         const mid = (totalWidth - 1) / 2
+        // Bredere zalen krijgen sterkere curves zodat de buiging logisch blijft
         const curveStrength = totalWidth >= 30 ? 14 : totalWidth >= 20 ? 11 : 8
 
         return (
@@ -154,7 +169,8 @@ const SeatLayout = () => {
         )
     }
 
-    // Fetch occupied seats for the selected time slot
+    // Bezette stoelen ophalen voor de geselecteerde voorstelling.
+    // Dit wordt gebruikt om bezette stoelen grijs te maken in de UI.
     const getOccupiedSeats = async () => {
         try {
             const { data } = await axios.get(`/api/booking/seats/${selectedTime.showId}`)
@@ -164,24 +180,27 @@ const SeatLayout = () => {
                 toast.error(data.message)
             }
         } catch (error) {
-            // Fetch failed
+            // Fout stilletjes negeren
         }
     }
 
-    // Create booking with theater choice and redirect to Stripe
+    // Boeking aanmaken en doorsturen naar Stripe checkout.
     const bookTickets = async () => {
         try {
+            // Validatie: alle stappen moeten doorlopen zijn
             if (!user) return toast.error("Log in om verder te gaan")
             if (!selectedTheater) return toast.error("Selecteer een zaal")
             if (!selectedTime) return toast.error("Selecteer een tijd")
             if (!selectedSeats.length) return toast.error("Selecteer stoelen")
 
+            // POST naar de backend, die maakt de Booking + Stripe sessie aan
             const { data } = await axios.post('/api/booking/create',
                 { showId: selectedTime.showId, selectedSeats, theater: selectedTheater },
                 { headers: { Authorization: `Bearer ${await getToken()}` } }
             )
 
             if (data.success) {
+                // Stuur de gebruiker direct door naar de Stripe betaalpagina
                 window.location.href = data.url
             } else {
                 toast.error(data.message)
@@ -191,19 +210,22 @@ const SeatLayout = () => {
         }
     }
 
+    // Bij het laden van de pagina: filmdata ophalen
     useEffect(() => { getShow() }, [])
 
+    // Telkens wanneer de gebruiker een andere tijd kiest: opnieuw bezette stoelen ophalen
     useEffect(() => {
         if (selectedTime) {
             getOccupiedSeats()
         }
     }, [selectedTime])
 
-    // Price calculations
+    // Prijsberekeningen voor de samenvatting onderaan
     const basePrice = show?.movie ? (show.dateTime[date]?.[0] ? 0 : 0) : 0
     const showPrice = selectedTime ? (show?.dateTime[date]?.find(t => t.showId === selectedTime.showId) ? show.movie : null) : null
-    const upcharge = currentTheater?.upcharge || 0
+    const upcharge = currentTheater?.upcharge || 0 // Toeslag van de gekozen zaal
 
+    // Rij-groepen van de huidige zaal (bv. [["A","B","C"], ["D","E"]] = 2 secties)
     const groupRows = currentTheater?.groupRows || []
 
     if (!show) return <Loading />
@@ -211,7 +233,7 @@ const SeatLayout = () => {
     return (
         <div className='px-6 md:px-16 lg:px-40 py-30 md:pt-50'>
 
-            {/* Step 1: Zaal selection */}
+            {/* Stap 1: Kies een zaal (zaal-1, zaal-2 of zaal-3) */}
             <div className='mb-12' style={{ animation: 'revealUp 0.5s cubic-bezier(0.16,1,0.3,1)' }}>
                 <h2 className='text-2xl font-semibold mb-2'>Kies een zaal</h2>
                 <p className='text-gray-400 text-sm mb-6'>Elke zaal heeft een unieke indeling en ervaring</p>
@@ -253,7 +275,7 @@ const SeatLayout = () => {
                                 )}
                             </div>
 
-                            {/* Mini seat preview */}
+                            {/* Mini-preview van de zaal-indeling op de keuze-kaart */}
                             <div className='flex flex-col items-center gap-0.5 mt-3'>
                                 <div className="w-16 h-0.5 bg-primary/30 rounded-full mb-1"></div>
                                 {theater.groupRows.slice(0, 3).map((group, gi) => (
@@ -276,10 +298,10 @@ const SeatLayout = () => {
                 </div>
             </div>
 
-            {/* Step 2 & 3: Time + Seats (only show after zaal is picked) */}
+            {/* Stap 2 & 3: Tijd kiezen + stoelen kiezen (verschijnt pas na zaal-keuze) */}
             {selectedTheater && (
                 <div className='flex flex-col md:flex-row' style={{ animation: 'revealUp 0.5s cubic-bezier(0.16,1,0.3,1)' }}>
-                    {/* Time slot sidebar */}
+                    {/* Sidebar links: alle beschikbare tijden voor deze datum */}
                     <div className='w-64 bg-gradient-to-b from-primary/10 to-primary/5 border border-primary/20 rounded-xl py-10 h-max md:sticky md:top-30'>
                         <p className='text-lg font-semibold px-6'>Beschikbare tijden</p>
                         <div className='mt-5 space-y-1'>
@@ -296,12 +318,12 @@ const SeatLayout = () => {
                         </div>
                     </div>
 
-                    {/* Seat selection grid */}
+                    {/* Hoofdgedeelte: het scherm + de stoelen-grid */}
                     <div className='relative flex-1 flex flex-col items-center max-md:mt-16'>
                         <BlurCircle top="-100px" left="-100px" />
                         <BlurCircle bottom="0" right="0" />
 
-                        {/* Theater info banner */}
+                        {/* Banner met info over de gekozen zaal */}
                         <div className='mb-6 text-center'>
                             <h2 className='text-xl font-semibold text-primary'>{currentTheater.name}</h2>
                             <p className='text-gray-500 text-xs mt-1'>
@@ -330,7 +352,7 @@ const SeatLayout = () => {
                             <p className='text-gray-500 mt-10'>Selecteer een tijd om de stoelen te zien</p>
                         )}
 
-                        {/* Seat legend */}
+                        {/* Legenda: uitleg van de drie stoel-statussen (vrij/geselecteerd/bezet) */}
                         {selectedTime && (
                             <div className='flex items-center gap-6 mt-10 text-xs text-gray-400'>
                                 <div className='flex items-center gap-2'>
@@ -348,7 +370,7 @@ const SeatLayout = () => {
                             </div>
                         )}
 
-                        {/* Price summary + checkout button */}
+                        {/* Samenvatting + afrekenknop (verschijnt zodra er stoelen geselecteerd zijn) */}
                         {selectedSeats.length > 0 && (
                             <div className='mt-12 bg-gradient-to-br from-primary/10 via-primary/5 to-transparent border border-primary/20 rounded-2xl p-6 w-full max-w-md text-center' style={{ animation: 'revealScale 0.4s cubic-bezier(0.16,1,0.3,1)' }}>
                                 <p className='text-sm text-gray-400 mb-2'>Overzicht</p>

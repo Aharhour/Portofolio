@@ -4,10 +4,13 @@ import { ChevronLeftIcon, ChevronRightIcon, CalendarIcon } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
 
+// DateSelect: datum-keuze component op de MovieDetails pagina.
+// Gebruiker kiest een datum en klikt "Book Now" → wordt doorgestuurd naar SeatLayout pagina.
 const DateSelect = ({ dateTime, id }) => {
     const navigate = useNavigate()
     const [selected, setSelected] = useState(null)
 
+    // "Book Now" klik: valideren dat er een datum gekozen is, dan doorsturen naar de seat layout
     const onBookHandler = () => {
         if (!selected) {
             return toast('Please select a date')
@@ -16,6 +19,7 @@ const DateSelect = ({ dateTime, id }) => {
         scrollTo(0, 0)
     }
 
+    // Beschikbare datums uit het dateTime object
     const dates = Object.keys(dateTime)
 
     return (
@@ -24,7 +28,7 @@ const DateSelect = ({ dateTime, id }) => {
                 <BlurCircle top="-100px" left="-100px" />
                 <BlurCircle top="100px" right="0px" />
 
-                {/* Date picker grid */}
+                {/* Datum-kiezer met chevron-pijlen en kaartjes per dag */}
                 <div>
                     <div className='flex items-center gap-2 mb-1'>
                         <CalendarIcon className='w-5 h-5 text-primary' />

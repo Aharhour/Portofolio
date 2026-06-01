@@ -1,4 +1,4 @@
-// Converts ISO datetime to local time like "02:30 PM"
+// Zet ISO datum/tijd om naar lokale tijd
 const isoTimeFormat = (dateTime) => {
     const date = new Date(dateTime);
     const localTime = date.toLocaleTimeString('en-US', {

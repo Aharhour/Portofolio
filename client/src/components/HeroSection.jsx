@@ -2,12 +2,13 @@ import { assets } from '../assets/assets'
 import { ArrowRight, CalendarIcon, ClockIcon } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 
+// HeroSection: grote banner bovenaan de homepage met een uitgelichte film.
+// Statisch (Avengers Endgame) - voor demo doeleinden, kan later dynamisch gemaakt worden.
 const HeroSection = () => {
     const navigate = useNavigate()
 
     return (
         <div className='relative flex flex-col items-start justify-center gap-4 px-6 md:px-16 lg:px-36 bg-[url("/background.png")] bg-cover bg-center h-screen overflow-hidden'>
-            {/* Overlay gradient for depth */}
             <div className='absolute inset-0 bg-gradient-to-r from-black/60 via-black/30 to-transparent pointer-events-none' />
             <div className='absolute inset-0 bg-gradient-to-t from-[#09090b] via-transparent to-transparent pointer-events-none' />
 

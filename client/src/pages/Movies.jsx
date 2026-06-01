@@ -3,10 +3,13 @@ import BlurCircle from '../components/BlurCircle'
 import { useAppContext } from '../context/AppContext'
 import useScrollReveal from '../library/useScrollReveal'
 
+// Movies pagina: toont een grid met alle films die nu draaien (uit AppContext).
+// Per film een MovieCard met fade-in animatie (gestaggerd zodat ze niet allemaal tegelijk verschijnen).
 const Movies = () => {
   const { shows } = useAppContext()
   const ref = useScrollReveal()
 
+  // Lege staat: geen films beschikbaar → vriendelijke melding
   return shows.length > 0 ? (
     <div ref={ref} className='relative my-40 mb-60 px-6 md:px-16 lg:px-40 xl:px-44 overflow-hidden min-h-[80vh]'>
 

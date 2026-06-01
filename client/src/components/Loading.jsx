@@ -1,22 +1,5 @@
-import { useEffect } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
-
-const ALLOWED_REDIRECTS = ['my-bookings', 'movies', 'favorite', 'admin', 'releases', 'theaters'];
-
+// Spinner-component voor het tonen van een laad-status.
 const Loading = () => {
-    const { nextUrl } = useParams()
-    const navigate = useNavigate()
-
-    // If a redirect URL is provided, navigate there after a delay (e.g. post-payment)
-    useEffect(() => {
-        if (nextUrl && ALLOWED_REDIRECTS.includes(nextUrl)) {
-            const timer = setTimeout(() => {
-                navigate(`/${nextUrl}`)
-            }, 8000)
-            return () => clearTimeout(timer)
-        }
-    }, [nextUrl, navigate])
-
     return (
         <div className='flex flex-col justify-center items-center h-[80vh] gap-4'>
             <div className='relative'>

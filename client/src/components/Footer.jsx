@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { assets } from '../assets/assets'
 import useScrollReveal from '../library/useScrollReveal'
 
+// Footer: onderste sectie van de site met logo, links en contactinfo.
 const Footer = () => {
     const ref = useScrollReveal()
 
@@ -9,7 +10,7 @@ const Footer = () => {
         <footer ref={ref} className="px-6 md:px-16 lg:px-36 mt-32 w-full">
             <div className='h-px w-full bg-gradient-to-r from-transparent via-gray-600 to-transparent mb-14' />
 
-            {/* Top section */}
+            {/* Bovenste sectie: logo + tagline links, link-kolommen rechts */}
             <div className="flex flex-col md:flex-row justify-between w-full gap-10 pb-14">
                 <div className="md:max-w-96 reveal reveal-left">
                     <img alt="BetaTickets" className="h-11" src={assets.logo} />
@@ -43,7 +44,7 @@ const Footer = () => {
                 </div>
             </div>
 
-            {/* Copyright */}
+            {/* Copyright regel onderaan met dynamisch huidige jaartal */}
             <div className='h-px w-full bg-gradient-to-r from-transparent via-gray-700 to-transparent' />
             <p className="py-5 text-center text-xs text-gray-500 reveal">
                 Copyright {new Date().getFullYear()} &copy; <a href="https://github.com/Aharhour" className="text-gray-400 hover:text-primary transition-colors duration-300">AHCORP</a>. All Rights Reserved.

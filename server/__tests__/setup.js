@@ -1,6 +1,6 @@
 import { vi } from 'vitest';
 
-// Mock mongoose - prevent actual database connections
+// Mock mongoose - voorkomt daadwerkelijke databaseverbindingen
 vi.mock('mongoose', async () => {
     const actual = await vi.importActual('mongoose');
     return {
@@ -13,7 +13,7 @@ vi.mock('mongoose', async () => {
     };
 });
 
-// Mock Clerk
+// Mock voor Clerk
 vi.mock('@clerk/express', () => ({
     clerkMiddleware: () => (req, res, next) => next(),
     clerkClient: {
@@ -25,7 +25,7 @@ vi.mock('@clerk/express', () => ({
     getAuth: vi.fn(),
 }));
 
-// Mock Inngest
+// Mock voor Inngest
 vi.mock('../inngest/index.js', () => ({
     inngest: {
         send: vi.fn().mockResolvedValue(true),
@@ -34,7 +34,7 @@ vi.mock('../inngest/index.js', () => ({
     functions: [],
 }));
 
-// Mock Stripe
+// Mock voor Stripe
 vi.mock('stripe', () => {
     return {
         default: vi.fn(() => ({
@@ -54,5 +54,5 @@ vi.mock('stripe', () => {
     };
 });
 
-// Mock dotenv
+// Mock voor dotenv
 vi.mock('dotenv/config', () => ({}));

@@ -6,40 +6,43 @@ import Loading from '../components/Loading'
 import { useAppContext } from '../context/AppContext'
 import useScrollReveal from '../library/useScrollReveal'
 
+// Releases pagina: aankomende films, gegroepeerd per maand met klikbare detail-modal.
 const Releases = () => {
     const { axios, image_base_url } = useAppContext()
     const [movies, setMovies] = useState([])
     const [loading, setLoading] = useState(true)
-    const [selectedMovie, setSelectedMovie] = useState(null)
+    const [selectedMovie, setSelectedMovie] = useState(null) // Voor de modal-popup
     const ref = useScrollReveal()
 
+    // Aankomende films ophalen, filteren op poster + datum, en sorteren op release-datum.
     const fetchUpcoming = async () => {
         try {
             const { data } = await axios.get('/api/show/upcoming')
             if (data.success) {
                 const sorted = data.movies
-                    .filter(m => m.poster_path && m.release_date)
+                    .filter(m => m.poster_path && m.release_date) // Geen films zonder poster of datum tonen
                     .sort((a, b) => new Date(a.release_date) - new Date(b.release_date))
                 setMovies(sorted)
             }
         } catch (error) {
-            // Fetch failed
+            // Fout stilletjes negeren
         }
         setLoading(false)
     }
 
     useEffect(() => { fetchUpcoming() }, [])
 
-    // Group movies by month+year
+    // Films groeperen per "jaar-maand" zodat we ze in maand-secties kunnen tonen.
     const grouped = movies.reduce((acc, movie) => {
         const date = new Date(movie.release_date)
-        const key = `${date.getFullYear()}-${String(date.getMonth()).padStart(2, '0')}`
-        const label = `${date.toLocaleString('nl-NL', { month: 'long' })} ${date.getFullYear()}`
+        const key = `${date.getFullYear()}-${String(date.getMonth()).padStart(2, '0')}` // Sorteerbare key
+        const label = `${date.toLocaleString('nl-NL', { month: 'long' })} ${date.getFullYear()}` // Mooi label
         if (!acc[key]) acc[key] = { label, movies: [] }
         acc[key].movies.push(movie)
         return acc
     }, {})
 
+    // Hulp-functie: hoeveel dagen tot release? Geeft een mensvriendelijke tekst terug.
     const getDaysUntil = (dateStr) => {
         const diff = Math.ceil((new Date(dateStr) - new Date()) / (1000 * 60 * 60 * 24))
         if (diff <= 0) return 'Nu in de bioscoop'
@@ -50,6 +53,7 @@ const Releases = () => {
         return `Over ${Math.floor(diff / 365)}+ jaar`
     }
 
+    // Datum mooi opmaken in het Nederlands (bv. "21 mei 2026").
     const formatDate = (dateStr) => {
         return new Date(dateStr).toLocaleDateString('nl-NL', {
             day: 'numeric', month: 'long', year: 'numeric'
@@ -72,8 +76,9 @@ const Releases = () => {
             {movies.length === 0 ? (
                 <p className='text-center text-gray-500'>Geen aankomende films gevonden.</p>
             ) : (
+                // Per maand een sectie tonen met sticky header
                 Object.entries(grouped)
-                    .sort(([a], [b]) => a.localeCompare(b))
+                    .sort(([a], [b]) => a.localeCompare(b)) // Sorteren op maand-key (vroegste eerst)
                     .map(([key, { label, movies: monthMovies }]) => (
                     <div key={key} className='mb-14 reveal'>
                         <div className='flex items-center gap-3 mb-6 sticky top-20 z-10 bg-black/80 backdrop-blur-md py-3 -mx-2 px-2 rounded-lg'>
@@ -89,7 +94,7 @@ const Releases = () => {
                                     onClick={() => setSelectedMovie(movie)}
                                     className='group cursor-pointer'
                                 >
-                                    {/* Poster */}
+                                    {/* Filmposter met hover-effecten en badges (datum, rating) */}
                                     <div className='relative rounded-xl overflow-hidden aspect-[2/3]'>
                                         <img
                                             src={image_base_url + movie.poster_path}
@@ -98,20 +103,20 @@ const Releases = () => {
                                         />
                                         <div className='absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition duration-300' />
 
-                                        {/* Hover overlay info */}
+                                        {/* Overlay die bij hover verschijnt: korte info onderaan de poster */}
                                         <div className='absolute bottom-0 left-0 right-0 p-3 translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition duration-300'>
                                             <p className='text-xs text-gray-300'>{formatDate(movie.release_date)}</p>
                                             <p className='text-[10px] text-gray-400 mt-0.5 line-clamp-2'>{movie.overview}</p>
                                         </div>
 
-                                        {/* Countdown badge */}
+                                        {/* Countdown badge linksboven (bv. "Over 3 weken") */}
                                         <div className='absolute top-2 left-2'>
                                             <span className='bg-primary/90 backdrop-blur-sm text-white text-[9px] font-semibold px-2 py-0.5 rounded-full'>
                                                 {getDaysUntil(movie.release_date)}
                                             </span>
                                         </div>
 
-                                        {/* Rating */}
+                                        {/* Beoordeling rechtsboven (alleen tonen als er een rating is) */}
                                         {movie.vote_average > 0 && (
                                             <div className='absolute top-2 right-2 flex items-center gap-1 bg-black/60 backdrop-blur-sm text-[10px] px-1.5 py-0.5 rounded-full'>
                                                 <StarIcon className='w-2.5 h-2.5 text-primary fill-primary' />
@@ -119,7 +124,7 @@ const Releases = () => {
                                             </div>
                                         )}
 
-                                        {/* Popularity indicator for top movies */}
+                                        {/* Populariteitsindicator voor topfilms */}
                                         {movie.popularity > 100 && (
                                             <div className='absolute bottom-2 right-2 opacity-0 group-hover:opacity-0'>
                                                 <TrendingUpIcon className='w-4 h-4 text-primary' />
@@ -127,7 +132,7 @@ const Releases = () => {
                                         )}
                                     </div>
 
-                                    {/* Title */}
+                                    {/* Titel */}
                                     <h3 className='font-medium text-sm mt-2 truncate group-hover:text-primary transition'>{movie.title}</h3>
                                     <p className='text-[11px] text-gray-500'>{formatDate(movie.release_date)}</p>
                                 </div>
@@ -137,9 +142,8 @@ const Releases = () => {
                 ))
             )}
 
-            {/* Detail Modal — rendered via portal to escape the PageTransition
-                wrapper, whose transform otherwise makes `fixed` descendants
-                position relative to the wrapper instead of the viewport. */}
+            {/* Detail-modal via React Portal: nodig omdat de PageTransition wrapper een transform heeft,
+                waardoor 'position: fixed' anders relatief aan de wrapper wordt i.p.v. aan de viewport. */}
             {selectedMovie && createPortal(
                 <div className='fixed inset-0 z-50 flex items-center justify-center p-4' onClick={() => setSelectedMovie(null)} style={{ animation: 'fadeIn 0.2s ease-out' }}>
                     <div className='absolute inset-0 bg-black/70 backdrop-blur-sm' />
@@ -148,7 +152,7 @@ const Releases = () => {
                         style={{ animation: 'revealScale 0.35s cubic-bezier(0.16,1,0.3,1)' }}
                         onClick={(e) => e.stopPropagation()}
                     >
-                        {/* Backdrop header */}
+                        {/* Header met grote backdrop afbeelding + sluit-knop */}
                         {selectedMovie.backdrop_path && (
                             <div className='relative h-56 md:h-72'>
                                 <img
@@ -167,10 +171,10 @@ const Releases = () => {
                             </div>
                         )}
 
-                        {/* Content */}
+                        {/* Hoofdinhoud van de modal */}
                         <div className='p-6 md:p-8 -mt-16 relative'>
                             <div className='flex gap-5'>
-                                {/* Poster */}
+                                {/* Poster, half over de backdrop heen voor een mooi effect */}
                                 <img
                                     src={image_base_url + selectedMovie.poster_path}
                                     alt={selectedMovie.title}
@@ -204,10 +208,11 @@ const Releases = () => {
                                 </div>
                             </div>
 
-                            {/* Genre tags */}
+                            {/* Genre-tags: TMDB geeft genre-IDs, wij vertalen ze naar Nederlandse namen */}
                             {selectedMovie.genre_ids && selectedMovie.genre_ids.length > 0 && (
                                 <div className='flex flex-wrap gap-2 mt-6'>
                                     {selectedMovie.genre_ids.map(id => {
+                                        // Mapping van TMDB genre-IDs naar Nederlandse namen
                                         const genreMap = {
                                             28: 'Actie', 12: 'Avontuur', 16: 'Animatie', 35: 'Komedie',
                                             80: 'Misdaad', 99: 'Documentaire', 18: 'Drama', 10751: 'Familie',
@@ -226,7 +231,7 @@ const Releases = () => {
                                 </div>
                             )}
 
-                            {/* Overview */}
+                            {/* Beschrijving van de film */}
                             <div className='mt-6'>
                                 <h3 className='text-sm font-semibold text-gray-300 mb-2'>Beschrijving</h3>
                                 <p className='text-sm text-gray-400 leading-relaxed'>
@@ -234,7 +239,7 @@ const Releases = () => {
                                 </p>
                             </div>
 
-                            {/* Stats */}
+                            {/* Statistieken: rating, populariteit, aantal stemmen */}
                             <div className='grid grid-cols-3 gap-4 mt-6'>
                                 <div className='bg-gray-800/50 rounded-xl p-4 text-center'>
                                     <StarIcon className='w-5 h-5 text-primary mx-auto mb-1' />
@@ -253,7 +258,7 @@ const Releases = () => {
                                 </div>
                             </div>
 
-                            {/* Taal */}
+                            {/* Originele taal van de film */}
                             <div className='mt-6 flex items-center gap-2 text-sm text-gray-500'>
                                 <span>Originele taal:</span>
                                 <span className='uppercase bg-gray-800 px-2 py-0.5 rounded text-gray-300 text-xs font-medium'>

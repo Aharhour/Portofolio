@@ -19,7 +19,7 @@ const ListBookings = () => {
             });
             setBookings(data.bookings)
         } catch (error) {
-            // Fetch failed
+            // Ophalen mislukt
         }
         setIsLoading(false)
     };
@@ -37,7 +37,7 @@ const ListBookings = () => {
                 <p className='text-gray-500 text-sm mt-1'>{bookings.length} boekingen gevonden</p>
             </div>
 
-            {/* Bookings table */}
+            {/* Tabel met boekingen */}
             <div className="max-w-5xl mt-6 overflow-x-auto rounded-xl border border-white/[0.06]" style={{ animation: 'revealUp 0.5s cubic-bezier(0.16,1,0.3,1) 0.1s both' }}>
                 {bookings.length > 0 ? (
                     <table className="w-full border-collapse text-nowrap">

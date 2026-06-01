@@ -4,8 +4,9 @@ import { getUserBookings, updateFavorite, getFavorites } from '../controllers/us
 
 const userRouter = express.Router();
 
-userRouter.get('/bookings', requireAuth, getUserBookings)
-userRouter.post('/update-favorite', requireAuth, updateFavorite)
-userRouter.get('/favorites', requireAuth, getFavorites)
+// Persoonlijke gegevens: alle endpoints vereisen een ingelogde gebruiker (requireAuth).
+userRouter.get('/bookings', requireAuth, getUserBookings)         // Mijn boekingen tonen
+userRouter.post('/update-favorite', requireAuth, updateFavorite)  // Favoriete film toevoegen/verwijderen
+userRouter.get('/favorites', requireAuth, getFavorites)           // Mijn favorietenlijst ophalen
 
 export default userRouter;

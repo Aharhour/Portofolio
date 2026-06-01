@@ -15,7 +15,7 @@ const Layout = () => {
     return isAdmin ? (
         <>
             <AdminNavbar />
-            {/* Sidebar + main content area */}
+            {/* Zijbalk + hoofdinhoud */}
             <div className='flex'>
                 <AdminSidebar />
                 <div className='flex-1 px-6 py-10 md:px-12 h-[calc(100vh-64px)] overflow-y-auto page-enter'>

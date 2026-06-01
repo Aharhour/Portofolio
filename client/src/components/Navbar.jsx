@@ -5,6 +5,7 @@ import { MenuIcon, SearchIcon, TicketPlus, XIcon } from 'lucide-react'
 import { useClerk, UserButton, useUser } from '@clerk/react'
 import { useAppContext } from '../context/AppContext'
 
+// Navbar: bovenste navigatiebalk, vast en wisselt van uiterlijk bij scrollen.
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false)
     const [scrolled, setScrolled] = useState(false)
@@ -28,7 +29,7 @@ const Navbar = () => {
                 <img src={assets.logo} alt="BetaTickets" className='w-36 h-auto transition-transform duration-300 hover:scale-105' />
             </Link>
 
-            {/* Nav links */}
+            {/* Navigatie-links (op mobile een fullscreen overlay, op desktop een rij in het midden) */}
             <div className={`max-md:absolute max-md:top-0 max-md:left-0 max-md:font-medium max-md:text-lg z-50 flex flex-col md:flex-row items-center max-md:justify-center gap-8 md:gap-1 md:rounded-full backdrop-blur bg-black/70 md:bg-white/[0.06] md:border border-white/[0.08] overflow-hidden transition-all duration-500 ${isOpen ? 'max-md:w-full max-md:h-screen max-md:opacity-100' : 'max-md:w-0 max-md:h-screen max-md:opacity-0 md:opacity-100'}`}>
 
                 <XIcon className='md:hidden absolute top-6 right-6 w-6 h-6 cursor-pointer hover:text-primary transition-colors' onClick={() => setIsOpen(false)} />
@@ -45,6 +46,7 @@ const Navbar = () => {
                 <NavLink onClick={() => { scrollTo(0, 0); setIsOpen(false) }} to='/releases' className={linkClass}>
                     <span className='md:px-4 md:py-2 hover-underline'>Releases</span>
                 </NavLink>
+                {/* Favorites-link tonen we alleen als de user daadwerkelijk favorieten heeft */}
                 {favoriteMovies.length > 0 && (
                     <NavLink onClick={() => { scrollTo(0, 0); setIsOpen(false) }} to='/favorite' className={linkClass}>
                         <span className='md:px-4 md:py-2 hover-underline'>Favorites</span>
@@ -52,7 +54,7 @@ const Navbar = () => {
                 )}
             </div>
 
-            {/* Auth section */}
+            {/* Auth-sectie rechts: Login knop voor anonieme users, UserButton voor ingelogden */}
             <div className='flex items-center gap-6'>
                 <SearchIcon className='max-md:hidden w-5 h-5 cursor-pointer text-gray-400 hover:text-white transition-colors duration-300 hover:scale-110 transition-transform' />
                 {!user ? (
@@ -60,6 +62,7 @@ const Navbar = () => {
                         Login
                     </button>
                 ) : (
+                    // Eigen "Mijn Boekingen" item toevoegen aan Clerk's standaard dropdown menu
                     <UserButton>
                         <UserButton.MenuItems>
                             <UserButton.Action
@@ -72,6 +75,7 @@ const Navbar = () => {
                 )}
             </div>
 
+            {/* Hamburger-menu icoon (alleen zichtbaar op mobile) */}
             <MenuIcon className='max-md:ml-4 md:hidden w-7 h-7 cursor-pointer hover:text-primary transition-colors' onClick={() => setIsOpen(!isOpen)} />
         </div>
     )

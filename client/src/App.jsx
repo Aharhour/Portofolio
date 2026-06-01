@@ -16,26 +16,27 @@ import ListShows from './pages/admin/ListShows'
 import ListBookings from './pages/admin/ListBookings'
 import { useAppContext } from './context/AppContext'
 import { SignIn } from '@clerk/react'
-import Loading from './components/Loading'
 import Theaters from './pages/Theaters'
 import Releases from './pages/Releases'
 import AboutUs from './pages/AboutUs'
 import ContactUs from './pages/ContactUs'
 import PrivacyPolicy from './pages/PrivacyPolicy'
 
+// Wrapper-component voor pagina-overgangen.
 const PageTransition = ({ children }) => {
   const location = useLocation()
   const [displayLocation, setDisplayLocation] = useState(location)
   const [transitionClass, setTransitionClass] = useState('page-enter')
 
   useEffect(() => {
+    // Als het pad verandert: oude pagina laten uitfaden, na 150ms de nieuwe tonen
     if (location.pathname !== displayLocation.pathname) {
       setTransitionClass('page-exit')
       const timeout = setTimeout(() => {
         setDisplayLocation(location)
         setTransitionClass('page-enter')
       }, 150)
-      return () => clearTimeout(timeout)
+      return () => clearTimeout(timeout) // Cleanup bij snel doorklikken
     }
   }, [location, displayLocation])
 
@@ -46,20 +47,22 @@ const PageTransition = ({ children }) => {
   )
 }
 
+// Hoofdcomponent: bepaalt de routing en welke onderdelen wel/niet getoond worden.
 const App = () => {
+  // Admin pagina's krijgen een eigen layout zonder publieke navbar/footer
   const isAdminRoute = useLocation().pathname.startsWith('/admin')
   const { user } = useAppContext()
 
   return (
     <>
+      {/* Toaster voor pop-up notificaties (success/error berichten) */}
       <Toaster />
 
-      {/* Show public navbar/footer only on non-admin pages */}
       {!isAdminRoute && <Navbar />}
 
       <PageTransition>
       <Routes>
-        {/* Public routes */}
+        
         <Route path='/' element={<Home />} />
         <Route path='/movies' element={<Movies />} />
         <Route path='/theaters' element={<Theaters />} />
@@ -67,25 +70,26 @@ const App = () => {
         <Route path='/movies/:id' element={<MovieDetails />} />
         <Route path='/movies/:id/:date' element={<SeatLayout />} />
         <Route path='/my-bookings' element={<MyBookings />} />
-        <Route path='/loading/:nextUrl' element={<Loading />} />
         <Route path='/favorite' element={<Favorite />} />
         <Route path='/about' element={<AboutUs />} />
         <Route path='/contact' element={<ContactUs />} />
         <Route path='/privacy' element={<PrivacyPolicy />} />
 
-        {/* Admin routes - require auth, nested under Layout */}
+        {/* Admin routes - vereist login. Niet ingelogd? → toon Clerk SignIn component */}
         <Route path='/admin/*' element={user ? <Layout /> : (
           <div className='min-h-screen flex justify-center items-center'>
             <SignIn fallbackRedirectUrl={'/admin'} />
           </div>
         )}>
-          <Route index element={<Dashboard />} />
-          <Route path="add-shows" element={<AddShows />} />
-          <Route path="list-shows" element={<ListShows />} />
-          <Route path="list-bookings" element={<ListBookings />} />
+          
+          <Route index element={<Dashboard />} />             
+          <Route path="add-shows" element={<AddShows />} />     
+          <Route path="list-shows" element={<ListShows />} />   
+          <Route path="list-bookings" element={<ListBookings />} /> 
         </Route>
       </Routes>
       </PageTransition>
+
 
       {!isAdminRoute && <Footer />}
     </>

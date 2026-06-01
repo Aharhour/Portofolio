@@ -1,6 +1,8 @@
 import { Shield, Eye, Database, Trash2, Cookie, UserCheck, Globe, Mail } from 'lucide-react'
 import useScrollReveal from '../library/useScrollReveal'
 
+// Alle secties van het privacybeleid als data-array.
+// Elke sectie heeft een icoon, titel en een lijst met regels (null = lege regel als spacing).
 const sections = [
     {
         icon: <Eye className="w-5 h-5 text-primary" />,
@@ -105,26 +107,29 @@ const sections = [
     },
 ]
 
+// Helper: rendert één regel uit een sectie. Ondersteunt **bold** markdown-stijl en lege regels.
 const renderLine = (line, i) => {
-    if (line === null) return <div key={i} className="h-2" />
+    if (line === null) return <div key={i} className="h-2" /> // Lege regel = wat spacing
+    // Splits op **...** patroon zodat we de bold-delen apart kunnen stylen
     const parts = line.split(/(\*\*.*?\*\*)/)
     return (
         <p key={i} className="text-gray-400 text-sm leading-relaxed">
             {parts.map((part, j) =>
                 part.startsWith('**') && part.endsWith('**')
-                    ? <span key={j} className="text-gray-200 font-medium">{part.slice(2, -2)}</span>
-                    : part
+                    ? <span key={j} className="text-gray-200 font-medium">{part.slice(2, -2)}</span> // Bold deel
+                    : part // Normale tekst
             )}
         </p>
     )
 }
 
+// PrivacyPolicy pagina: rendert alle secties uit de data-array hierboven.
 const PrivacyPolicy = () => {
     const ref = useScrollReveal()
 
     return (
         <div ref={ref} className="pt-28 pb-20 px-6 md:px-16 lg:px-36">
-            {/* Hero */}
+            {/* Hero-sectie */}
             <div className="text-center max-w-3xl mx-auto mb-16 reveal reveal-blur">
                 <p className="text-primary text-sm font-medium tracking-widest uppercase mb-3">Privacybeleid</p>
                 <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
@@ -137,7 +142,7 @@ const PrivacyPolicy = () => {
                 <p className="text-gray-500 text-sm mt-4">Laatst bijgewerkt: 23 maart 2026</p>
             </div>
 
-            {/* Sections */}
+            {/* Hoofdinhoud: loop door alle privacy-secties en render elk als kaartje */}
             <div className="max-w-4xl mx-auto space-y-6">
                 {sections.map((section, i) => (
                     <div key={section.title} className={`rounded-xl border border-white/10 bg-white/[0.03] p-6 md:p-8 card-hover hover:border-primary/20 reveal stagger-${Math.min(i + 1, 8)}`}>
@@ -154,7 +159,7 @@ const PrivacyPolicy = () => {
                 ))}
             </div>
 
-            {/* Bottom note */}
+            {/* Onderaan: extra opmerking dat gebruikers door gebruik akkoord gaan */}
             <div className="max-w-4xl mx-auto mt-12 rounded-xl border border-primary/20 bg-primary/[0.05] p-6 text-center reveal">
                 <p className="text-gray-300 text-sm">
                     Door gebruik te maken van BetaTickets ga je akkoord met dit privacybeleid.

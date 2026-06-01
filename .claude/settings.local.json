@@ -25,7 +25,26 @@
       "Bash(mkdir -p \"/tmp/docxbuild/_rels\" \"/tmp/docxbuild/word/_rels\")",
       "Read(//tmp/**)",
       "Bash(node build.js)",
-      "Bash(node -e \"require\\('@babel/parser'\\).parse\\(require\\('fs'\\).readFileSync\\('src/pages/Releases.jsx','utf8'\\), { sourceType:'module', plugins:['jsx'] }\\); console.log\\('OK'\\)\")"
+      "Bash(node -e \"require\\('@babel/parser'\\).parse\\(require\\('fs'\\).readFileSync\\('src/pages/Releases.jsx','utf8'\\), { sourceType:'module', plugins:['jsx'] }\\); console.log\\('OK'\\)\")",
+      "Bash(pip list *)",
+      "Bash(mkdir -p \"C:/bit-academy/Jaar 3/End-project/Portofolio/PortfolioFiles/Presentatie\")",
+      "Bash(npm init *)",
+      "Bash(node generate-docx.mjs)",
+      "Bash(node generate-pptx.mjs)",
+      "Bash(grep -n \"^// ===\\\\|^// Slide\\\\|addNotes\\\\|^{$\\\\|^}$\" \"PortfolioFiles/Presentatie/generate-pptx.mjs\")",
+      "Bash(unzip -p QuickShow_Presentatie.pptx ppt/presentation.xml)",
+      "Bash(unzip -l QuickShow_Codeuitleg.docx)",
+      "Bash(unzip -p QuickShow_Codeuitleg.docx word/document.xml)",
+      "Bash(node -e ' *)",
+      "Bash(unzip -l QuickShow_Presentatie.pptx)",
+      "PowerShell(Get-Command *)",
+      "PowerShell(try { $w = New-Object -ComObject Word.Application; \"Word OK: $\\($w.Version\\)\"; $w.Quit\\(\\) } catch { \"no Word: $_\" })",
+      "PowerShell(& \"C:\\\\bit-academy\\\\Jaar 3\\\\End-project\\\\Portofolio\\\\PortfolioFiles\\\\generate-code-uitleg.ps1\")",
+      "PowerShell(powershell -NoProfile -ExecutionPolicy Bypass -File \"C:\\\\bit-academy\\\\Jaar 3\\\\End-project\\\\Portofolio\\\\PortfolioFiles\\\\generate-code-uitleg.ps1\")",
+      "PowerShell(Get-Process *)",
+      "Bash(xargs grep -l \"import\\\\|export\")",
+      "Bash(xargs grep -l \"sendEmail\")",
+      "Bash(Get-ChildItem *)"
     ]
   }
 }

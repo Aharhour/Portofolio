@@ -1,17 +1,18 @@
 import { useCallback, useRef } from 'react'
 
 /**
- * Hook that adds scroll-reveal animation to elements with the "reveal" class.
- * Uses a callback ref so it works correctly with conditionally rendered content
- * (e.g. components that return null while loading, then render after async fetch).
+ * Hook die scroll-reveal animatie toevoegt aan elementen met de "reveal" klasse.
+ * Gebruikt een callback ref zodat het correct werkt met voorwaardelijk gerenderde
+ * content (bijv. componenten die null teruggeven tijdens het laden en daarna
+ * renderen na een async fetch).
  *
- * A MutationObserver picks up dynamically added .reveal elements (async content).
+ * Een MutationObserver vangt dynamisch toegevoegde .reveal elementen op (async content).
  */
 const useScrollReveal = (options = {}) => {
     const cleanupRef = useRef(null)
 
     const ref = useCallback((container) => {
-        // Cleanup previous observers if the node changes
+        // Ruim vorige observers op als de node verandert
         if (cleanupRef.current) {
             cleanupRef.current()
             cleanupRef.current = null
@@ -40,10 +41,10 @@ const useScrollReveal = (options = {}) => {
             }
         }
 
-        // Initial scan
+        // Eerste scan
         container.querySelectorAll('.reveal').forEach(observe)
 
-        // Watch for new .reveal elements added to the DOM (async content)
+        // Let op nieuwe .reveal elementen die aan de DOM worden toegevoegd (async content)
         const mutationObserver = new MutationObserver((mutations) => {
             for (const mutation of mutations) {
                 for (const node of mutation.addedNodes) {

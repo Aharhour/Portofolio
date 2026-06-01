@@ -1,24 +1,26 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import BlurCircle from '../components/BlurCircle'
-import { Heart, PlayCircleIcon, StarIcon } from 'lucide-react'
+import { Heart, StarIcon } from 'lucide-react'
 import toast from 'react-hot-toast'
 import timeFormat from '../library/timeFormat'
 import DateSelect from '../components/DateSelect'
 import MovieCard from '../components/MovieCard'
 import Loading from '../components/Loading'
+import CommentSection from '../components/CommentSection'
 import { useAppContext } from '../context/AppContext'
 import useScrollReveal from '../library/useScrollReveal'
 
+// Detailpagina van één film: poster, beschrijving, cast, datum-keuze en aanbevelingen.
 const MovieDetails = () => {
     const navigate = useNavigate()
-    const { id } = useParams()
+    const { id } = useParams() // movieId uit de URL
     const [show, setShow] = useState(null)
-    const ref = useScrollReveal()
+    const ref = useScrollReveal() // Scroll-animaties triggeren wanneer elementen in beeld komen
 
     const { shows, axios, getToken, user, fetchFavoriteMovies, favoriteMovies, image_base_url } = useAppContext()
 
-    // Fetch movie details and available showtimes
+    // Filmdetails + alle showtimes voor deze film ophalen bij de backend.
     const getShow = async () => {
         try {
             const { data } = await axios.get(`/api/show/${id}`)
@@ -26,13 +28,14 @@ const MovieDetails = () => {
                 setShow(data)
             }
         } catch (error) {
-            // Fetch failed
+            // Fout stilletjes negeren
         }
     }
 
-    // Toggle favorite status for this movie
+    // Hartje aan-/uitzetten: voegt deze film toe aan favorieten of haalt 'm eruit.
     const handleFavorite = async () => {
         try {
+            // Niet ingelogd? → toast met loginbericht
             if (!user) return toast.error("Please login to proceed")
 
             const { data } = await axios.post('/api/user/update-favorite', { movieId: id }, {
@@ -40,23 +43,27 @@ const MovieDetails = () => {
             })
 
             if (data.success) {
+                // Lijst opnieuw ophalen zodat het hartje direct visueel bijwerkt
                 await fetchFavoriteMovies()
                 toast.success(data.message)
             }
         } catch (error) {
-            // Fetch failed
+            // Fout stilletjes negeren
         }
     }
 
+    // Bij elke wijziging van het film-id (andere film geopend): opnieuw fetchen
     useEffect(() => {
         getShow()
     }, [id])
 
+    // Check of deze film in de favorieten zit (voor het hart-icoon styling)
     const isFavorite = favoriteMovies?.find(movie => movie._id === id)
 
+    // Pas renderen als de film geladen is, anders een loading spinner tonen
     return show ? (
         <div ref={ref} className="px-6 md:px-16 lg:px-40 pt-30 md:pt-50">
-            {/* Movie poster and info section */}
+            {/* Bovenste sectie: filmposter + alle film-info naast elkaar */}
             <div className="flex flex-col md:flex-row gap-8 max-w-6xl mx-auto">
                 <img
                     src={image_base_url + show.movie.poster_path}
@@ -89,13 +96,8 @@ const MovieDetails = () => {
                         {show.movie.release_date.split('-')[0]}
                     </p>
 
-                    {/* Action buttons: trailer, buy tickets, favorite */}
+                    {/* Actieknoppen: tickets kopen en favoriet aan/uit */}
                     <div className="flex items-center flex-wrap gap-4 mt-4">
-                        <button className="flex items-center gap-2 px-7 py-3 text-sm bg-gray-800 hover:bg-gray-900 transition rounded-md font-medium cursor-pointer btn-press">
-                            <PlayCircleIcon className="w-5 h-5" />
-                            Watch Trailer
-                        </button>
-
                         <a
                             href="#dateSelect"
                             className="px-10 py-3 text-sm bg-primary hover:bg-primary-dull transition rounded-md font-medium cursor-pointer btn-press glow-primary"
@@ -110,7 +112,7 @@ const MovieDetails = () => {
                 </div>
             </div>
 
-            {/* Cast horizontal scroll */}
+            {/* Cast: horizontaal scrollende lijst van acteurs (max 12 personen getoond) */}
             <p className="text-lg font-medium mt-20 reveal">Cast</p>
             <div className="overflow-x-auto no-scrollbar mt-8 pb-4 reveal">
                 <div className="flex items-center gap-4 w-max px-4">
@@ -127,12 +129,17 @@ const MovieDetails = () => {
                 </div>
             </div>
 
-            {/* Date selection for booking */}
+            {/* Datum-keuze component voor het boeken (link naar SeatLayout pagina) */}
             <div className="reveal">
                 <DateSelect dateTime={show.dateTime} id={id} />
             </div>
 
-            {/* Recommended movies */}
+            {/* Comment-sectie: ingelogde gebruikers kunnen reacties achterlaten onder de film */}
+            <div className="reveal">
+                <CommentSection movieId={id} />
+            </div>
+
+            {/* Aanbevelingen: 4 andere films onderaan om door te klikken */}
             <p className="text-lg font-medium mt-20 mb-8 reveal">You May Also Like</p>
             <div className="flex flex-wrap max-sm:justify-center gap-8">
                 {shows.slice(0, 4).map((movie, i) => (

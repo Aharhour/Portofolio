@@ -27,7 +27,7 @@ const AddShows = () => {
                 setNowPlayingMovies(data.movies);
             }
         } catch (error) {
-            // Fetch failed
+            // Ophalen mislukt
         }
     };
 
@@ -36,7 +36,7 @@ const AddShows = () => {
         const [date, time] = dateTimeInput.split("T");
         if (!date || !time) return;
 
-        // Check if date is in the future
+        // Controleer of de datum in de toekomst ligt
         if (new Date(dateTimeInput) <= new Date()) {
             return toast.error('Datum moet in de toekomst liggen');
         }
@@ -115,7 +115,7 @@ const AddShows = () => {
                 <p className='text-gray-500 text-sm mt-1'>Selecteer een film, stel showtimes in en publiceer</p>
             </div>
 
-            {/* Step 1: Movie selection */}
+            {/* Stap 1: Film selecteren */}
             <div className='mt-8' style={{ animation: 'revealUp 0.5s cubic-bezier(0.16,1,0.3,1) 0.1s both' }}>
                 <div className='flex items-center justify-between mb-4'>
                     <h2 className='text-base font-semibold flex items-center gap-2'>
@@ -123,7 +123,7 @@ const AddShows = () => {
                         Kies een film
                     </h2>
 
-                    {/* Search */}
+                    {/* Zoekveld */}
                     <div className='flex items-center gap-2 bg-white/[0.04] border border-white/[0.08] rounded-xl px-3 py-2 focus-within:border-primary/30 transition-all duration-300'>
                         <SearchIcon className='w-4 h-4 text-gray-500' />
                         <input
@@ -176,7 +176,7 @@ const AddShows = () => {
                 )}
             </div>
 
-            {/* Selected movie preview */}
+            {/* Voorbeeld van de geselecteerde film */}
             {selectedMovieData && (
                 <div className='flex items-center gap-4 mt-2 p-4 bg-primary/[0.06] border border-primary/15 rounded-xl' style={{ animation: 'revealUp 0.4s cubic-bezier(0.16,1,0.3,1)' }}>
                     <img src={image_base_url + selectedMovieData.poster_path} alt={selectedMovieData.title} className='w-14 h-20 object-cover rounded-lg shadow-md' />
@@ -193,16 +193,16 @@ const AddShows = () => {
                 </div>
             )}
 
-            {/* Step 2: Price & Showtimes */}
+            {/* Stap 2: Prijs & speeltijden */}
             <div className='mt-10 grid grid-cols-1 lg:grid-cols-2 gap-8' style={{ animation: 'revealUp 0.5s cubic-bezier(0.16,1,0.3,1) 0.2s both' }}>
-                {/* Left: Price + Date/Time input */}
+                {/* Links: prijs + datum/tijd invoer */}
                 <div>
                     <h2 className='text-base font-semibold flex items-center gap-2 mb-5'>
                         <span className='flex items-center justify-center w-7 h-7 rounded-full bg-primary text-white text-xs font-bold shadow-lg shadow-primary/20'>2</span>
                         Prijs & Showtimes
                     </h2>
 
-                    {/* Price */}
+                    {/* Prijs */}
                     <div className='mb-6'>
                         <label className="block text-xs font-medium text-gray-400 mb-2 uppercase tracking-wider">Basisprijs per stoel</label>
                         <div className="flex items-center gap-3 bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 w-fit focus-within:border-primary/30 transition-all duration-300">
@@ -219,7 +219,7 @@ const AddShows = () => {
                         </div>
                     </div>
 
-                    {/* Date & Time */}
+                    {/* Datum & tijd */}
                     <div>
                         <label className="block text-xs font-medium text-gray-400 mb-2 uppercase tracking-wider">Datum & Tijd toevoegen</label>
                         <div className="flex items-center gap-3">
@@ -242,7 +242,7 @@ const AddShows = () => {
                     </div>
                 </div>
 
-                {/* Right: Selected showtimes overview */}
+                {/* Rechts: overzicht van de geselecteerde speeltijden */}
                 <div>
                     <div className='flex items-center justify-between mb-4'>
                         <label className="text-xs font-medium text-gray-400 uppercase tracking-wider">
@@ -291,7 +291,7 @@ const AddShows = () => {
                 </div>
             </div>
 
-            {/* Summary & Submit */}
+            {/* Samenvatting & verzenden */}
             <div className='mt-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pt-6 border-t border-white/[0.06]' style={{ animation: 'revealUp 0.5s cubic-bezier(0.16,1,0.3,1) 0.3s both' }}>
                 <div className='text-sm text-gray-400'>
                     {selectedMovieData && totalShowtimes > 0 && showPrice ? (

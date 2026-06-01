@@ -4,7 +4,9 @@ import ReactPlayer from 'react-player/youtube'
 import BlurCircle from './BlurCircle'
 import useScrollReveal from '../library/useScrollReveal'
 
+// TrailerSection: YouTube-speler met thumbnail-strip onderaan om van trailer te wisselen.
 const TrailerSection = () => {
+    // Eerste trailer is standaard geselecteerd; gebruiker kan klikken om te wisselen
     const [currentTrailer, setCurrentTrailer] = useState(dummyTrailers[0])
     const ref = useScrollReveal()
 
@@ -14,7 +16,7 @@ const TrailerSection = () => {
                 Trailers
             </p>
 
-            {/* YouTube player for the selected trailer */}
+            {/* YouTube speler voor de huidige trailer (gebruikt react-player library) */}
             <div className='relative mt-6 reveal'>
                 <BlurCircle top='-100px' right='-100px' />
 
@@ -33,7 +35,7 @@ const TrailerSection = () => {
                 />
             </div>
 
-            {/* Thumbnail strip - clicking switches the active trailer */}
+            {/* Thumbnail strip onderaan: klikken op een thumbnail wisselt de actieve trailer */}
             <div className='flex gap-4 mt-6 justify-center flex-wrap reveal'>
                 {dummyTrailers.map((trailer) => (
                     <img
